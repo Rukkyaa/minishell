@@ -40,12 +40,12 @@ int	count_words(char const *str, char c);
 int	words_length(char const *str, int i, char c);
 
 //get_path.c
-char	**path_generator(int path, char **env);
+char	**get_path(char **env);
 char	**split_path(char *s, char c);
-int	find_path(char **env);
 
 //libft_utils.c
 int is_whitespace(char c);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
 int	ft_isprint(int c);
 
 #endif

@@ -111,7 +111,11 @@ int	main(int argc, char **argv, char **env)
 		return (0);
 	(void) **argv;
 	line = NULL;
-	paths = path_generator(find_path(env), env);
+	paths = get_path(env);
+	int i = 0;
+	while (paths[i])
+		printf("%s\n", paths[i++]);
+	/*
 	if (paths == NULL)
 		return (1);
 	while (line == NULL)
@@ -121,6 +125,6 @@ int	main(int argc, char **argv, char **env)
 		decomposition(line, paths, env);
 		free(line);
 		line = NULL;
-	}
+	}*/
 	return (EXIT_SUCCESS);
 }

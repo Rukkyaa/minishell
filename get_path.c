@@ -12,28 +12,17 @@
 
 #include "minishell.h"
 
-char	**path_generator(int path, char **env)
+//function to get the path from the environment
+char    **get_path(char **envp)
 {
-	if (path == -1)
-		return (NULL);
-	return (split_path(env[find_path(env)], ':'));
-}
+        int     i;
+        char    **path;
 
-int	find_path(char **env)
-{
-	int	i;
-
-	i = 0;
-	if (!env)
-		return (-1);
-	while (env[i] != NULL)
-	{
-		if (env[i][0] == 'P' && env[i][1] == 'A' && env[i][2] == 'T'
-			&& env[i][3] == 'H')
-			return (i);
-		i++;
-	}
-	return (-1);
+        i = -1;
+        while (envp[++i])
+            if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+                    return (split_path(envp[i] + 5, ':'));
+        return (NULL);
 }
 
 char	**split_path(char *s, char c)
