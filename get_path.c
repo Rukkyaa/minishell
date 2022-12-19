@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:27:26 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/19 13:27:58 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2022/12/19 15:38:09 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 char    **get_path(char **envp)
 {
         int     i;
-        char    **path;
 
         i = -1;
         while (envp[++i])

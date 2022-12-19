@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/19 13:29:48 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2022/12/19 18:15:36 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <unistd.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
 
 // < == 0 input
@@ -33,6 +37,9 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+
+char **check_redirection(char *line);
+
 //ft_slit.c
 char	**ft_split(char *s, char c);
 void	free_tab(char **tab);
@@ -47,5 +54,16 @@ char	**split_path(char *s, char c);
 int is_whitespace(char c);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 int	ft_isprint(int c);
+char	*ft_strdup(const char *s1);
+int	ft_strlen(const char *s);
+char	*ft_strjoin(char *s1, char *s2);
+void	ft_putstr_fd(char const *s, int fd);
+void	ft_putchar_fd(char c, int fd);
+
+//gen_command.c
+char *get_filename(char *line, int i);
+char *extrac_cmd(char *line, char **redir);
+char	*clean_up(char *line, int dep, int length);
+t_list	*gen_maillon(char *line);
 
 #endif
