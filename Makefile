@@ -6,13 +6,13 @@
 #    By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2022/12/19 11:14:23 by gabrielduha      ###   ########.fr        #
+#    Updated: 2022/12/19 13:30:08 by gabrielduha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT	= all
 
-SRCS	= minishell.c
+SRCS	= minishell.c ft_split.c libft_utils.c get_path.c
 OBJS	= ${SRCS:.c=.o}
 NAME	= minishell
 CC		= cc
