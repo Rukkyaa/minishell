@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -6,7 +7,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 12:13:55 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/19 17:41:10 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2022/12/19 12:14:14 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +55,15 @@ void	free_tab(char **tab)
 		free(tab);
 }
 
-char	**ft_split(char *s, char c)
+/*
+** Split function modified to add a '/' at the end of each string
+**
+** @param   s       The string to split
+** @param   c       The character to split on
+**
+** @return  The string split as a 2D array with a '/' at the end of each string
+*/
+char	**split_path(char *s, char c)
 {
 	char	**tab;
 	int		a;
@@ -63,14 +72,12 @@ char	**ft_split(char *s, char c)
 
 	i = 0;
 	a = 0;
-	if (!s)
-		return (NULL);
 	tab = malloc((count_words(s, c) + 1) * sizeof(char *));
 	if (!(tab))
 		return (0);
 	while (a < count_words(s, c) && s[i] != '\0')
 	{
-		tab[a] = malloc((words_length(s, i, c) + 1) * sizeof(char));
+		tab[a] = malloc((words_length(s, i, c) + 2) * sizeof(char));
 		if (!(tab[a]))
 			return (free_tab(tab), (char **)0);
 		d = 0;
@@ -78,7 +85,9 @@ char	**ft_split(char *s, char c)
 			i++;
 		while (s[i] != c && s[i] != '\0')
 			tab[a][d++] = s[i++];
-		tab[a++][d] = '\0';
+		tab[a][d++] = '/';
+		tab[a][d] = '\0';
+		a++;
 	}
-	return (tab[a] = 0, free(s), tab);
+	return (tab[a] = 0, tab);
 }

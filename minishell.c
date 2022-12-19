@@ -170,6 +170,7 @@ int	main(int argc, char **argv, char **env)
 	(void) **argv;
 	line = NULL;
 	paths = get_path(env);
+	(void) line;
 	//int i = 0;
 	//while (paths[i])
 	//	printf("%s\n", paths[i++]);
