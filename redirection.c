@@ -6,13 +6,23 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 02:37:12 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/21 12:33:53 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/21 19:47:56 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	get_redirection(char *str, t_list *minishell)
+/*
+** This function get the redirection, and open the file with the right flags
+** to stock the fd in the struct
+** It also get the here_doc if there is one
+**
+** @param str: the string to parse
+** @param minishell: the struct to stock the fd
+**
+** @return void
+*/
+void	get_redirection(char *str, t_minishell *minishell)
 {
 	char	*here_doc = NULL;
 
@@ -22,9 +32,7 @@ void	get_redirection(char *str, t_list *minishell)
 			here_doc = get_filename(str++, 2);
 		else if (*str == '<')
 		{
-			printf("Test1\n");
 			minishell->infile = open(get_filename(str, 1), O_RDONLY);
-			printf("Test2\n");
 			if (minishell -> infile == -1)
 				printf("minishell: %s: No such file or directory\n", get_filename(str, 1));
 		}
@@ -39,8 +47,6 @@ void	get_redirection(char *str, t_list *minishell)
 		}
 		str ++;
 	}
-	(void) here_doc;
-	//if (here_doc)
-	//	printf("Here doc : %s\n", here_doc);
-	printf("coucou\n");
+	if (here_doc)
+		printf("Here doc : %s\n", here_doc);
 }

@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/21 12:33:44 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/21 19:46:40 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include <stdio.h>
+# include <stdbool.h>
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -28,7 +29,7 @@
 // > == 1 output
 // >> == 2 output
 
-typedef struct s_list
+typedef struct s_minishell
 {
 	pid_t			pid;
 	char			**cmd;
@@ -38,7 +39,7 @@ typedef struct s_list
 	int				outfile;
 	char			**env;
 	struct s_list	*next;
-}	t_list;
+}	t_minishell;
 
 
 char **check_redirection(char *line);
@@ -67,8 +68,9 @@ void	ft_putchar_fd(char c, int fd);
 char *get_filename(char *line, int i);
 char *extrac_cmd(char *line, char **redir);
 char	*clean_up(char *line, int dep, int length);
-t_list	*gen_maillon(char *line);
+t_minishell	*gen_maillon(char *line);
 
-
-void    get_redirection(char *str, t_list *minishell);
+char	*ft_epur(char *str);
+void	remove_sub(char **str, int start, int end);
+void    get_redirection(char *str, t_minishell *minishell);
 #endif

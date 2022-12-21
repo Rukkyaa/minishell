@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:12:28 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/21 12:11:26 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/21 19:47:44 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,11 @@ char *get_filename(char *line, int i) //attention a gerer les quotes
 	return (text);
 }
 
-t_list	*gen_maillon(char *line)
+t_minishell	*gen_maillon(char *line)
 {
-	t_list *elem;
+	t_minishell *elem;
 
-	elem = malloc(sizeof(t_list));
+	elem = malloc(sizeof(t_minishell));
 	if (!elem)
 		return (NULL);
 	elem->redirections = check_redirection(line);

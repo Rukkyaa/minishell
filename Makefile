@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+         #
+#    By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2022/12/19 13:30:08 by gabrielduha      ###   ########.fr        #
+#    Updated: 2022/12/21 19:44:16 by rukkyaa          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT	= all
 
-SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirection.c
+SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirection.c ft_epur.c
 OBJS	= ${SRCS:.c=.o}
 NAME	= minishell
 CC		= cc

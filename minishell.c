@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/21 12:33:57 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/21 19:46:27 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int redirecting(char *file, int port) // ajout d'une option append qui va lire t
 	return (0);
 }
 
-void	print_maillon(t_list *elem)
+void	print_maillon(t_minishell *elem)
 {
 	int i = 0;
 
@@ -115,7 +115,7 @@ void	print_maillon(t_list *elem)
 
 int	exec_command_one(char *line, char **paths, char **env)
 {
-	t_list *elem;
+	t_minishell *elem;
 	int	status1;
 
 	printf("Debut de exec_command_one\n");
@@ -152,7 +152,6 @@ int decomposition(char *line, char **paths, char **env)
 	{
 		if (line[i] != '|' && line[i + 1] == '|' && line[i + 2] != '|')
 			break;
-		printf("Coucou!\n");
 		i++;
 	}
 	if (line[i + 2] == '\0') //ca veut dire qu'on a parcouru toute la chaine sans trouver un pipe
@@ -162,28 +161,30 @@ int decomposition(char *line, char **paths, char **env)
 	return (0);
 }
 
+void	minishell_init(t_minishell **minishell)
+{
+	(*minishell)->infile = dup(STDIN_FILENO);
+	(*minishell)->outfile = dup(STDOUT_FILENO);
+}
+
 int	main(int argc, char **argv, char **env)
 {
-	char	*line;
-	char	**paths;
-	t_list	*minishell;
+	char		*line;
+	char		**paths;
+	t_minishell	*minishell;
 	
-	if (argc != 1)
-		return (0);
+	(void)argc;
 	(void) **argv;
-	minishell = NULL;
+	
+	minishell_init(&minishell);
 	line = NULL;
 	paths = get_path(env);
-	(void) line;
-	//int i = 0;
-	//while (paths[i])
-	//	printf("%s\n", paths[i++]);
-	if (paths == NULL)
+	if (!paths)
 		return (1);
 	while (line == NULL)
 	{
-		line = readline("Minishell> ");
-		printf("Line : %s\n", line);
+		line = ft_epur(readline("\nMinishell> "));
+		printf("Line : %s\n\n", line);
 		//decomposition(line, paths, env);
 		get_redirection(line, minishell);
 		printf("Infile : %d\n", minishell->infile);
