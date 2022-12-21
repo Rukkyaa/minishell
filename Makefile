@@ -12,7 +12,7 @@
 
 .DEFAULT	= all
 
-SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c
+SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirection.c
 OBJS	= ${SRCS:.c=.o}
 NAME	= minishell
 CC		= cc

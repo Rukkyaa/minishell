@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/19 18:14:26 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2022/12/21 02:37:10 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char **check_redirection(char *line)
 	int i;
 
 	i = 0;
-	redirections = malloc(3 * sizeof(char *)); //a mettre dans la stack direct ?
+	redirections = malloc(4 * sizeof(char *)); //a mettre dans la stack direct ?
 	if (!redirections)
 		return (NULL);
 	redirections[0] = NULL;
@@ -117,11 +117,13 @@ int	exec_command_one(char *line, char **paths, char **env)
 {
 	t_list *elem;
 	int	status1;
-	
+
+	printf("Debut de exec_command_one\n");
 	elem = gen_maillon(line);
 	if (!elem)
 		return (-1);
 	print_maillon(elem);
+	printf("Fin de exec_command_one\n");
 	elem->pid = fork();
 	if (elem->pid < 0)
 		return (-1);
@@ -142,7 +144,6 @@ int	exec_command_one(char *line, char **paths, char **env)
 int decomposition(char *line, char **paths, char **env)
 {
 	//traiter ici les operateurs || et && et les parentheses avec un while pour lancer autant de fois et dans le bon ordre la fct "exec_command"
-
 	//cas ou il n'y a pas d'operateurs logiques
 	int i;
 
@@ -151,6 +152,7 @@ int decomposition(char *line, char **paths, char **env)
 	{
 		if (line[i] != '|' && line[i + 1] == '|' && line[i + 2] != '|')
 			break;
+		printf("Coucou!\n");
 		i++;
 	}
 	if (line[i + 2] == '\0') //ca veut dire qu'on a parcouru toute la chaine sans trouver un pipe
@@ -163,7 +165,7 @@ int decomposition(char *line, char **paths, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	char	*line;
-	char **paths;
+	char	**paths;
 
 	if (argc != 1)
 		return (0);
@@ -178,10 +180,10 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	while (line == NULL)
 	{
-		//line = ft_strdup("< test cat");
 		line = readline("Minishell> ");
 		printf("Line : %s\n", line);
-		decomposition(line, paths, env);
+		//decomposition(line, paths, env);
+		get_redirection(line);
 		free(line);
 		line = NULL;
 	}

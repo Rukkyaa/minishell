@@ -67,4 +67,6 @@ char *extrac_cmd(char *line, char **redir);
 char	*clean_up(char *line, int dep, int length);
 t_list	*gen_maillon(char *line);
 
+
+void    get_redirection(char *str);
 #endif

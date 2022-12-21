@@ -20,13 +20,13 @@
 **
 ** @return  The path as a 2D array
 */
-char    **get_path(char **envp)
+char	**get_path(char	**envp)
 {
-        int     i;
+	int	i;
 
-        i = -1;
-        while (envp[++i])
-            if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-                    return (split_path(envp[i] + 5, ':'));
-        return (NULL);
+	i = -1;
+	while (envp[++i])
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			return (split_path(envp[i] + 5, ':'));
+	return (NULL);
 }
