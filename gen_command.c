@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gen_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:12:28 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/19 18:14:32 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2022/12/21 12:11:26 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

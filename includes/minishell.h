@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/19 18:15:36 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2022/12/21 12:33:44 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct s_list
 	char			**cmd;
 	int				fd[2];
 	char			**redirections;
+	int				infile;
+	int				outfile;
 	char			**env;
 	struct s_list	*next;
 }	t_list;
@@ -68,5 +70,5 @@ char	*clean_up(char *line, int dep, int length);
 t_list	*gen_maillon(char *line);
 
 
-void    get_redirection(char *str);
+void    get_redirection(char *str, t_list *minishell);
 #endif

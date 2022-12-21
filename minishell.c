@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/21 02:37:10 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/21 12:33:57 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,10 +166,12 @@ int	main(int argc, char **argv, char **env)
 {
 	char	*line;
 	char	**paths;
-
+	t_list	*minishell;
+	
 	if (argc != 1)
 		return (0);
 	(void) **argv;
+	minishell = NULL;
 	line = NULL;
 	paths = get_path(env);
 	(void) line;
@@ -183,7 +185,9 @@ int	main(int argc, char **argv, char **env)
 		line = readline("Minishell> ");
 		printf("Line : %s\n", line);
 		//decomposition(line, paths, env);
-		get_redirection(line);
+		get_redirection(line, minishell);
+		printf("Infile : %d\n", minishell->infile);
+		printf("Outfile : %d\n", minishell->outfile);
 		free(line);
 		line = NULL;
 	}
