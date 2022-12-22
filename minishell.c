@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/21 19:46:27 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/22 16:13:06 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "includes/minishell.h"
 
 char **check_redirection(char *line)
 {
@@ -53,7 +53,7 @@ int	exec_command(char **paths, char **cmd, char **env)
 		return (ft_putstr_fd("'' : command not found\n", 2), -1);
 	while (paths[++i] != NULL)
 	{
-		path = ft_strjoin(paths[i], cmd[0]);
+		path = ft_strjoin_spe(paths[i], cmd[0]);
 		if (path == NULL)
 			return (-1);
 		if (access(path, F_OK) == 0)
@@ -116,7 +116,7 @@ void	print_maillon(t_minishell *elem)
 int	exec_command_one(char *line, char **paths, char **env)
 {
 	t_minishell *elem;
-	int	status1;
+	//int	status1;
 
 	printf("Debut de exec_command_one\n");
 	elem = gen_maillon(line);
@@ -124,20 +124,21 @@ int	exec_command_one(char *line, char **paths, char **env)
 		return (-1);
 	print_maillon(elem);
 	printf("Fin de exec_command_one\n");
-	elem->pid = fork();
-	if (elem->pid < 0)
-		return (-1);
-	if (elem->pid == 0)
-	{
-		if (elem->redirections[0] && ft_strlen(elem->redirections[0]) != 0 && redirecting(elem->redirections[0], STDIN_FILENO) == -1)
-				exit (42);
-		if (elem->redirections[1] && ft_strlen(elem->redirections[1]) != 0 && redirecting(elem->redirections[1], STDOUT_FILENO) == -1)
-				exit (42); //ajouter le cas >> append
-		if (exec_command(paths, elem->cmd, env) == -1)
-			exit(42);
-	}
-	if (waitpid(elem->pid, &status1, 0) < -1 || (WIFEXITED(status1) && WEXITSTATUS(status1) == 42))
-		return (-1);
+	printf("%p%p", paths, env);
+	// elem->pid = fork();
+	// if (elem->pid < 0)
+	// 	return (-1);
+	// if (elem->pid == 0)
+	// {
+	// 	if (elem->redirections[0] && ft_strlen(elem->redirections[0]) != 0 && redirecting(elem->redirections[0], STDIN_FILENO) == -1)
+	// 			exit (42);
+	// 	if (elem->redirections[1] && ft_strlen(elem->redirections[1]) != 0 && redirecting(elem->redirections[1], STDOUT_FILENO) == -1)
+	// 			exit (42); //ajouter le cas >> append
+	// 	if (exec_command(paths, elem->cmd, env) == -1)
+	// 		exit(42);
+	// }
+	// if (waitpid(elem->pid, &status1, 0) < -1 || (WIFEXITED(status1) && WEXITSTATUS(status1) == 42))
+	// 	return (-1);
 	return (0);
 }
 
@@ -154,10 +155,10 @@ int decomposition(char *line, char **paths, char **env)
 			break;
 		i++;
 	}
-	if (line[i + 2] == '\0') //ca veut dire qu'on a parcouru toute la chaine sans trouver un pipe
+	if (line[i + 2] == '\0')
 		exec_command_one(line, paths, env); //cas ou on a une seule commande, reste a traiter les < et > et >>
-	//else
-	//	pipex();
+	// else
+	// 	pipex();
 	return (0);
 }
 
@@ -171,12 +172,12 @@ int	main(int argc, char **argv, char **env)
 {
 	char		*line;
 	char		**paths;
-	t_minishell	*minishell;
+	//t_minishell	*minishell;
 	
 	(void)argc;
 	(void) **argv;
 	
-	minishell_init(&minishell);
+	//minishell_init(&minishell);
 	line = NULL;
 	paths = get_path(env);
 	if (!paths)
@@ -185,10 +186,11 @@ int	main(int argc, char **argv, char **env)
 	{
 		line = ft_epur(readline("\nMinishell> "));
 		printf("Line : %s\n\n", line);
-		//decomposition(line, paths, env);
-		get_redirection(line, minishell);
-		printf("Infile : %d\n", minishell->infile);
-		printf("Outfile : %d\n", minishell->outfile);
+		//AJOUT DE LA DECOMPOSITION LOGIQUE
+		decomposition(line, paths, env);
+		// get_redirection(line, minishell);
+		// printf("Infile : %d\n", minishell->infile);
+		// printf("Outfile : %d\n", minishell->outfile);
 		free(line);
 		line = NULL;
 	}

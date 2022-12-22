@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:28:50 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/19 18:11:53 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2022/12/22 15:34:21 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "includes/minishell.h"
 
 int is_whitespace(char c)
 {
@@ -41,18 +41,6 @@ char	*ft_strcat(char *s1, char *s2)
 	return (s1);
 }
 
-int	ft_strlen(const char *s)
-{
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
-
 static char	*ft_strcpy(char *dst, const char *src)
 {
 	int	i;
@@ -81,7 +69,7 @@ char	*ft_strdup(const char *s1)
 	return (ft_strcpy(p, s1));
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin_spe(char *s1, char *s2)
 {
 	char	*str;
 	int		i;
@@ -97,16 +85,3 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (free(s1), str);
 }
 
-void	ft_putchar_fd(char c, int fd)
-{
-	write(fd, &c, 1);
-}
-
-void	ft_putstr_fd(char const *s, int fd)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] != '\0')
-		ft_putchar_fd((char)s[i++], fd);
-}

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_epur.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 19:11:54 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/21 19:49:26 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/22 15:26:37 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "includes/minishell.h"
 
 char	*ft_epur(char *str)
 {

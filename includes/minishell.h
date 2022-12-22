@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/21 19:46:40 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/22 16:12:23 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+
+# include "../libft/libft.h"
 
 
 // < == 0 input
@@ -60,9 +62,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 int	ft_isprint(int c);
 char	*ft_strdup(const char *s1);
 int	ft_strlen(const char *s);
-char	*ft_strjoin(char *s1, char *s2);
-void	ft_putstr_fd(char const *s, int fd);
-void	ft_putchar_fd(char c, int fd);
+char	*ft_strjoin_spe(char *s1, char *s2);
 
 //gen_command.c
 char *get_filename(char *line, int i);
@@ -72,5 +72,5 @@ t_minishell	*gen_maillon(char *line);
 
 char	*ft_epur(char *str);
 void	remove_sub(char **str, int start, int end);
-void    get_redirection(char *str, t_minishell *minishell);
+int	get_redirection(char *str, t_minishell *minishell);
 #endif

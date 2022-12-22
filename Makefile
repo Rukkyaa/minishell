@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+         #
+#    By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2022/12/21 19:44:16 by rukkyaa          ###   ########.fr        #
+#    Updated: 2022/12/22 14:41:57 by gduhau           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ OBJS	= ${SRCS:.c=.o}
 NAME	= minishell
 CC		= cc
 RM		= rm -f
-CFLAGS	= -Wall -Wextra -Werror -I includes/ -I libft/
+CFLAGS	= -Wall -Wextra -Werror
+HEADERS = -I includes/ -I libft/
 
 LIBFT = -L libft/ -lft
 
@@ -26,7 +27,7 @@ LIBFT = -L libft/ -lft
 
 ${NAME}:	${OBJS}
 			make -C libft/
-			${CC} ${CFLAGS} ${OBJS} -lreadline $(LIBFT) -o ${NAME}
+			${CC} ${CFLAGS} ${OBJS} -lreadline $(LIBFT) ${HEADERS} -o ${NAME}
 
 all: ${NAME}
 
