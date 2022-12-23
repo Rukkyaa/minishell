@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:27:26 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/22 15:26:55 by gduhau           ###   ########.fr       */
+/*   Updated: 2022/12/23 08:08:02 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@
 **
 ** @return  The path as a 2D array
 */
-char	**get_path(char	**envp)
+char	*get_env_var(char	**envp, char	*var)
 {
-	int	i;
+	int		i;
 
 	i = -1;
 	while (envp[++i])
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			return (split_path(envp[i] + 5, ':'));
+		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0)
+			return (envp[i] + ft_strlen(var) + 1);
 	return (NULL);
 }

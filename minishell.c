@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/22 16:13:06 by gduhau           ###   ########.fr       */
+/*   Updated: 2022/12/23 09:15:59 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,18 +179,16 @@ int	main(int argc, char **argv, char **env)
 	
 	//minishell_init(&minishell);
 	line = NULL;
-	paths = get_path(env);
+	paths = split_path(get_env_var(env, "PATH"), ':');
 	if (!paths)
 		return (1);
 	while (line == NULL)
 	{
-		line = ft_epur(readline("\nMinishell> "));
-		printf("Line : %s\n\n", line);
-		//AJOUT DE LA DECOMPOSITION LOGIQUE
-		decomposition(line, paths, env);
-		// get_redirection(line, minishell);
-		// printf("Infile : %d\n", minishell->infile);
-		// printf("Outfile : %d\n", minishell->outfile);
+		line = ft_epur(readline("Minishell> "));
+		if (!strncmp(line, "pwd", 3))
+			ft_pwd();
+		else if (!strncmp(line, "echo", 4))
+			ft_echo(line);
 		free(line);
 		line = NULL;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/22 16:12:23 by gduhau           ###   ########.fr       */
+/*   Updated: 2022/12/23 08:47:41 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <limits.h>
 
 # include "../libft/libft.h"
 
@@ -53,7 +54,7 @@ int	count_words(char const *str, char c);
 int	words_length(char const *str, int i, char c);
 
 //get_path.c
-char	**get_path(char **env);
+char	*get_env_var(char **env, char *var);
 char	**split_path(char *s, char c);
 
 //libft_utils.c
@@ -73,4 +74,9 @@ t_minishell	*gen_maillon(char *line);
 char	*ft_epur(char *str);
 void	remove_sub(char **str, int start, int end);
 int	get_redirection(char *str, t_minishell *minishell);
+
+// BUILTINS
+int	ft_pwd(void);
+int	ft_echo(char *str);
+
 #endif

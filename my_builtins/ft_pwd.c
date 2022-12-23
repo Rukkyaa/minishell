@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize.c                                       :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/22 12:08:25 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/11/07 10:51:30 by axlamber         ###   ########.fr       */
+/*   Created: 2022/12/23 08:37:21 by rukkyaa           #+#    #+#             */
+/*   Updated: 2022/12/23 08:38:00 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-int	ft_lstsize(t_list *lst)
+int	ft_pwd(void)
 {
-	int	len;
+	char	buffer[PATH_MAX];
 
-	len = 0;
-	while (lst)
+	if (getcwd(buffer, PATH_MAX))
 	{
-		len ++;
-		lst = lst->next;
+		ft_putendl_fd(buffer, 1);
+		return (EXIT_SUCCESS);
 	}
-	return (len);
+	return (EXIT_FAILURE);
 }
