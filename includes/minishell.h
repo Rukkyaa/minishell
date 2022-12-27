@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/23 08:47:41 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/27 02:09:59 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,17 @@ typedef struct s_minishell
 	struct s_list	*next;
 }	t_minishell;
 
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+void	ft_env_add_back(t_env **lst, t_env *new);
+t_env	*ft_envlast(t_env *lst);
+t_env	*ft_envnew(char *key, char *value);
+t_env	*env_to_struct(char **env, t_env *env_struct);
 
 char **check_redirection(char *line);
 
@@ -78,5 +89,7 @@ int	get_redirection(char *str, t_minishell *minishell);
 // BUILTINS
 int	ft_pwd(void);
 int	ft_echo(char *str);
+int	ft_env(t_env *env);
+int	ft_unset(t_env *env, char *to_unset);
 
 #endif

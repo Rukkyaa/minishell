@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/23 09:15:59 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/27 02:13:08 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,15 +173,18 @@ int	main(int argc, char **argv, char **env)
 	char		*line;
 	char		**paths;
 	//t_minishell	*minishell;
+	t_env		*env_list;
 	
 	(void)argc;
 	(void) **argv;
-	
 	//minishell_init(&minishell);
 	line = NULL;
+	(void) line;
 	paths = split_path(get_env_var(env, "PATH"), ':');
 	if (!paths)
 		return (1);
+	env_list = NULL;
+	env_list = env_to_struct(env, env_list);
 	while (line == NULL)
 	{
 		line = ft_epur(readline("Minishell> "));
@@ -189,8 +192,22 @@ int	main(int argc, char **argv, char **env)
 			ft_pwd();
 		else if (!strncmp(line, "echo", 4))
 			ft_echo(line);
+		else if (!strncmp(line, "env", 3))
+			ft_env(env_list);
+		else if (!strncmp(line, "unset", 5))
+			ft_unset(env_list, line + 6);
 		free(line);
 		line = NULL;
+	}
+	free_tab(paths);
+	t_env	*tmp;
+	while (env_list)
+	{
+		tmp = env_list->next;
+		free(env_list->key);
+		free(env_list->value);
+		free(env_list);
+		env_list = tmp;
 	}
 	return (EXIT_SUCCESS);
 }

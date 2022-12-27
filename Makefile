@@ -6,19 +6,20 @@
 #    By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2022/12/23 08:47:51 by rukkyaa          ###   ########.fr        #
+#    Updated: 2022/12/27 02:10:16 by rukkyaa          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT	= all
 
 SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirection.c ft_epur.c \
-			my_builtins/ft_pwd.c my_builtins/ft_echo.c
+			my_builtins/ft_pwd.c my_builtins/ft_echo.c my_builtins/env_to_struct.c my_builtins/ft_env.c \
+			my_builtins/ft_unset.c
 OBJS	= ${SRCS:.c=.o}
 NAME	= minishell
 CC		= cc
 RM		= rm -f
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -g
 HEADERS = -I includes/ -I libft/
 
 LIBFT = -L libft/ -lft
