@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:53:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/23 09:13:30 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2022/12/26 16:24:59 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_echo(char *str)
 	i = -1;
 	if (split[0])
 	{
-		while (!strcmp(split[++i], "-n"))
+		while (!strcmp(split[++i], "-n")) //INTERDIT
 			option = true;
 		while (split[i])
 		{
