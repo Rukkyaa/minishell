@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/28 12:18:51 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2022/12/29 10:05:47 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ t_all *init_env(char **env)
 
 t_tree *init_tree(char **line)
 {
-	int i;
-	int compt_cmd;
+//	int i;
+//	int compt_cmd;
 	t_tree	*start;
 
-	i = 0;
-	compt_cmd = 1;
+//	i = 0;
+//	compt_cmd = 1;
 	if (countof_spe(line, '(', 0) != countof_spe(line, ')', 0))
 		return (printf("bash: syntax error\n"), NULL);
 	start = init_m_tree(ft_strlen(*line));
