@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4-operations.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:47:45 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/28 12:42:14 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/05 12:22:13 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	op_found(char *line)
 	i = 0;
 	while (line[i + 1] != '\0')
 	{
+		if (line[i] == '\"' || line[i] == '\'')
+			i = avoid_quotes(line, i);
 		if (line[i] == '&' && line[i + 1] == '&')
 			return (i);
 		if (line[i] == '|' && line[i + 1] == '|')

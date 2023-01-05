@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/28 12:42:38 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/05 14:40:14 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,27 @@ void print_here_doc(char **here_docs);
 int	init_shell(t_tree *start, t_all *p);
 int	init_cmd(t_tree *start, t_all *p);
 int recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p);
+char	*ft_trim_quotes(char *s1, int *alert);
+char	*ft_trim(char *s1);
 
 //parsing/9-redir.c
 char *erase_redir(char *cmd);
 int check_redirection(char *cmd, t_minishell *maillon);
 char *get_filename(char *line, int i);
 void clean_rest(t_tree *start, int i, int end);
+
+//parsing/spe_split.c
+char	**ft_split_spe(char *s, char c);
+
+//pipex/executor.c
+int	executor(t_tree *start);
+int	opening(char *file, int port, int append, int mode);
+int	exec_command(char **paths, char **cmd, char **env);
+
+//pipex/pipe.c
+int	first_pipe(t_minishell *elem, char **paths, char **env);
+int	mid_pipe(t_minishell *elem, char **paths, char **env);
+int	last_pipe(t_minishell *elem, char **paths, char **env);
 
 //get_next_line
 char	*get_next_line(int fd);

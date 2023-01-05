@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6-count.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:29:25 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/28 12:27:26 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/05 12:14:21 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,24 @@ int	countof_spe(char **line, char c, int compt)
 
 int avoid_quotes(char *line, int i)
 {
+	int ibis;
+
+	ibis = i;
 	if (line[i] == '\"')
 	{
 		i++;
 		while (line[i] != '\0' && line[i] != '\"')
 			i++;
-		i++;
-		return (i);
 	}
 	else if (line[i] == '\'')
 	{
 		i++;
 		while (line[i] != '\0' && line[i] != '\'')
 			i++;
-		i++;
-		return (i);
 	}
-	return (i);
+	if (line[i] == '\0')
+		return(++ibis);
+	return (++i);
 }
 
 int last_char_spe(char *line, char c)
@@ -72,9 +73,8 @@ int last_char_spe(char *line, char c)
 	res = -1;
 	while (line[i] != '\0')
 	{
-		//if (line[i] == '\"' || line[i] == '\'')
-		//	i = avoid_quotes(line, i);
-		//printf("%c\n", line[i]);
+		if (line[i] == '\"' || line[i] == '\'')
+			i = avoid_quotes(line, i);
 		if (line[i] == c)
 			res = i;
 		i++;

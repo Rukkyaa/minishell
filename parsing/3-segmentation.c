@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3-segmentation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:43:39 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/28 12:41:16 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/05 12:25:09 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,13 @@ int op_scd(t_tree *start, int i, char *reserve)
 
 	if (reserve[i] == '\0')
 		return (1);
+	if (reserve[i] == '\"' || reserve[i] == '\'')
+		return (op_scd(start, avoid_quotes(reserve, i), reserve));
 	if (reserve[i] == '&' && reserve[i + 1] == '&')
 	{
 		start->cmd = clean_rest_op(start, i);
 		new = fill_branch(reserve, i + 1);
 		clean_res(reserve, i);
-		printf("%s\n", new->cmd);
 		if (!new)
 			return (-1);
 		if (start->and != NULL)
@@ -94,7 +95,6 @@ int op_scd(t_tree *start, int i, char *reserve)
 		start->cmd = clean_rest_op(start, i);
 		new = fill_branch(reserve, i + 1);
 		clean_res(reserve, i);
-		printf("%s\n", new->cmd);
 		if (!new)
 			return (-1);
 		if (start->or != NULL)

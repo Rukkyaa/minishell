@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+         #
+#    By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2022/12/28 12:39:28 by gabrielduha      ###   ########.fr        #
+#    Updated: 2023/01/05 13:24:08 by gduhau           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,9 @@ SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirecti
 			my_builtins/ft_pwd.c my_builtins/ft_echo.c parsing/1-init.c parsing/2-free.c \
 			parsing/3-segmentation.c parsing/4-operations.c parsing/5-heredocs.c \
 			parsing/get_next_line/get_next_line.c parsing/get_next_line/get_next_line_utils.c \
-			parsing/6-count.c parsing/7-print.c parsing/8-init2.c parsing/9-redir.c
+			parsing/6-count.c parsing/7-print.c parsing/8-init2.c parsing/9-redir.c \
+			pipex/executor.c pipex/pipe.c parsing/spe_split.c
+			
 OBJS	= ${SRCS:.c=.o}
 NAME	= minishell
 CC		= cc

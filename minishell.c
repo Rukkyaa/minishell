@@ -3,44 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/28 12:47:58 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/05 16:20:12 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-
-
-
-//int	exec_command(char **paths, char **cmd, char **env)
-//{
-//	int		i;
-//	char	*path;
-
-//	i = -1;
-//	if (!cmd || ft_strlen(cmd[0]) == 0)
-//		return (ft_putstr_fd("'' : command not found\n", 2), -1);
-//	while (paths[++i] != NULL)
-//	{
-//		path = ft_strjoin_spe(paths[i], cmd[0]);
-//		if (path == NULL)
-//			return (-1);
-//		if (access(path, F_OK) == 0)
-//		{
-//			if (access(path, X_OK) != 0)
-//				return (perror(""), free(path), -1);
-//			if (execve(path, cmd, env) == -1)
-//				return (free(path), -1);
-//			return (free(path), 0);
-//		}
-//		free(path);
-//	}
-//	ft_putstr_fd(cmd[0], 2);
-//	ft_putstr_fd(": command not found\n", 2);
-//	return (-1);
-//}
 
 //int	redir_non_null(char **redir)
 //{
@@ -64,35 +34,6 @@
 //		return (perror(""), -1);
 //	if (dup2(fdt, port) < 0)
 //		return (perror(""), -1);
-//	return (0);
-//}
-
-//int	exec_command_one(char *line, char **paths, char **env)
-//{
-//	t_minishell *elem;
-//	//int	status1;
-
-//	printf("Debut de exec_command_one\n");
-//	elem = gen_maillon(line);
-//	if (!elem)
-//		return (-1);
-//	print_maillon(elem);
-//	printf("Fin de exec_command_one\n");
-//	printf("%p%p", paths, env);
-//	// elem->pid = fork();
-//	// if (elem->pid < 0)
-//	// 	return (-1);
-//	// if (elem->pid == 0)
-//	// {
-//	// 	if (elem->redirections[0] && ft_strlen(elem->redirections[0]) != 0 && redirecting(elem->redirections[0], STDIN_FILENO) == -1)
-//	// 			exit (42);
-//	// 	if (elem->redirections[1] && ft_strlen(elem->redirections[1]) != 0 && redirecting(elem->redirections[1], STDOUT_FILENO) == -1)
-//	// 			exit (42); //ajouter le cas >> append
-//	// 	if (exec_command(paths, elem->cmd, env) == -1)
-//	// 		exit(42);
-//	// }
-//	// if (waitpid(elem->pid, &status1, 0) < -1 || (WIFEXITED(status1) && WEXITSTATUS(status1) == 42))
-//	// 	return (-1);
 //	return (0);
 //}
 
@@ -130,13 +71,16 @@ t_tree *parsingator(char *line, t_all *p)
 	if (!line || !p || !(*line_bis))
 		return (NULL);
 	//ajout d'emblee d'une securite qui traite les quotes
+	//verfier si le heredocs remplace les var avant d'ouvrir le stdin (probablement pas)
 	p->here_docs = get_here_docs(line_bis);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
 		return (free(*line_bis), NULL);
+	//apres le here docs, faire le tri des asterisques
+	//remplacer les dollars par les var/ avant ou apres les asterisques a voir
 	start = init_tree(line_bis);
 	if (init_shell(start, p) == -1)
 		return (free_start(start), free(line_bis), NULL);
-	return (start);
+	return (free(*line_bis), free(line_bis), start);
 }
 
 void print_all(t_all *p)
@@ -147,6 +91,21 @@ void print_all(t_all *p)
 	print_cmd(p->start, 1);
 	print_here_doc(p->here_docs);
 }
+
+//implanter les * (GAB)
+	//trouver comment lire les dossiers (AXEL)
+//implanter les traitements de $variables (avant ou apres asterisque ?) (GAB/AXEL (fonctionne avec unset))
+//effacer tous les strncmp
+//integrer les signaux (AXEL)
+//integrer les quotes (a priori good) (GAB)
+//integrer la gestion d'erreur dans l'exec de pipex (GAB)
+//integrer le delire tty (A voir)
+//ajout de l'historique (AXEL)
+//Tester append (pb quand mixer a <<) (GAB)
+//Corriger le probleme des here docs mutiples dans l'exec (GAB)
+// faire les builtins sous forme de fonctions (AXEL)
+// integrer les builtins (GAB)
+//regarder l'histoire du $?
 
 int	main(int argc, char **argv, char **env)
 {
@@ -165,7 +124,8 @@ int	main(int argc, char **argv, char **env)
 		//line = ft_strdup("cat test | (wc && (ls || ifconfig))");
 		p->start = parsingator(line, p);
 		print_all(p);
-
+		if (executor(p->start) == -1)
+			printf("ERRRRROOOOOR\n");
 		//if (!strncmp(line, "pwd", 3))
 		//	ft_pwd();
 		//else if (!strncmp(line, "echo", 4))
@@ -177,3 +137,20 @@ int	main(int argc, char **argv, char **env)
 	free_all(p);
 	return (EXIT_SUCCESS);
 }
+
+//MAIN SANS READLINE POUR CHECK LEAKS
+// int main(int argc, char **argv, char **env)
+// {
+// 	t_all *p;
+
+// 	(void)argc;
+// 	p = init_env(env);
+// 	if (!p)
+// 		return (1);
+// 	p->start = parsingator(argv[1], p);
+// 	print_all(p);
+// 	free_cmd(p);
+// 	free_all(p);
+// 	return (EXIT_SUCCESS);
+// }
+
