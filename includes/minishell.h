@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/05 14:40:14 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/07 18:05:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,9 @@ void clean_rest(t_tree *start, int i, int end);
 
 //parsing/spe_split.c
 char	**ft_split_spe(char *s, char c);
+
+//parsing/var_dealer.c
+char	**replace_var(char **line, char **env);
 
 //pipex/executor.c
 int	executor(t_tree *start);

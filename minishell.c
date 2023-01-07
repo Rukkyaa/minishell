@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/05 16:20:12 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/07 18:24:21 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@
 t_tree *parsingator(char *line, t_all *p)
 {
 	//reste a gerer les quotes, les meta carateres
-	//fonction qui recupere les here_docs
 	// fonction qui anticipe les quotes (calcul de la somme)
 	t_tree *start;
 	char **line_bis;
@@ -71,14 +70,11 @@ t_tree *parsingator(char *line, t_all *p)
 	if (!line || !p || !(*line_bis))
 		return (NULL);
 	//ajout d'emblee d'une securite qui traite les quotes
-	//verfier si le heredocs remplace les var avant d'ouvrir le stdin (probablement pas)
 	p->here_docs = get_here_docs(line_bis);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
 		return (free(*line_bis), NULL);
-	//apres le here docs, faire le tri des asterisques
-	//remplacer les dollars par les var/ avant ou apres les asterisques a voir
-	start = init_tree(line_bis);
-	if (init_shell(start, p) == -1)
+	start = init_tree(replace_var(line_bis, p->env));
+	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
 		return (free_start(start), free(line_bis), NULL);
 	return (free(*line_bis), free(line_bis), start);
 }
@@ -92,9 +88,7 @@ void print_all(t_all *p)
 	print_here_doc(p->here_docs);
 }
 
-//implanter les * (GAB)
-	//trouver comment lire les dossiers (AXEL)
-//implanter les traitements de $variables (avant ou apres asterisque ?) (GAB/AXEL (fonctionne avec unset))
+
 //effacer tous les strncmp
 //integrer les signaux (AXEL)
 //integrer les quotes (a priori good) (GAB)
@@ -106,6 +100,8 @@ void print_all(t_all *p)
 // faire les builtins sous forme de fonctions (AXEL)
 // integrer les builtins (GAB)
 //regarder l'histoire du $?
+//verifier que tous les ports sont bien fermes a la fin
+//gerer les destructions de fichiers en cas d'erreur de la commande
 
 int	main(int argc, char **argv, char **env)
 {
@@ -149,6 +145,9 @@ int	main(int argc, char **argv, char **env)
 // 		return (1);
 // 	p->start = parsingator(argv[1], p);
 // 	print_all(p);
+// 	if (executor(p->start) == -1)
+// 		printf("ERRRRROOOOOR\n");
+	
 // 	free_cmd(p);
 // 	free_all(p);
 // 	return (EXIT_SUCCESS);
