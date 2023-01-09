@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/28 12:22:28 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/09 14:34:10 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,45 +165,90 @@ char	*gen_new_limiter(char *limiter)
 
 //cas d'erreur a traiter si le malloc de find lim echoue
 
-char *clean_heredoc_line(char *line, char *filename)
-{
-	char *limiter;
-	int i;
-	int length;
-	int length2;
-	char *new_line;
+// char *clean_heredoc_line(char *line, char *filename, char *LIM)
+// {
+// 	int i;
+// 	int length;
+// 	int length2;
+// 	char *new_line;
 
-	limiter = find_lim(line);
-	length = 0;
-	length2 = 0;
+// 	length = 0;
+// 	length2 = 0;
+// 	i = 0;
+// 	while (line[i + 1] != '\0' && !(line[i] == '<' && line[i + 1] == '<'))
+// 	{
+// 		length++;
+// 		i++;
+// 	}
+// 	i += 2;
+// 	while (line[i] != '\0' && is_whitespace(line[i]) == 1)
+// 		i++;
+// 	i += ft_strlen(LIM);
+// 	while (line[i] != '\0' && i++ < ft_strlen(line))
+// 		length2++;
+// 	new_line = malloc((++length + length2 + ft_strlen(filename) + 1) * sizeof(char));
+// 	if (!new_line)
+// 		return (free(LIM), NULL);
+// 	i = -1;
+// 	while (++i < length)
+// 		new_line[i] = line[i];
+// 	new_line[i] = '\0';
+// 	new_line = ft_strcat(new_line, filename);
+// 	length = i + ft_strlen(filename);
+// 	i += 2;
+// 	while (is_whitespace(line[i]) == 1)
+// 		i++;
+// 	i += ft_strlen(LIM);
+// 	while (line[i] != '\0')
+// 		new_line[length++] = line[i++];
+// 	return (free(LIM), new_line);
+// }
+
+int ft_strnspe(const char *big, const char *little, size_t len)
+{
+	size_t	i;
+	size_t	j;
+
 	i = 0;
-	while (line[i + 1] != '\0' && !(line[i] == '<' && line[i + 1] == '<'))
+	if (!(*little))
+		return (-1);
+	if (!len)
+		return (-1);
+	while (big[i] && i < len)
 	{
-		length++;
+		j = 0;
+		while (big[i + j] == little[j] && big[i + j] && i + j < len)
+			j ++;
+		if (little[j] == '\0')
+			return (i);
 		i++;
 	}
-	i += 2;
-	while (is_whitespace(line[i]) == 1 && line[i] != '\0')
-		i++;
-	i += ft_strlen(limiter);
-	while (i < ft_strlen(line) && line[i++] != '\0')
-		length2++;
-	new_line = malloc((++length + length2 + ft_strlen(filename) + 1) * sizeof(char));
-	if (!new_line)
-		return (free(limiter), NULL);
-	i = -1;
-	while (++i < length)
-		new_line[i] = line[i];
-	new_line[i] = '\0';
-	new_line = ft_strcat(new_line, filename);
-	length = i + ft_strlen(filename);
-	i += 2;
-	while (is_whitespace(line[i]) == 1)
-		i++;
-	i += ft_strlen(limiter);
-	while (line[i] != '\0')
-		new_line[length++] = line[i++];
-	return (free(limiter), new_line);
+	return (-1);
+}
+
+char *clean_heredoc_line(char *line, char *filename, char *LIM)
+{
+	int i;
+	char *new_line;
+	char *reste;
+
+	new_line = ft_substr(line, 0, ft_strnspe(line, LIM, ft_strlen(LIM)));
+	if (!new_line || new_line == NULL)
+		return (free(LIM), free(line), NULL);
+	i = ft_strlen(new_line) - 1;
+	while (i >= 0 && is_whitespace(new_line[i]) == 1)
+		i--;
+	new_line[i] = ' ';
+	new_line = ft_strjoin_spe(new_line, filename);
+	if (new_line == NULL || !new_line)
+		return (free(LIM), free(line), NULL);
+	reste = ft_substr(line, ft_strnspe(line, LIM, ft_strlen(LIM)) + ft_strlen(LIM), ft_strlen(line));
+	if (!reste || reste == NULL)
+		return (free(LIM), free(line), free(new_line), NULL);
+	new_line = ft_strjoin_spe(new_line, reste);
+	if (!new_line || new_line == NULL)
+		return (free(LIM), free(line), free(reste), NULL);
+	return (free(LIM), free(line), free(reste), new_line);
 }
 
 int fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas avec quotes
@@ -230,8 +275,8 @@ int fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas av
 	}
 	free(lect);
 	lect = get_next_line(-42);
-	*line = clean_heredoc_line(*line, here_docs[nb]);
-	if (line == NULL)
+	*line = clean_heredoc_line(*line, here_docs[nb], find_lim(*line));
+	if (*line == NULL)
 		return (free(newlimiter), close (fd), free(here_docs[nb]), -1);
 	return (free(newlimiter), close (fd), fill_file(here_docs, line, max, ++nb));
 }
@@ -243,7 +288,7 @@ char **get_here_docs(char **line)
 {
 	char **here_docs;
 
-	if (heredoc_count(*line, 0) == 0 || ft_strlen(*line) < 3)
+	if (heredoc_count(*line, 0) == 0) // || ft_strlen(*line) < 3)
 		return (NULL);
 	here_docs = malloc((heredoc_count(*line, 0) + 1) * sizeof(char *));
 	if (!here_docs)

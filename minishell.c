@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/07 18:24:21 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/09 14:31:35 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ int	main(int argc, char **argv, char **env)
 		//line = ft_strdup("cat test | (wc && (ls || ifconfig))");
 		p->start = parsingator(line, p);
 		print_all(p);
-		if (executor(p->start) == -1)
-			printf("ERRRRROOOOOR\n");
+		// if (executor(p->start) == -1)
+		// 	printf("ERRRRROOOOOR\n");
 		//if (!strncmp(line, "pwd", 3))
 		//	ft_pwd();
 		//else if (!strncmp(line, "echo", 4))
