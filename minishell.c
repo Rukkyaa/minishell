@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/09 14:31:35 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/09 20:48:34 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,65 +91,75 @@ void print_all(t_all *p)
 
 //effacer tous les strncmp
 //integrer les signaux (AXEL)
-//integrer les quotes (a priori good) (GAB)
-//integrer la gestion d'erreur dans l'exec de pipex (GAB)
-//integrer le delire tty (A voir)
+//integrer les quotes (a priori good) (GAB) il se passe un truc bizarre si il 'y en a qu'une
 //ajout de l'historique (AXEL)
 //Tester append (pb quand mixer a <<) (GAB)
-//Corriger le probleme des here docs mutiples dans l'exec (GAB)
 // faire les builtins sous forme de fonctions (AXEL)
-// integrer les builtins (GAB)
+// finir d'integrer les builtins (GAB)
 //regarder l'histoire du $?
-//verifier que tous les ports sont bien fermes a la fin
 //gerer les destructions de fichiers en cas d'erreur de la commande
+//revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
+//definir une politique claire sur le cas ou il n' a qu'une seule quote
+//traite le cas "cat " OU "cat |" // regarder aussi le segfault si " | "    "| || etc"
+//cas special avec le cd ou on peut creer deux dossier puis rm le parent
+//verifier que le parsing encaisse bien plusieurs redirections semblables et supprime ou garde les fichiers vides selon bash
+//specifier le nom du fichier quand celui n'existe pas
+//cas du heredoc avec $"" (traduit en \0) + heredoc chelou si il y a pas de commande avant 
+//souci de parsing et de reecriture des chaines
+//cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss
+//env -i, savoir gerer sans l'env et copier dans le dur le reste du env
+//cas du "'$USER'"
+//cas des mutiples exit et lancement de minishell dans le minishell
+//trouver pq les multiples outfiles bugs avec le pipe
+//cas des ulltiples $ : $$$USER 
+//ajourter la tilde ~ 
 
-int	main(int argc, char **argv, char **env)
-{
-	t_all *p;
-	char *line;
-
-	(void)argc;
-	(void) **argv;
-	p = init_env(env);
-	if (!p)
-		return (1);
-	line = NULL;
-	while (line == NULL)
-	{
-		line = ft_epur(readline("Minishell> "));
-		//line = ft_strdup("cat test | (wc && (ls || ifconfig))");
-		p->start = parsingator(line, p);
-		print_all(p);
-		// if (executor(p->start) == -1)
-		// 	printf("ERRRRROOOOOR\n");
-		//if (!strncmp(line, "pwd", 3))
-		//	ft_pwd();
-		//else if (!strncmp(line, "echo", 4))
-		//	ft_echo(line);
-		free_cmd(p);
-		free(line);
-		line = NULL;
-	}
-	free_all(p);
-	return (EXIT_SUCCESS);
-}
-
-//MAIN SANS READLINE POUR CHECK LEAKS
-// int main(int argc, char **argv, char **env)
+// int	main(int argc, char **argv, char **env)
 // {
 // 	t_all *p;
+// 	char *line;
 
 // 	(void)argc;
+// 	(void) **argv;
 // 	p = init_env(env);
 // 	if (!p)
 // 		return (1);
-// 	p->start = parsingator(argv[1], p);
-// 	print_all(p);
-// 	if (executor(p->start) == -1)
-// 		printf("ERRRRROOOOOR\n");
-	
-// 	free_cmd(p);
+// 	line = NULL;
+// 	while (line == NULL)
+// 	{
+// 		line = ft_epur(readline("Minishell> "));
+// 		//line = ft_strdup("cat test | (wc && (ls || ifconfig))");
+// 		p->start = parsingator(line, p);
+// 		//print_all(p);
+// 		if (executor(p->start) == -1)
+// 			printf("ERRRRROOOOOR\n");
+// 		//if (!strncmp(line, "pwd", 3))
+// 		//	ft_pwd();
+// 		//else if (!strncmp(line, "echo", 4))
+// 		//	ft_echo(line);
+// 		free_here_docs(p->here_docs);
+// 		free(line);
+// 		line = NULL;
+// 	}
 // 	free_all(p);
 // 	return (EXIT_SUCCESS);
 // }
+
+//MAIN SANS READLINE POUR CHECK LEAKS
+int main(int argc, char **argv, char **env)
+{
+	t_all *p;
+
+	(void)argc;
+	p = init_env(env);
+	if (!p)
+		return (1);
+	p->start = parsingator(argv[1], p);
+	print_all(p);
+	if (executor(p->start) == -1)
+		printf("ERRRRROOOOOR\n");
+	free_here_docs(p->here_docs);
+	free_all(p);
+	return (EXIT_SUCCESS);
+}
 

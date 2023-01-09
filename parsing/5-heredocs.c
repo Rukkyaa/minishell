@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/09 14:34:10 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/09 16:31:44 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,55 +43,6 @@ int heredoc_count(char *line, int index)
 	}
 	return (compt);
 }
-
-//char *find_last_limiter(char *line)
-//{
-//	int i;
-//	int compt;
-//	int d;
-//	char *limiter;
-
-//	compt = 0;
-//	i = ft_strlen(line) - 2;
-//	while (i > 0 && line[i] != '<' && line[i - 1] != '<')
-//		i--;
-//	i += 2;
-//	while (is_whitespace(line[i]) == 1)
-//		i++;
-//	d = i;
-//	while (is_whitespace(line[d++]) == 0)
-//		compt++;
-//	limiter = malloc((compt + 1) * sizeof(char));
-//	if (!limiter)
-//		return (NULL);
-//	compt = 0;
-//	while (i < d)
-//		limiter[compt++] = line[i++];
-//	return(limiter[compt] = '\0', limiter);
-//}
-
-//char *get_text(char *last_limiter)
-//{
-//	char *text;
-//	char *lect;
-
-//	if (last_limiter == NULL || !last_limiter)
-//		return (NULL);
-//	text = malloc(1);
-//	if (!text)
-//		return (NULL);
-//	text[0] = '\0';
-//	lect = get_next_line(0);
-//	while (ft_strcmp(lect, last_limiter) != 0)
-//	{
-//		text = ft_strjoin_spe(text, lect);
-//		free(lect);
-//		lect = get_next_line(0);
-//	}
-//	free(lect);
-//	lect = get_next_line(-42);
-//	return (free(last_limiter), text);
-//}
 
 char	*generate_name(char *limiter)
 {
@@ -232,7 +183,7 @@ char *clean_heredoc_line(char *line, char *filename, char *LIM)
 	char *new_line;
 	char *reste;
 
-	new_line = ft_substr(line, 0, ft_strnspe(line, LIM, ft_strlen(LIM)));
+	new_line = ft_substr(line, 0, ft_strnspe(line, LIM, ft_strlen(line)));
 	if (!new_line || new_line == NULL)
 		return (free(LIM), free(line), NULL);
 	i = ft_strlen(new_line) - 1;
@@ -242,7 +193,7 @@ char *clean_heredoc_line(char *line, char *filename, char *LIM)
 	new_line = ft_strjoin_spe(new_line, filename);
 	if (new_line == NULL || !new_line)
 		return (free(LIM), free(line), NULL);
-	reste = ft_substr(line, ft_strnspe(line, LIM, ft_strlen(LIM)) + ft_strlen(LIM), ft_strlen(line));
+	reste = ft_substr(line, ft_strnspe(line, LIM, ft_strlen(line)) + ft_strlen(LIM), ft_strlen(line));
 	if (!reste || reste == NULL)
 		return (free(LIM), free(line), free(new_line), NULL);
 	new_line = ft_strjoin_spe(new_line, reste);
@@ -274,7 +225,8 @@ int fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas av
 		lect = get_next_line(0);
 	}
 	free(lect);
-	lect = get_next_line(-42);
+	if (nb + 1 == max)
+		lect = get_next_line(-42);
 	*line = clean_heredoc_line(*line, here_docs[nb], find_lim(*line));
 	if (*line == NULL)
 		return (free(newlimiter), close (fd), free(here_docs[nb]), -1);

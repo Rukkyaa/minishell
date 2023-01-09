@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/07 18:12:48 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/09 16:50:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_all *init_env(char **env)
 	if (!p->paths)
 		return (free(p), NULL);
 	p->env = env;
+	//p->here_docs = NULL; //ligne add, voir si ca impacte le fonctionnement
 	return (p);
 }
 

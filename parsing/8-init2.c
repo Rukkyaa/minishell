@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/05 15:23:33 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/09 16:58:28 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ int recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	if (!new_elem)
 		return (-1);
 	new_elem->next = NULL;
-	new_elem->infile = NULL;
-	new_elem->outfile = NULL;
+	new_elem->file_in = NULL;
+	new_elem->file_out = NULL;
 	new_elem->cmd = NULL;
 	new_elem->append = 0;
 	init->next = new_elem;
@@ -117,8 +117,8 @@ int	init_cmd(t_tree *start, t_all *p)
 	if (!init_mini)
 		return (-1);
 	init_mini->next = NULL;
-	init_mini->infile = NULL;
-	init_mini->outfile = NULL;
+	init_mini->file_in = NULL;
+	init_mini->file_out = NULL;
 	init_mini->cmd = NULL;
 	init_mini->append = 0;
 	if (recursive_lst(init_mini, tab_cmd, 0, p) == -1)

@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/07 18:05:55 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/09 18:43:05 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,31 @@
 
 # include "../libft/libft.h"
 
-
 // < == 0 input
 // > == 1 output
 // >> == 2 output
+
+typedef struct s_infile
+{
+	char *file_in;
+	struct s_infile *next;
+}	t_infile;
+
+typedef struct s_outfile
+{
+	char *file_out;
+	struct s_outfile *next;
+	int	created;
+	int append;
+}	t_outfile;
 
 typedef struct s_minishell
 {
 	pid_t			pid;
 	char			**cmd;
 	int				fd[2];
-	char			*infile;
-	char			*outfile;
+	t_infile			*file_in;
+	t_outfile			*file_out;
 	int				append;
 	char			**env;
 	char			**paths;
@@ -79,6 +92,10 @@ void clean_rest(t_tree *start, int i, int end);
 void free_all(t_all *p);
 void	free_start(t_tree *start);
 void free_cmd(t_all *p);
+void free_files_in(t_infile *lst);
+void free_files_out(t_outfile *lst, int mode);
+void	free_minishell(t_minishell *elem, int mode);
+void	free_here_docs(char **here_docs);
 
 //parsing/3-segmentation.c
 int op_segmentation(t_tree *start, int i, int end, char *reserve);
@@ -94,6 +111,7 @@ void clean_res(char *reserve, int index);
 //parsing/5-heredocs.c
 char **get_here_docs(char **line);
 int heredoc_count(char *line, int index);
+int	ft_strcmp(char *s1, char *s2);
 
 //parsing/6-count.c
 int	countof_spe(char **line, char c, int compt);
@@ -120,6 +138,8 @@ char *erase_redir(char *cmd);
 int check_redirection(char *cmd, t_minishell *maillon);
 char *get_filename(char *line, int i);
 void clean_rest(t_tree *start, int i, int end);
+t_outfile	*add_file_out(t_outfile *lst, char *file, int opt);
+t_infile	*add_file_in(t_infile *lst, char *file);
 
 //parsing/spe_split.c
 char	**ft_split_spe(char *s, char c);
@@ -131,6 +151,12 @@ char	**replace_var(char **line, char **env);
 int	executor(t_tree *start);
 int	opening(char *file, int port, int append, int mode);
 int	exec_command(char **paths, char **cmd, char **env);
+int	opening_in(t_infile *file_org, int port);
+int	opening_out(t_outfile *file_org, int port);
+
+//pipex/exec_builtins.c
+int path_comp_builtins(char **paths);
+void exec_builtin(int nb, char **cmd);
 
 //pipex/pipe.c
 int	first_pipe(t_minishell *elem, char **paths, char **env);

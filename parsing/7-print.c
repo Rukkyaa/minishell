@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   7-print.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:24:51 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/28 12:46:32 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/09 18:46:54 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void print_tree(t_tree *start, int i)
 void print_pipe(t_minishell *elem, int i)
 {
 	int d;
+	t_infile *f1;
+	t_outfile *f2;
 
 	d = 0;
 	printf("\n	|PIPE %d\n", i);
@@ -38,8 +40,31 @@ void print_pipe(t_minishell *elem, int i)
 		printf("	|cmd[%d]: %s\n", d, elem->cmd[d]);
 		d++;
 	}
-	printf("	|Infile : %s\n", elem->infile);
-	printf("	|Outfile : %s\n\n", elem->outfile);
+	d = 0;
+	f1 = elem->file_in;
+	if (f1 != NULL)
+	{
+		while (f1 != NULL)
+		{
+			printf("	|Infile[%d] : %s\n", d++, f1->file_in);
+			f1 = f1->next;
+		}
+	}
+	f2 = elem->file_out;
+	if (f2 != NULL)
+	{
+		while (f2 != NULL)
+		{
+			printf("	|Outfile[%d] : %s", d++, f2->file_out);
+			if (f2->created == 1)
+				printf("	*created*");
+			if (f2->append == 1)
+				printf("	*append*");
+			printf("\n");
+			f2 = f2->next;
+		}
+	}
+	printf("\n");
 	if (elem->next != NULL)
 		print_pipe(elem->next, ++i);
 }
