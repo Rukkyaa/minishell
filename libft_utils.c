@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:28:50 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/26 14:44:57 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/07 17:41:33 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,11 @@ char	*ft_strjoin_spe(char *s1, char *s2)
 	int		i;
 
 	i = -1;
+	if (!s1 || s1 == NULL)
+		return (s2);
 	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!(str))
-		return (NULL);
+		return (free(s1), NULL);
 	while (s1[++i] != '\0')
 		str[i] = s1[i];
 	str[i] = '\0';

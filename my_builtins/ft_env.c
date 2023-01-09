@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/27 01:57:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/29 10:23:41 by rukkyaa          ###   ########.fr       */
+/*   Created: 2023/01/09 23:35:36 by rukkyaa           #+#    #+#             */
+/*   Updated: 2023/01/10 00:37:39 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ int	ft_env(t_env *env)
 		ft_putstr_fd("\n", 1);
 		env = env->next;
 	}
-	return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

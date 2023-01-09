@@ -5,12 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/27 00:49:44 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/29 10:23:19 by rukkyaa          ###   ########.fr       */
+/*   Created: 2023/01/09 23:34:40 by rukkyaa           #+#    #+#             */
+/*   Updated: 2023/01/10 00:38:04 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+t_env	*ft_envlast(t_env *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}
 
 void	ft_env_add_back(t_env **lst, t_env *new)
 {
@@ -23,15 +32,6 @@ void	ft_env_add_back(t_env **lst, t_env *new)
 	}
 	else
 		*lst = new;
-}
-
-t_env	*ft_envlast(t_env *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
 }
 
 t_env	*ft_envnew(char *key, char *value)

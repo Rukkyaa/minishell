@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/29 10:05:47 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/09 16:50:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,16 @@ t_all *init_env(char **env)
 	if (!p->paths)
 		return (free(p), NULL);
 	p->env = env;
+	//p->here_docs = NULL; //ligne add, voir si ca impacte le fonctionnement
 	return (p);
 }
 
 t_tree *init_tree(char **line)
 {
-//	int i;
-//	int compt_cmd;
 	t_tree	*start;
 
-//	i = 0;
-//	compt_cmd = 1;
+	if (!line || line == NULL)
+		return (NULL);
 	if (countof_spe(line, '(', 0) != countof_spe(line, ')', 0))
 		return (printf("bash: syntax error\n"), NULL);
 	start = init_m_tree(ft_strlen(*line));
@@ -54,7 +53,7 @@ t_tree *init_m_tree(int length)
 	start = malloc(sizeof(t_tree));
 	if (!start)
 		return (NULL);
-	start->cmd = ft_calloc(length, sizeof(char));
+	start->cmd = ft_calloc(length + 1, sizeof(char));
 	start->and = NULL;
 	start->or = NULL;
 	return (start);

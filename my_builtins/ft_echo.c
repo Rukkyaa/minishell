@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:53:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/29 10:19:12 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/10 00:37:31 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_echo(char *str)
 	i = -1;
 	if (split[0])
 	{
-		while (!strcmp(split[++i], "-n")) //INTERDIT
+		while (!ft_strncmp(split[++i], "-n", 2))
 			option = true;
 		while (split[i])
 		{
@@ -37,5 +37,6 @@ int	ft_echo(char *str)
 	}
 	if (!option)
 		ft_putchar_fd('\n', 1);
+	free_tab(split);
 	return (EXIT_SUCCESS);
 }
