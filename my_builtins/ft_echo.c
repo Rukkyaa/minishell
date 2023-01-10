@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:53:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 00:37:31 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/10 23:12:36 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_echo(char *str)
 	i = -1;
 	if (split[0])
 	{
-		while (!ft_strncmp(split[++i], "-n", 2))
+		while (split[++i] && !ft_strncmp(split[i], "-n\0", 3))
 			option = true;
 		while (split[i])
 		{

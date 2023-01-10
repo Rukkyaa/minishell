@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 00:27:36 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/10 23:26:55 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ void print_all(t_all *p)
 
 void	check_builtins(char *str, t_env *env)
 {
-	printf("Builtins !\n");
+	// printf("Builtins !\n");
 	if (!strncmp(str, "pwd", 3))
 		ft_pwd();
 	else if (!strncmp(str, "echo", 4))
 		ft_echo(str + 4);
-	//else if (!strncmp(str, "cd", 2))
-	//	ft_cd(str);
+	else if (!strncmp(str, "cd", 2))
+		ft_cd(env, str);
 	else if (!strncmp(str, "env", 3))
 		ft_env(env);
 	else if (!strncmp(str, "export", 6))

@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 00:27:33 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/10 23:30:10 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,11 +216,13 @@ int	ft_echo(char *str);
 int	ft_env(t_env *env);
 int	ft_unset(t_env *env, char *to_unset);
 int	ft_export(t_env *env, char *str);
+int	ft_cd(t_env *env, char *new_cd);
 
 // ENV STRUCT
 t_env	*ft_envlast(t_env *lst);
 void	ft_env_add_back(t_env **lst, t_env *new);
 t_env	*env_to_struct(char **env, t_env *env_struct);
 t_env	*ft_envnew(char *key, char *value);
+bool	ft_is_in_env(t_env *env, char *str);
 
 #endif
