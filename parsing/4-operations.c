@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:47:45 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/05 12:22:13 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 19:38:31 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,17 @@ int	op_found(char *line)
 	int i;
 
 	i = 0;
-	while (line[i + 1] != '\0')
+	while (line[i] != '\0' && line[i + 1] != '\0')
 	{
-		if (line[i] == '\"' || line[i] == '\'')
+		if (line[i] != '\0' && (line[i] == '\"' || line[i] == '\''))
+		{
 			i = avoid_quotes(line, i);
+			if (i == ft_strlen(line))
+				break;
+		}
 		if (line[i] == '&' && line[i + 1] == '&')
 			return (i);
-		if (line[i] == '|' && line[i + 1] == '|')
+		if (line[i] == '|' && line[i + 1] == '|') //possible invalid read
 			return (i);
 		i++;
 	}

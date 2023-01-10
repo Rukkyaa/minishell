@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:29:25 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/05 12:14:21 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 19:35:32 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,24 @@ int	countof_spe(char **line, char c, int compt)
 		return (0);
 	while ((*line)[++i] != '\0')
 	{
-		if ((*line)[i] == '\"')
+		if ((*line)[i] != '\0' && (*line)[i] == '\"')
 		{
 			i++;
-			while ((*line)[i] != '\"')
+			while ((*line)[i] != '\0' && (*line)[i] != '\"')
 				i++;
 			i++;
 		}
-		if ((*line)[i] == '\'')
+		if ((*line)[i] != '\0' && (*line)[i] == '\'')
 		{
 			i++;
-			while ((*line)[i] != '\'')
+			while ((*line)[i] != '\0' && (*line)[i] != '\'')
 				i++;
 			i++;
 		}
-		if ((*line)[i] == c)
+		if ((*line)[i] != '\0' && (*line)[i] == c)
 			compt++;
-		
+		if ((*line)[i] == '\0')
+			break;
 	}
 	return (compt);
 }
@@ -75,6 +76,8 @@ int last_char_spe(char *line, char c)
 	{
 		if (line[i] == '\"' || line[i] == '\'')
 			i = avoid_quotes(line, i);
+		if (i == ft_strlen(line))
+			break;
 		if (line[i] == c)
 			res = i;
 		i++;
@@ -110,7 +113,11 @@ int count_pipe(char *cmd)
 	while (cmd[i] != '\0')
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
+		{
 			i = avoid_quotes(cmd, i);
+			if (i == ft_strlen(cmd))
+				break;
+		}
 		if (cmd[i] == '|')
 			compt++;
 		i++;

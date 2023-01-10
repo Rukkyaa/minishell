@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/09 16:58:28 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 17:26:57 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ char	*ft_trim_quotes(char *s1, int *alert)
 		return (NULL);
 	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"') || (s1[0] == '\'' && s1[1] == '\'')))
 		return (NULL);
-	if ((s1[0] == '\'' || s1[ft_strlen(s1) - 1] == '\'') || (s1[0] == '\"' || s1[ft_strlen(s1) - 1] == '\"'))
+	if ((s1[0] == '\'' && s1[ft_strlen(s1) - 1] == '\'') || (s1[0] == '\"' && s1[ft_strlen(s1) - 1] == '\"'))
 	{
 		s1_bis = malloc((ft_strlen(s1) -1) * sizeof(char));
 		if (!s1_bis)
 			return ((*alert)++, s1);
 		while (s1[++i + 1] != '\0')
 			s1_bis[i - 1] = s1[i];
-		s1_bis[i - 2] = '\0';
+		s1_bis[i - 1] = '\0';
 		free(s1);
 		return(s1_bis);
 	}
@@ -129,7 +129,7 @@ int	init_cmd(t_tree *start, t_all *p)
 
 int	init_shell(t_tree *start, t_all *p)
 {
-	if (!start)
+	if (!start || start == NULL)
 		return (-1);
 	if (init_cmd(start, p) == -1)
 		return (-1);

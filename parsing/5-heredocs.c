@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/09 16:31:44 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 19:26:40 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ int heredoc_count(char *line, int index)
 
 	i = index;
 	compt = 0;
-	while (line[i + 2] != '\0')
+	while (line[i] != '\0' && line[i + 1] != '\0' && line[i + 2] != '\0')
 	{
 		if (line[i] == '\"' || line[i] == '\'')
 			i = avoid_quotes(line, i);
-		if (line[i] == '<' && line[i + 1] == '<' && line[i + 2] != '<')
+		if (i == ft_strlen(line))
+			break;
+		if (line[i] != '\0' && line[i] == '<' && line[i + 1] != '\0' && line[i + 1] == '<' && line[i + 2] != '\0' && line[i + 2] != '<')
 			compt++;
 		i++;
 	}

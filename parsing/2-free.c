@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/09 18:43:48 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 15:53:56 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,35 @@
 
 void free_files_in(t_infile *lst)
 {
+	t_infile *p;
+
 	if (lst == NULL || !lst)
 		return ;
-	while (lst->next != NULL)
+	while (lst != NULL)
 	{
 		free(lst->file_in);
+		p = lst;
 		lst = lst->next;
+		free(p);
 	}
-	free(lst->file_in);
 	return ;
 }
 
 void free_files_out(t_outfile *lst, int mode)
 {
+	t_outfile *p;
+
 	if (lst == NULL || !lst)
 		return ;
-	while (lst->next != NULL)
+	while (lst != NULL)
 	{
 		if (mode == 1 && lst->created == 1)
 			unlink(lst->file_out);
 		free(lst->file_out);
+		p = lst;
 		lst = lst->next;
+		free(p);
 	}
-	free(lst->file_out);
 	return ;
 }
 
@@ -47,20 +53,20 @@ void	free_minishell(t_minishell *elem, int mode)
 	if (elem->file_in != NULL)
 		free_files_in(elem->file_in);
 	if (elem->file_out != NULL)
-		free_files_out(elem->file_out, 1);
+		free_files_out(elem->file_out, mode);
 	free_tab(elem->cmd);
 	free_minishell(elem->next, mode);
 	free(elem);
 }
 
-void	free_start(t_tree *start)
+void	free_start(t_tree *start, int mode)
 {
 	free(start->cmd);
-	free_minishell(start->first_elem, 1);
+	free_minishell(start->first_elem, mode);
 	if (start->and != NULL)
-		free_start(start->and);
+		free_start(start->and, mode);
 	if (start->or != NULL)
-		free_start(start->or);
+		free_start(start->or, mode);
 	free(start);
 }
 

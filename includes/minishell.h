@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/09 18:43:05 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 15:59:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void clean_rest(t_tree *start, int i, int end);
 
 //parsing/2-free.c
 void free_all(t_all *p);
-void	free_start(t_tree *start);
+void	free_start(t_tree *start, int mode);
 void free_cmd(t_all *p);
 void free_files_in(t_infile *lst);
 void free_files_out(t_outfile *lst, int mode);
@@ -148,20 +148,21 @@ char	**ft_split_spe(char *s, char c);
 char	**replace_var(char **line, char **env);
 
 //pipex/executor.c
-int	executor(t_tree *start);
+int	executor(t_tree *start, t_all *p);
 int	opening(char *file, int port, int append, int mode);
 int	exec_command(char **paths, char **cmd, char **env);
 int	opening_in(t_infile *file_org, int port);
 int	opening_out(t_outfile *file_org, int port);
+void error_process(t_all *p);
 
 //pipex/exec_builtins.c
 int path_comp_builtins(char **paths);
 void exec_builtin(int nb, char **cmd);
 
 //pipex/pipe.c
-int	first_pipe(t_minishell *elem, char **paths, char **env);
-int	mid_pipe(t_minishell *elem, char **paths, char **env);
-int	last_pipe(t_minishell *elem, char **paths, char **env);
+int	first_pipe(t_minishell *elem, t_all *p);
+int	mid_pipe(t_minishell *elem, t_all *p);
+int	last_pipe(t_minishell *elem, t_all *p);
 
 //get_next_line
 char	*get_next_line(int fd);

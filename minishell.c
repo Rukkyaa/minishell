@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/09 20:48:34 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 19:40:30 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_tree *parsingator(char *line, t_all *p)
 		return (free(*line_bis), NULL);
 	start = init_tree(replace_var(line_bis, p->env));
 	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
-		return (free_start(start), free(line_bis), NULL);
+		return (free_start(start, 0), free(line_bis), NULL);
 	return (free(*line_bis), free(line_bis), start);
 }
 
@@ -93,26 +93,32 @@ void print_all(t_all *p)
 //integrer les signaux (AXEL)
 //integrer les quotes (a priori good) (GAB) il se passe un truc bizarre si il 'y en a qu'une
 //ajout de l'historique (AXEL)
-//Tester append (pb quand mixer a <<) (GAB)
 // faire les builtins sous forme de fonctions (AXEL)
-// finir d'integrer les builtins (GAB)
+
 //regarder l'histoire du $?
-//gerer les destructions de fichiers en cas d'erreur de la commande
 //revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
 //definir une politique claire sur le cas ou il n' a qu'une seule quote
 //traite le cas "cat " OU "cat |" // regarder aussi le segfault si " | "    "| || etc"
-//cas special avec le cd ou on peut creer deux dossier puis rm le parent
-//verifier que le parsing encaisse bien plusieurs redirections semblables et supprime ou garde les fichiers vides selon bash
-//specifier le nom du fichier quand celui n'existe pas
 //cas du heredoc avec $"" (traduit en \0) + heredoc chelou si il y a pas de commande avant 
-//souci de parsing et de reecriture des chaines
-//cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss
-//env -i, savoir gerer sans l'env et copier dans le dur le reste du env
-//cas du "'$USER'"
+//souci de parsing et de reecriture des chaines A PRIORI GOOD
+//Refaire des test sur le traitement des variables
+//Faire les tests sur les operateurs logiques
+
+
+
+//PB DE BUILTINS
 //cas des mutiples exit et lancement de minishell dans le minishell
-//trouver pq les multiples outfiles bugs avec le pipe
-//cas des ulltiples $ : $$$USER 
-//ajourter la tilde ~ 
+//TRAITER LE CAS DES ./ ET ../ AVEC LA FCT CD AXEL
+//cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss + pouvoir lire les chemins de fichier qui ramene en arriere (../../...)
+//cas special avec le cd ou on peut creer deux dossier puis rm le parent
+
+//trouver pq les multiples outfiles bugs avec le pipe GOOD
+//ajourter la tilde ~ GOOD
+//gerer les destructions de fichiers en cas d'erreur de la commande GOOD
+//env -i, savoir gerer sans l'env et copier dans le dur le reste du env GOOD
+//verifier que le parsing encaisse bien plusieurs redirections semblables et supprime ou garde les fichiers vides selon bash GOOD
+//cas des ulltiples $ : $$$USER GOOD
+//cas du "'$USER'" GOOD
 
 // int	main(int argc, char **argv, char **env)
 // {
@@ -130,8 +136,8 @@ void print_all(t_all *p)
 // 		line = ft_epur(readline("Minishell> "));
 // 		//line = ft_strdup("cat test | (wc && (ls || ifconfig))");
 // 		p->start = parsingator(line, p);
-// 		//print_all(p);
-// 		if (executor(p->start) == -1)
+// 		print_all(p);
+// 		if (executor(p->start, p) == -1)
 // 			printf("ERRRRROOOOOR\n");
 // 		//if (!strncmp(line, "pwd", 3))
 // 		//	ft_pwd();
@@ -152,12 +158,13 @@ int main(int argc, char **argv, char **env)
 
 	(void)argc;
 	p = init_env(env);
-	if (!p)
-		return (1);
+	if (!p || p == NULL)
+		return (printf("Error in setting environment\n"), 1);
 	p->start = parsingator(argv[1], p);
 	print_all(p);
-	if (executor(p->start) == -1)
+	if (executor(p->start, p) == -1)
 		printf("ERRRRROOOOOR\n");
+	printf("finito");
 	free_here_docs(p->here_docs);
 	free_all(p);
 	return (EXIT_SUCCESS);

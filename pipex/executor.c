@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/09 18:40:51 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 15:59:18 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@
 int	opening_out(t_outfile *file_org, int port)
 {
 	int fdt;
-	char *line;
 	t_outfile *file;
 
 	file = file_org;
@@ -59,10 +58,13 @@ int	opening_out(t_outfile *file_org, int port)
 	while (file->next != NULL)
 	{
 		if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
-			return (perror(""), -1);
-		else if (access(file->file_out, F_OK) != 0)
+			return (perror(file->file_out), -1);
+		else
 		{
-			fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
+			if (file->append == 1)
+				fdt = open(file->file_out, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
+			else
+				fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
 			if (fdt == -1)
 				return (perror(""), -1);
 			if (close(fdt) == -1)
@@ -71,20 +73,11 @@ int	opening_out(t_outfile *file_org, int port)
 		file = file->next;
 	}
 	if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
-		return (perror(""), -1);
-	else if (access(file->file_out, F_OK) != 0)
-		fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
+		return (perror(file->file_out), -1);
+	else if (file->append == 1)
+		fdt = open(file->file_out, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 	else
-		fdt = open(file->file_out, O_WRONLY);
-	if (file->append == 1 && fdt != -1)
-	{
-		line = get_next_line(fdt);
-		while (line != NULL)
-		{
-			free(line);
-			line = get_next_line(fdt); //Besoin du get next line 42 ??
-		}
-	}
+		fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
 	if (fdt == -1)
 		return (perror(""), -1);
 	if (dup2(fdt, port) < 0)
@@ -103,11 +96,11 @@ int	opening_in(t_infile *file_org, int port)
 	while(file->next != NULL)
 	{
 		if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
-			return (perror(""), -1);
+			return (perror(file->file_in), -1);
 		file = file->next;
 	}
 	if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
-		return (perror(""), -1);
+		return (perror(file->file_in), -1);
 	fdt = open(file->file_in, O_RDONLY);
 	if (fdt == -1)
 		return (perror(""), -1);
@@ -124,8 +117,8 @@ int	exec_command(char **paths, char **cmd, char **env)
 	i = -1;
 	if (!cmd || ft_strlen(cmd[0]) == 0)
 		return (ft_putstr_fd("'' : command not found\n", 2), -1);
-	if (path_comp_builtins(cmd) > 0)
-		exec_builtin(path_comp_builtins(cmd), cmd);
+	// if (path_comp_builtins(cmd) > 0)
+	// 	exec_builtin(path_comp_builtins(cmd), cmd);
 	while (paths[++i] != NULL)
 	{
 		path = ft_strjoin_spe(paths[i], cmd[0]);
@@ -146,7 +139,16 @@ int	exec_command(char **paths, char **cmd, char **env)
 	return (-1);
 }
 
-int	exec_command_one(t_minishell *elem, char **paths, char **env)
+void error_process(t_all *p)
+{
+	free_start(p->start, 0);
+	free_tab(p->paths);
+	free_here_docs(p->here_docs);
+	free(p);
+	exit(1);
+}
+
+int	exec_command_one(t_minishell *elem, t_all *p)
 {
 	int	status1;
 
@@ -156,11 +158,11 @@ int	exec_command_one(t_minishell *elem, char **paths, char **env)
 	if (elem->pid == 0)
 	{
 		if (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1)
-			exit (1);
+			error_process(p);
 		if (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1)
-			exit (1);
-		if (exec_command(paths, elem->cmd, env) == -1)
-			exit(1);
+			error_process(p);
+		if (exec_command(p->paths, elem->cmd, p->env) == -1)
+			error_process(p);
 		exit(0);
 	}
 	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 1))
@@ -168,31 +170,31 @@ int	exec_command_one(t_minishell *elem, char **paths, char **env)
 	return (0);
 }
 
-int	pipex(t_minishell *first_elem)
+int	pipex(t_minishell *first_elem, t_all *p)
 {
 	if (first_elem == NULL || !first_elem)
 		return (0);
 	else if (first_elem->next == NULL)
-		return (exec_command_one(first_elem, first_elem->paths, first_elem->env));
-	return (first_pipe(first_elem, first_elem->paths, first_elem->env));
+		return (exec_command_one(first_elem, p));
+	return (first_pipe(first_elem, p));
 }
 
-int	executor(t_tree *start)
+int	executor(t_tree *start, t_all *p)
 {
 	int status;
 
 	if (start == NULL || !start)
 		return (0);
-	status = pipex(start->first_elem);
+	status = pipex(start->first_elem, p);
 	free(start->cmd);
 	if (status == -1)
 		free_minishell(start->first_elem, 1);
 	else
 		free_minishell(start->first_elem, 0);
 	if (start->and != NULL && status != -1)
-		return (executor(start->and));
+		return (executor(start->and, p));
 	else if (start->or != NULL && status == -1)
-		return (executor(start->or));
+		return (executor(start->or, p));
 	else if (status == -1)
 		return (free(start), -1); //quid en cas d'erreur
 	return (free(start), 0);

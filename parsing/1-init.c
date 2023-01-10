@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/09 16:50:55 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 16:41:41 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_all *init_env(char **env)
 	if (!p)
 		return (NULL);
 	p->paths = split_path(get_env_var(env, "PATH"), ':');
-	if (!p->paths)
+	if (!p->paths || p->paths == NULL)
 		return (free(p), NULL);
 	p->env = env;
 	//p->here_docs = NULL; //ligne add, voir si ca impacte le fonctionnement
@@ -40,9 +40,9 @@ t_tree *init_tree(char **line)
 		return (NULL);
 	start->cmd = ft_strcpy(start->cmd, *line);
 	if (first_segmentation(start, start) == -1)
-		return (free_start(start), NULL);
+		return (free_start(start, 0), NULL);
 	if (scnd_segmentation(start, start) == -1)
-		return (free_start(start), NULL);
+		return (free_start(start, 0), NULL);
 	return (start);
 }
 
