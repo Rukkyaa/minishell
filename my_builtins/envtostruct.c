@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_to_struct.c                                    :+:      :+:    :+:   */
+/*   envtostruct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/09 23:34:40 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 00:38:04 by rukkyaa          ###   ########.fr       */
+/*   Created: 2023/01/11 13:48:04 by gduhau            #+#    #+#             */
+/*   Updated: 2023/01/11 14:52:09 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,16 @@ char	*ft_strndup(char *str, int n)
 	return (dup);
 }
 
-t_env	*env_to_struct(char **env, t_env *env_struct)
+t_env	*env_to_struct(char **env)
 {
 	char			*tmp;
 	char			*value;
 	t_env			*tmp_env;
+	t_env			*env_struct;
 	unsigned int	i;
 
 	tmp_env = NULL;
+	env_struct = NULL;
 	while (*env)
 	{
 		i = -1;
@@ -83,10 +85,12 @@ t_env	*env_to_struct(char **env, t_env *env_struct)
 			return (NULL); // FREE
 		value = ft_strdup(*env + i + 1);
 		if (!value)
-			return (NULL); // FREE
+			return (free(tmp), NULL); // FREE
 		tmp_env = ft_envnew(tmp, value);
 		if (!tmp_env)
-			return (NULL); // FREE
+			return (free(tmp), free(value), NULL); // FREE
+		// free(tmp);
+		// free(value);
 		ft_env_add_back(&env_struct, tmp_env);
 		env++;
 	}

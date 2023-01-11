@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 23:30:10 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/11 16:22:39 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@
 // > == 1 output
 // >> == 2 output
 
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	int				code;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_infile
 {
 	char *file_in;
@@ -54,7 +62,7 @@ typedef struct s_minishell
 	t_infile			*file_in;
 	t_outfile			*file_out;
 	int				append;
-	char			**env;
+	t_env			*env;
 	char			**paths;
 	struct s_minishell	*next;
 }	t_minishell;
@@ -67,23 +75,19 @@ typedef struct s_tree
 	struct s_tree *or;
 }	t_tree;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
 typedef struct s_all
 {
 	char **paths;
-	char **env;
+	t_env *env;
 	char **here_docs;
 	t_tree *start;
+	int last_status;
 	//t_minishell *first_elem;
 }	t_all;
 
 # define BUFFER_SIZE 42
+
+t_env	*env_to_struct(char **env);
 
 //parsing/1-init.c
 t_all *init_env(char **env);
@@ -97,12 +101,13 @@ void clean_rest(t_tree *start, int i, int end);
 
 //parsing/2-free.c
 void free_all(t_all *p);
-void	free_start(t_tree *start);
+void	free_start(t_tree *start, int mode);
 void free_cmd(t_all *p);
 void free_files_in(t_infile *lst);
 void free_files_out(t_outfile *lst, int mode);
 void	free_minishell(t_minishell *elem, int mode);
 void	free_here_docs(char **here_docs);
+void free_env(t_env *envp);
 
 //parsing/3-segmentation.c
 int op_segmentation(t_tree *start, int i, int end, char *reserve);
@@ -152,23 +157,24 @@ t_infile	*add_file_in(t_infile *lst, char *file);
 char	**ft_split_spe(char *s, char c);
 
 //parsing/var_dealer.c
-char	**replace_var(char **line, char **env);
+char	**replace_var(char **line, t_all *p);
 
 //pipex/executor.c
-int	executor(t_tree *start);
+int	executor(t_tree *start, t_all *p);
 int	opening(char *file, int port, int append, int mode);
-int	exec_command(char **paths, char **cmd, char **env);
+int	exec_command(char **paths, char **cmd, t_env *env);
 int	opening_in(t_infile *file_org, int port);
 int	opening_out(t_outfile *file_org, int port);
+void error_process(t_all *p);
 
 //pipex/exec_builtins.c
 int path_comp_builtins(char **paths);
 void exec_builtin(int nb, char **cmd);
 
 //pipex/pipe.c
-int	first_pipe(t_minishell *elem, char **paths, char **env);
-int	mid_pipe(t_minishell *elem, char **paths, char **env);
-int	last_pipe(t_minishell *elem, char **paths, char **env);
+int	first_pipe(t_minishell *elem, t_all *p);
+int	mid_pipe(t_minishell *elem, t_all *p);
+int	last_pipe(t_minishell *elem, t_all *p);
 
 //get_next_line
 char	*get_next_line(int fd);
@@ -186,7 +192,7 @@ int	count_words(char const *str, char c);
 int	words_length(char const *str, int i, char c);
 
 //get_path.c
-char	*get_env_var(char **env, char *var);
+char	*get_env_var(t_env *envp, char	*var);
 char	**split_path(char *s, char c);
 
 //libft_utils.c
@@ -221,8 +227,7 @@ int	ft_cd(t_env *env, char *new_cd);
 // ENV STRUCT
 t_env	*ft_envlast(t_env *lst);
 void	ft_env_add_back(t_env **lst, t_env *new);
-t_env	*env_to_struct(char **env, t_env *env_struct);
+t_env	*env_to_struct(char **env);
 t_env	*ft_envnew(char *key, char *value);
 bool	ft_is_in_env(t_env *env, char *str);
-
 #endif

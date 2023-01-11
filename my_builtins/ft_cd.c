@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 23:15:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/11 13:57:39 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/11 16:51:56 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,20 @@ static void	update_env(t_env *env, char *old, char *new)
 		printf("Error update env\n");
 }
 
+static void	update_pwd(t_env *env)
+{
+	char	buffer[PATH_MAX];
+	char	*pwd;
+
+	if (getcwd(buffer, PATH_MAX))
+	{
+		pwd = ft_strdup(buffer);
+		if (!pwd)
+			return ;
+		update_env(env, "PWD", pwd);
+	}
+}
+
 char	*go_home(t_env *env)
 {
 	if (ft_is_in_env(env, "HOME"))
@@ -54,7 +68,7 @@ int	ft_cd(t_env *env, char *new_cd)
 	char	**split;
 	char	*oldpwd;
 	char	*pwd;
-	
+
 	pwd = NULL;
 	split = ft_split(new_cd, ' ');
 	if (!split)
@@ -67,13 +81,12 @@ int	ft_cd(t_env *env, char *new_cd)
 		pwd = ft_strdup(go_home(env));
 	else if (!ft_strcmp(split[1], "-"))
 		pwd = ft_strdup(go_back(env));
-	printf("Update OLDPWD : %s\n", oldpwd);
-	update_env(env, "OLDPWD", oldpwd);
-	printf("pwd : %s\n", pwd);
+	else if (ft_strlen(new_cd) > 3)
+		pwd = ft_strdup(new_cd + 3);
 	if (!chdir(pwd))
 	{
-		printf("Update PWD : %s\n", pwd);
-		update_env(env, "PWD", pwd);
+		update_pwd(env);
+		update_env(env, "OLDPWD", oldpwd);
 	}
 	else
 		printf("Error\n");

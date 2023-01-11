@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 23:26:55 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/11 16:29:59 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,20 +73,62 @@ t_tree *parsingator(char *line, t_all *p)
 	p->here_docs = get_here_docs(line_bis);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
 		return (free(*line_bis), NULL);
-	start = init_tree(replace_var(line_bis, p->env));
+	start = init_tree(replace_var(line_bis, p));
 	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
-		return (free_start(start), free(line_bis), NULL);
+		return (free(*line_bis), free(line_bis), free(start->cmd), free(start), NULL);
 	return (free(*line_bis), free(line_bis), start);
 }
 
 void print_all(t_all *p)
 {
+	if (p->start == NULL)
+		return ;
 	printf("-------AFFICHAGE DES DIFFERENTES BRANCHES-------\n");
 	print_tree(p->start, 1);
 	printf("------------------------------------------------\n");
 	print_cmd(p->start, 1);
 	print_here_doc(p->here_docs);
 }
+
+
+//effacer tous les strncmp
+//integrer les signaux (AXEL)
+//integrer les quotes (a priori good) (GAB) il se passe un truc bizarre si il 'y en a qu'une
+//ajout de l'historique (AXEL)
+// faire les builtins sous forme de fonctions (AXEL)
+
+
+//revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
+//definir une politique claire sur le cas ou il n' a qu'une seule quote
+//traite le cas "cat " OU "cat |" // En gros le bloquer et dire syntax error 
+//cas du heredoc avec $"" (traduit en \0) + heredoc chelou si il y a pas de commande avant 
+//souci de parsing et de reecriture des chaines A PRIORI GOOD
+//Refaire des test sur le traitement des variables
+//Faire les tests sur les operateurs logiques
+//regarder fct chdir pour les paths a executer
+// gerer les differents statuts de sortie
+//TEST=tptp
+//traiter l'env em moins (env -i | bash)
+//reprendre la tilde, bug avec la nvlle struct de env
+
+
+//PB DE BUILTINS
+//cas des mutiples exit et lancement de minishell dans le minishell
+//TRAITER LE CAS DES ./ ET ../ AVEC LA FCT CD AXEL
+//cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss + pouvoir lire les chemins de fichier qui ramene en arriere (../../...)
+//cas special avec le cd ou on peut creer deux dossier puis rm le parent
+
+//reintegrer la struct env GOOD
+//regarder aussi le segfault si " | "    "| || etc" GOOD
+//regarder l'histoire du $? GOOD
+//leaks a gerer pour | GOOD
+//trouver pq les multiples outfiles bugs avec le pipe GOOD
+//ajourter la tilde ~ GOOD
+//gerer les destructions de fichiers en cas d'erreur de la commande GOOD
+//env -i, savoir gerer sans l'env et copier dans le dur le reste du env GOOD
+//verifier que le parsing encaisse bien plusieurs redirections semblables et supprime ou garde les fichiers vides selon bash GOOD
+//cas des ulltiples $ : $$$USER GOOD
+//cas du "'$USER'" GOOD
 
 void	check_builtins(char *str, t_env *env)
 {
@@ -106,35 +148,10 @@ void	check_builtins(char *str, t_env *env)
 	//else if (!strncmp(str, "exit", 4))
 	//	ft_exit();
 }
-//effacer tous les strncmp
-//integrer les signaux (AXEL)
-//integrer les quotes (a priori good) (GAB) il se passe un truc bizarre si il 'y en a qu'une
-//ajout de l'historique (AXEL)
-//Tester append (pb quand mixer a <<) (GAB)
-// faire les builtins sous forme de fonctions (AXEL)
-// finir d'integrer les builtins (GAB)
-//regarder l'histoire du $?
-//gerer les destructions de fichiers en cas d'erreur de la commande
-//revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
-//definir une politique claire sur le cas ou il n' a qu'une seule quote
-//traite le cas "cat " OU "cat |" // regarder aussi le segfault si " | "    "| || etc"
-//cas special avec le cd ou on peut creer deux dossier puis rm le parent
-//verifier que le parsing encaisse bien plusieurs redirections semblables et supprime ou garde les fichiers vides selon bash
-//specifier le nom du fichier quand celui n'existe pas
-//cas du heredoc avec $"" (traduit en \0) + heredoc chelou si il y a pas de commande avant 
-//souci de parsing et de reecriture des chaines
-//cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss
-//env -i, savoir gerer sans l'env et copier dans le dur le reste du env
-//cas du "'$USER'"
-//cas des mutiples exit et lancement de minishell dans le minishell
-//trouver pq les multiples outfiles bugs avec le pipe
-//cas des ulltiples $ : $$$USER 
-//ajourter la tilde ~ 
 
 int	main(int argc, char **argv, char **env)
 {
 	t_all *p;
-	t_env	*env_struct;
 	char *line;
 
 	(void)argc;
@@ -143,21 +160,21 @@ int	main(int argc, char **argv, char **env)
 	if (!p)
 		return (1);
 	line = NULL;
-	env_struct = NULL;
-	env_struct = env_to_struct(env, env_struct);
 	while (line == NULL)
 	{
 		line = ft_epur(readline("Minishell> "));
-		//line = ft_strdup("cat test | (wc && (ls || ifconfig))");
-		p->start = parsingator(line, p);
-		// //print_all(p);
-		// if (executor(p->start) == -1)
+		// //line = ft_strdup("cat test | (wc && (ls || ifconfig))");
+		// p->start = parsingator(line, p);
+		// // if (p->start == NULL)
+		// // 	free_start(p->start)
+		// print_all(p);
+		// if (p->start != NULL && executor(p->start, p) == -1)
 		// 	printf("ERRRRROOOOOR\n");
 		// //if (!strncmp(line, "pwd", 3))
 		// //	ft_pwd();
 		// //else if (!strncmp(line, "echo", 4))
 		// //	ft_echo(line);
-		check_builtins(line, env_struct);
+		check_builtins(line, p->env);
 		free_here_docs(p->here_docs);
 		free(line);
 		line = NULL;
@@ -167,21 +184,21 @@ int	main(int argc, char **argv, char **env)
 }
 
 //MAIN SANS READLINE POUR CHECK LEAKS
-/*
-int main(int argc, char **argv, char **env)
-{
-	t_all *p;
+// int main(int argc, char **argv, char **env)
+// {
+// 	t_all *p;
 
-	(void)argc;
-	p = init_env(env);
-	if (!p)
-		return (1);
-	p->start = parsingator(argv[1], p);
-	print_all(p);
-	if (executor(p->start) == -1)
-		printf("ERRRRROOOOOR\n");
-	free_here_docs(p->here_docs);
-	free_all(p);
-	return (EXIT_SUCCESS);
-}
-*/
+// 	(void)argc;
+// 	p = init_env(env);
+// 	if (!p || p == NULL)
+// 		return (printf("Error in setting environment\n"), 1);
+// 	p->start = parsingator(argv[1], p);
+// 	print_all(p);
+// 	if (executor(p->start, p) == -1)
+// 		printf("ERRRRROOOOOR\n");
+// 	printf("finito");
+// 	free_here_docs(p->here_docs);
+// 	free_all(p);
+// 	return (EXIT_SUCCESS);
+// }
+

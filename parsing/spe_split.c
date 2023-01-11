@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 12:28:52 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/05 13:24:51 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 19:33:43 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ char	**ft_split_spe(char *s, char c)
 			if (s[i] == '\"' || s[i] == '\'')
 			{
 				end = avoid_quotes(s, i);
-				while (i <= end)
+				while (s[i] != '\0' && i <= end)
 					tab[a][d++] = s[i++];
 			}
 			else

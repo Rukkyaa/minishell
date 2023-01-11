@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 12:13:55 by gabrielduha       #+#    #+#             */
-/*   Updated: 2022/12/22 15:27:08 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 13:27:38 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ void	free_tab(char **tab)
 	int	i;
 
 	i = 0;
-	while (tab [i])
+	if (!tab || tab == NULL)
+		return ;
+	while (tab[i])
 		free(tab[i++]);
 	if (tab != (char **)0)
 		free(tab);
@@ -71,6 +73,8 @@ char	**split_path(char *s, char c)
 
 	i = 0;
 	a = 0;
+	if (!s || s == NULL)
+		return (NULL);
 	tab = malloc((count_words(s, c) + 1) * sizeof(char *));
 	if (!(tab))
 		return (0);

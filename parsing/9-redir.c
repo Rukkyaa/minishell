@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/09 20:32:45 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/10 13:35:51 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
 			p->created = 1;
 		else
 			p->created = 0;
-		return (free(file), p);
+		return (p);
 	}
 	p = lst;
 	p_bis = p;
@@ -115,7 +115,7 @@ t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
 		new_elem->created = 1;
 	else
 		new_elem->created = 0;
-	return (p->next = new_elem, free(file), p_bis);
+	return (p->next = new_elem, p_bis);
 }
 
 int check_redirection(char *cmd, t_minishell *maillon) //fonction bancale (risque de invalid read)
@@ -163,7 +163,7 @@ char *erase_redir(char *cmd)
 	int end;
 
 	i = 0;
-	while (cmd[i + 1] != '\0') //il y a sans doute une plus opti a faire
+	while (cmd[i] != '\0' && cmd[i + 1] != '\0') //il y a sans doute une plus opti a faire
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
 			i = avoid_quotes(cmd, i);
@@ -186,6 +186,8 @@ char *erase_redir(char *cmd)
 					cmd[i++] = ' ';
 			}
 		}
+		if (cmd[i] == '\0')
+			break;
 		i++;
 	}
 	return (cmd);
