@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 00:36:00 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/11 13:11:19 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	ft_is_in_env(t_env *env, char *str)
 {
 	while (env)
 	{
-		if (!ft_strncmp(env->key, str, ft_strlen(str)))
+		if (!ft_strcmp(env->key, str))
 			return (true);
 		env = env->next;
 	}
