@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/11 12:53:03 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 14:38:48 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,40 +109,81 @@ int	opening_in(t_infile *file_org, int port)
 	return (close(fdt), 0);
 }
 
-int	exec_command(char **paths, char **cmd, char **env)
+char **env_to_char(t_env *env)
+{
+	char **reforged;
+	int i;
+	int e;
+	t_env *temp;
+
+	i = 0;
+	e = 0;
+	if (!env || env == NULL)
+		return (NULL);
+	temp = env;
+	while (temp != NULL && i++ > -1)
+		temp = temp->next;
+	reforged = malloc((i + 1) * sizeof(char *));
+	if (!reforged)
+		return (NULL);
+	while (e < i)
+	{
+		reforged[e] = ft_strjoin(env->key, "=");
+		reforged[e] = ft_strjoin_spe(reforged[e], env->value); //securite direc dans le spe pour le reforged
+		if (reforged[e++] == NULL)
+			return (free_tab(reforged), NULL);
+		env = env->next;
+	}
+	return (reforged[e] = NULL, reforged);
+}
+
+int	exec_command(char **paths, char **cmd, t_env *env)
 {
 	int		i;
 	char	*path;
+	char	**reforged_env;
 
 	i = -1;
 	if (!cmd || ft_strlen(cmd[0]) == 0)
 		return (ft_putstr_fd("'' : command not found\n", 2), -1);
+	reforged_env = env_to_char(env);
+	if (reforged_env == NULL && env != NULL)
+		return (-1);
 	// if (path_comp_builtins(cmd) > 0)
 	// 	exec_builtin(path_comp_builtins(cmd), cmd);
 	while (paths[++i] != NULL)
 	{
-		path = ft_strjoin_spe(paths[i], cmd[0]);
+		path = ft_strjoin(paths[i], cmd[0]);
 		if (path == NULL)
-			return (-1);
+			return (-1); //gesrtion d'erreurs 
 		if (access(path, F_OK) == 0)
 		{
 			if (access(path, X_OK) != 0)
 				return (perror(""), free(path), -1);
-			if (execve(path, cmd, env) == -1)
-				return (free(path), -1);
-			return (free(path), 0);
+			if (execve(path, cmd, reforged_env) == -1)
+				return (free(path), free_tab(reforged_env), -1);
+			return (free(path), free_tab(reforged_env), 0);
 		}
 		free(path);
 	}
+	if (access(cmd[0], F_OK) == 0)
+	{
+		if (access(cmd[0], X_OK) != 0)
+			return (perror(""), free(path), free_tab(reforged_env), -1);
+		if (execve(cmd[0], cmd, reforged_env) == -1)
+			return (free_tab(reforged_env), -1);
+		return (free_tab(reforged_env), 0);
+	}
 	ft_putstr_fd(cmd[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
-	return (-1);
+	return (free_tab(reforged_env), -1);
 }
 
 void error_process(t_all *p)
 {
 	free_start(p->start, 0);
 	free_tab(p->paths);
+	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);
 	exit(1);

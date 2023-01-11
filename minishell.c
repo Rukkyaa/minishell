@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/11 13:02:43 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 15:03:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_tree *parsingator(char *line, t_all *p)
 	p->here_docs = get_here_docs(line_bis);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
 		return (free(*line_bis), NULL);
-	start = init_tree(replace_var(line_bis, p->env, p));
+	start = init_tree(replace_var(line_bis, p));
 	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
 		return (free(*line_bis), free(line_bis), free(start->cmd), free(start), NULL);
 	return (free(*line_bis), free(line_bis), start);
@@ -100,17 +100,16 @@ void print_all(t_all *p)
 
 //revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
 //definir une politique claire sur le cas ou il n' a qu'une seule quote
-//traite le cas "cat " OU "cat |" // 
+//traite le cas "cat " OU "cat |" // En gros le bloquer et dire syntax error 
 //cas du heredoc avec $"" (traduit en \0) + heredoc chelou si il y a pas de commande avant 
 //souci de parsing et de reecriture des chaines A PRIORI GOOD
 //Refaire des test sur le traitement des variables
 //Faire les tests sur les operateurs logiques
-
-//reintegrer la struct env
 //regarder fct chdir pour les paths a executer
 // gerer les differents statuts de sortie
-// double free sur TEST=tptp ou autre command not found
+//TEST=tptp
 //traiter l'env em moins (env -i | bash)
+//reprendre la tilde, bug avec la nvlle struct de env
 
 
 //PB DE BUILTINS
@@ -119,6 +118,7 @@ void print_all(t_all *p)
 //cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss + pouvoir lire les chemins de fichier qui ramene en arriere (../../...)
 //cas special avec le cd ou on peut creer deux dossier puis rm le parent
 
+//reintegrer la struct env GOOD
 //regarder aussi le segfault si " | "    "| || etc" GOOD
 //regarder l'histoire du $? GOOD
 //leaks a gerer pour | GOOD

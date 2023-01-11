@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/11 13:05:27 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 14:25:38 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,18 @@ typedef struct s_tree
 	struct s_tree *or;
 }	t_tree;
 
-// typedef struct s_env
-// {
-// 	char			*key;
-// 	char			*value;
-// 	struct s_env	*next;
-// }	t_env;
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	int				code;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct s_all
 {
 	char **paths;
-	char **env;
+	t_env *env;
 	char **here_docs;
 	t_tree *start;
 	int last_status;
@@ -85,6 +86,8 @@ typedef struct s_all
 }	t_all;
 
 # define BUFFER_SIZE 42
+
+t_env	*env_to_struct(char **env);
 
 //parsing/1-init.c
 t_all *init_env(char **env);
@@ -104,6 +107,7 @@ void free_files_in(t_infile *lst);
 void free_files_out(t_outfile *lst, int mode);
 void	free_minishell(t_minishell *elem, int mode);
 void	free_here_docs(char **here_docs);
+void free_env(t_env *envp);
 
 //parsing/3-segmentation.c
 int op_segmentation(t_tree *start, int i, int end, char *reserve);
@@ -153,12 +157,12 @@ t_infile	*add_file_in(t_infile *lst, char *file);
 char	**ft_split_spe(char *s, char c);
 
 //parsing/var_dealer.c
-char	**replace_var(char **line, char **env, t_all *p);
+char	**replace_var(char **line, t_all *p);
 
 //pipex/executor.c
 int	executor(t_tree *start, t_all *p);
 int	opening(char *file, int port, int append, int mode);
-int	exec_command(char **paths, char **cmd, char **env);
+int	exec_command(char **paths, char **cmd, t_env *env);
 int	opening_in(t_infile *file_org, int port);
 int	opening_out(t_outfile *file_org, int port);
 void error_process(t_all *p);
@@ -188,7 +192,7 @@ int	count_words(char const *str, char c);
 int	words_length(char const *str, int i, char c);
 
 //get_path.c
-char	*get_env_var(char **env, char *var);
+char	*get_env_var(t_env *envp, char	*var);
 char	**split_path(char *s, char c);
 
 //libft_utils.c

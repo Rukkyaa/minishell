@@ -6,7 +6,7 @@
 #    By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2023/01/11 10:23:32 by gduhau           ###   ########.fr        #
+#    Updated: 2023/01/11 14:22:02 by gduhau           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirecti
 			parsing/get_next_line/get_next_line.c parsing/get_next_line/get_next_line_utils.c \
 			parsing/6-count.c parsing/7-print.c parsing/8-init2.c parsing/9-redir.c \
 			pipex/executor.c pipex/pipe.c parsing/spe_split.c parsing/var_dealer.c \
-			pipex/exec_builtins.c
+			pipex/exec_builtins.c my_builtins/envtostruct.c
 			
 OBJS	= ${SRCS:.c=.o}
 NAME	= minishell

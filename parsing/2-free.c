@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/10 15:53:56 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 14:56:22 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,23 @@ void free_files_in(t_infile *lst)
 		p = lst;
 		lst = lst->next;
 		free(p);
+	}
+	return ;
+}
+
+void free_env(t_env *envp)
+{
+	t_env *temp;
+
+	if (!envp || envp == NULL)
+		return ;
+	while (envp != NULL)
+	{
+		free(envp->key);
+		free(envp->value);
+		temp = envp;
+		envp = envp->next;
+		free(temp);
 	}
 	return ;
 }
@@ -96,5 +113,6 @@ void	free_here_docs(char **here_docs)
 void free_all(t_all *p)
 {
 	free_tab(p->paths);
+	free_env(p->env);
 	free(p);
 }

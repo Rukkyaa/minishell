@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/11 13:04:50 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 14:22:58 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@ t_all *init_env(char **env)
 	// while (env[i] != NULL)
 	// 	printf("%s\n", env[i++]);
 	// /// 
-	p->paths = split_path(get_env_var(env, "PATH"), ':');
-	if (!p->paths) // || p->paths == NULL)
+	p->env = env_to_struct(env);
+	if (!p->env)
 		return (free(p), NULL);
-	p->env = env;
+	p->paths = split_path(get_env_var(p->env, "PATH"), ':');
+	if (!p->paths) // || p->paths == NULL)
+		return (free_env(p->env), free(p), NULL);
 	p->last_status = 0;
 	//p->here_docs = NULL; //ligne add, voir si ca impacte le fonctionnement
 	return (p);
