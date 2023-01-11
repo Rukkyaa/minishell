@@ -6,7 +6,7 @@
 #    By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2023/01/09 16:09:24 by gduhau           ###   ########.fr        #
+#    Updated: 2023/01/11 10:23:32 by gduhau           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJS	= ${SRCS:.c=.o}
 NAME	= minishell
 CC		= cc
 RM		= rm -f
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -g
 HEADERS = -I includes/ -I libft/
 
 LIBFT = -L libft/ -lft

@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/10 17:26:57 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 13:02:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,25 @@ int recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	return (recursive_lst(new_elem, cmd, ++nb, p));
 }
 
+int all_spaces(char **tab)
+{
+	int i;
+	char **inter;
+
+	i = 0;
+	if (tab == NULL || tab[i] == NULL)
+		return (1);
+	while (tab[i] != NULL)
+	{
+		inter = ft_split_spe(tab[i], ' ');
+		if (*inter != NULL)
+			return (free_tab(inter), 0);
+		free_tab(inter);
+		i++;
+	}
+	return (1);
+}
+
 int	init_cmd(t_tree *start, t_all *p)
 {
 	t_minishell *init_mini;
@@ -113,6 +132,8 @@ int	init_cmd(t_tree *start, t_all *p)
 	if (!start || !p || count_pipe(start->cmd) == 0)
 		return (-1);
 	tab_cmd = ft_split_spe(start->cmd, '|');
+	if (all_spaces(tab_cmd) == 1)
+		return (printf("syntax error near unexpected token `|'\n"), free_tab(tab_cmd), 2);
 	init_mini = malloc(sizeof(t_minishell));
 	if (!init_mini)
 		return (-1);
@@ -129,9 +150,12 @@ int	init_cmd(t_tree *start, t_all *p)
 
 int	init_shell(t_tree *start, t_all *p)
 {
+	int	ret;
+
 	if (!start || start == NULL)
 		return (-1);
-	if (init_cmd(start, p) == -1)
+	ret = init_cmd(start, p);
+	if (ret != 1)
 		return (-1);
 	if (start->and != NULL && init_shell(start->and, p) == -1)
 		return (-1);

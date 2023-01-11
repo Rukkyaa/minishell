@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/10 19:28:13 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 10:27:35 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char *get_var(char **line, char **env, int i, int *leng)
 	int d;
 
 	e = i + 1;
-	while ((*line)[e] != '\0' && is_whitespace((*line)[e]) == 0 && ((*line)[e] != '\"' && (*line)[e] != '\''))
+	while ((*line)[e] != '\0' && is_whitespace((*line)[e]) == 0 && (*line)[e] != '\"' && (*line)[e] != '\'' && (*line)[e] != '$')
 		e++;
 	var = ft_substr(*line, i + 1, e - i - 1);
 	if (!var)
@@ -131,7 +131,19 @@ int	find_other(char *line, int i)
 // 	return (line);
 // }
 
-char	**replace_var(char **line, char **env)
+char *gen_status(int nb)
+{
+	char *stat;
+
+	stat = malloc(2);
+	if (!stat)
+		return (NULL);
+	stat[0] =  nb + '0';
+	stat[1] = '\0';
+	return (stat);
+}
+
+char	**replace_var(char **line, char **env, t_all *p)
 {
 	int	i;
 	int leng;
@@ -152,6 +164,15 @@ char	**replace_var(char **line, char **env)
 			{
 				if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '$')
 					i += 2;
+				else if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
+				{
+					leng = 1;
+					*line = change_line(*line, gen_status(p->last_status), i, &leng);
+					if (*line == NULL)
+						return (free(line), NULL);
+					e = find_other(*line, init);
+					i = init;
+				}
 				else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' &&  is_whitespace((*line)[i + 1]) == 0)
 				{
 		//if ((*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
@@ -185,6 +206,14 @@ char	**replace_var(char **line, char **env)
 		}
 		else if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '$')
 			i += 2;
+		else if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
+		{
+			leng = 1;
+			*line = change_line(*line, gen_status(p->last_status), i, &leng);
+			if (*line == NULL)
+				return (free(line), NULL);
+			i = 0;
+		}
 		else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' &&  is_whitespace((*line)[i + 1]) == 0)
 		{
 		//if ((*line)[i + 1] != '\0' && (*line)[i + 1] == '?')

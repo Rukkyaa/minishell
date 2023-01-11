@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 15:59:46 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 13:05:27 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,20 @@ typedef struct s_tree
 	struct s_tree *or;
 }	t_tree;
 
+// typedef struct s_env
+// {
+// 	char			*key;
+// 	char			*value;
+// 	struct s_env	*next;
+// }	t_env;
+
 typedef struct s_all
 {
 	char **paths;
 	char **env;
 	char **here_docs;
 	t_tree *start;
+	int last_status;
 	//t_minishell *first_elem;
 }	t_all;
 
@@ -145,7 +153,7 @@ t_infile	*add_file_in(t_infile *lst, char *file);
 char	**ft_split_spe(char *s, char c);
 
 //parsing/var_dealer.c
-char	**replace_var(char **line, char **env);
+char	**replace_var(char **line, char **env, t_all *p);
 
 //pipex/executor.c
 int	executor(t_tree *start, t_all *p);

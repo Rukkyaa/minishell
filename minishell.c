@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/10 19:40:30 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 13:02:43 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,16 @@ t_tree *parsingator(char *line, t_all *p)
 	p->here_docs = get_here_docs(line_bis);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
 		return (free(*line_bis), NULL);
-	start = init_tree(replace_var(line_bis, p->env));
+	start = init_tree(replace_var(line_bis, p->env, p));
 	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
-		return (free_start(start, 0), free(line_bis), NULL);
+		return (free(*line_bis), free(line_bis), free(start->cmd), free(start), NULL);
 	return (free(*line_bis), free(line_bis), start);
 }
 
 void print_all(t_all *p)
 {
+	if (p->start == NULL)
+		return ;
 	printf("-------AFFICHAGE DES DIFFERENTES BRANCHES-------\n");
 	print_tree(p->start, 1);
 	printf("------------------------------------------------\n");
@@ -95,15 +97,20 @@ void print_all(t_all *p)
 //ajout de l'historique (AXEL)
 // faire les builtins sous forme de fonctions (AXEL)
 
-//regarder l'histoire du $?
+
 //revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
 //definir une politique claire sur le cas ou il n' a qu'une seule quote
-//traite le cas "cat " OU "cat |" // regarder aussi le segfault si " | "    "| || etc"
+//traite le cas "cat " OU "cat |" // 
 //cas du heredoc avec $"" (traduit en \0) + heredoc chelou si il y a pas de commande avant 
 //souci de parsing et de reecriture des chaines A PRIORI GOOD
 //Refaire des test sur le traitement des variables
 //Faire les tests sur les operateurs logiques
 
+//reintegrer la struct env
+//regarder fct chdir pour les paths a executer
+// gerer les differents statuts de sortie
+// double free sur TEST=tptp ou autre command not found
+//traiter l'env em moins (env -i | bash)
 
 
 //PB DE BUILTINS
@@ -112,6 +119,9 @@ void print_all(t_all *p)
 //cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss + pouvoir lire les chemins de fichier qui ramene en arriere (../../...)
 //cas special avec le cd ou on peut creer deux dossier puis rm le parent
 
+//regarder aussi le segfault si " | "    "| || etc" GOOD
+//regarder l'histoire du $? GOOD
+//leaks a gerer pour | GOOD
 //trouver pq les multiples outfiles bugs avec le pipe GOOD
 //ajourter la tilde ~ GOOD
 //gerer les destructions de fichiers en cas d'erreur de la commande GOOD
@@ -120,53 +130,55 @@ void print_all(t_all *p)
 //cas des ulltiples $ : $$$USER GOOD
 //cas du "'$USER'" GOOD
 
-// int	main(int argc, char **argv, char **env)
-// {
-// 	t_all *p;
-// 	char *line;
-
-// 	(void)argc;
-// 	(void) **argv;
-// 	p = init_env(env);
-// 	if (!p)
-// 		return (1);
-// 	line = NULL;
-// 	while (line == NULL)
-// 	{
-// 		line = ft_epur(readline("Minishell> "));
-// 		//line = ft_strdup("cat test | (wc && (ls || ifconfig))");
-// 		p->start = parsingator(line, p);
-// 		print_all(p);
-// 		if (executor(p->start, p) == -1)
-// 			printf("ERRRRROOOOOR\n");
-// 		//if (!strncmp(line, "pwd", 3))
-// 		//	ft_pwd();
-// 		//else if (!strncmp(line, "echo", 4))
-// 		//	ft_echo(line);
-// 		free_here_docs(p->here_docs);
-// 		free(line);
-// 		line = NULL;
-// 	}
-// 	free_all(p);
-// 	return (EXIT_SUCCESS);
-// }
-
-//MAIN SANS READLINE POUR CHECK LEAKS
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_all *p;
+	char *line;
 
 	(void)argc;
+	(void) **argv;
 	p = init_env(env);
-	if (!p || p == NULL)
-		return (printf("Error in setting environment\n"), 1);
-	p->start = parsingator(argv[1], p);
-	print_all(p);
-	if (executor(p->start, p) == -1)
-		printf("ERRRRROOOOOR\n");
-	printf("finito");
-	free_here_docs(p->here_docs);
+	if (!p)
+		return (1);
+	line = NULL;
+	while (line == NULL)
+	{
+		line = ft_epur(readline("Minishell> "));
+		//line = ft_strdup("cat test | (wc && (ls || ifconfig))");
+		p->start = parsingator(line, p);
+		// if (p->start == NULL)
+		// 	free_start(p->start)
+		print_all(p);
+		if (p->start != NULL && executor(p->start, p) == -1)
+			printf("ERRRRROOOOOR\n");
+		//if (!strncmp(line, "pwd", 3))
+		//	ft_pwd();
+		//else if (!strncmp(line, "echo", 4))
+		//	ft_echo(line);
+		free_here_docs(p->here_docs);
+		free(line);
+		line = NULL;
+	}
 	free_all(p);
 	return (EXIT_SUCCESS);
 }
+
+//MAIN SANS READLINE POUR CHECK LEAKS
+// int main(int argc, char **argv, char **env)
+// {
+// 	t_all *p;
+
+// 	(void)argc;
+// 	p = init_env(env);
+// 	if (!p || p == NULL)
+// 		return (printf("Error in setting environment\n"), 1);
+// 	p->start = parsingator(argv[1], p);
+// 	print_all(p);
+// 	if (executor(p->start, p) == -1)
+// 		printf("ERRRRROOOOOR\n");
+// 	printf("finito");
+// 	free_here_docs(p->here_docs);
+// 	free_all(p);
+// 	return (EXIT_SUCCESS);
+// }
 

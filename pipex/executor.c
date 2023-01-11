@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/10 15:59:18 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/11 12:53:03 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,8 +184,10 @@ int	executor(t_tree *start, t_all *p)
 	int status;
 
 	if (start == NULL || !start)
-		return (0);
+		return (-1);
 	status = pipex(start->first_elem, p);
+	if (status == -1)
+		p->last_status = 1;
 	free(start->cmd);
 	if (status == -1)
 		free_minishell(start->first_elem, 1);
