@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/11 14:56:22 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/12 16:47:28 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	free_minishell(t_minishell *elem, int mode)
 
 void	free_start(t_tree *start, int mode)
 {
+	if (start == NULL || !start)
+		return ;
 	free(start->cmd);
 	free_minishell(start->first_elem, mode);
 	if (start->and != NULL)

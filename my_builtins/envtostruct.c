@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 13:48:04 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/11 14:52:09 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/12 14:50:25 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_env	*ft_envnew(char *key, char *value)
 	list->key = key;
 	list->value = value;
 	list->next = NULL;
+	list->code = 1;
 	return (list);
 }
 

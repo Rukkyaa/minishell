@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 16:07:10 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/10 16:02:27 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/12 11:27:39 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	first_pipe(t_minishell *elem, t_all *p)
 			error_process(p);
 		if (dup2(elem->fd[1], STDOUT_FILENO) < 0)
 			error_process(p);
-		if (exec_command(p->paths, elem->cmd, p->env) == -1)
+		if (exec_command(p->paths, elem->cmd, p) == -1)
 			error_process(p);
 		exit(0);
 	}
@@ -66,7 +66,7 @@ int	mid_pipe(t_minishell *elem, t_all *p)
 			|| dup2(elem->next->fd[1], STDOUT_FILENO) < 0)
 			error_process(p);
 		close(elem->next->fd[0]);
-		if (exec_command(p->paths, elem->next->cmd, p->env) == -1)
+		if (exec_command(p->paths, elem->next->cmd, p) == -1)
 			error_process(p);
 		exit(0);
 	}
@@ -96,7 +96,7 @@ int	last_pipe(t_minishell *elem, t_all *p)
 		close(elem->fd[1]);
 		if (dup2(elem->fd[0], STDIN_FILENO) < 0)
 			error_process(p);
-		if (exec_command(p->paths, elem->next->cmd, p->env) == -1)
+		if (exec_command(p->paths, elem->next->cmd, p) == -1)
 			error_process(p);
 		exit(0);
 	}

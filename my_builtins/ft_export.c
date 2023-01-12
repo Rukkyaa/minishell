@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/11 13:11:19 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/12 13:49:17 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,16 @@ void	change_value(t_env *env, char *key, char *value)
 	}
 }
 
-int	ft_export(t_env *env, char *str)
+int	ft_export(t_env *env, char **split)
 {
-	char	**split;
 	char	*key;
 	char	*value;
 
-	split = ft_split(str, '=');
-	if (!split)
-		return (EXIT_FAILURE);
 	if (!(split[0]) || !(split[1]))
-		return (free_tab(split), EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	key = ft_strdup(split[0]);
 	if (!key)
-		return (free_tab(split), EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	value = ft_strdup(split[1]);
 	if (!value)
 		return (free_tab(split), free(key), EXIT_FAILURE);

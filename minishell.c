@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/11 16:29:59 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/12 16:49:36 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+
+t_sig g_sig;
 
 //int	redir_non_null(char **redir)
 //{
@@ -55,11 +57,61 @@
 //	return (-1);
 //}
 
+int	countofquotes(char *line, char c, int compt)
+{
+	int i;
+
+	i = -1;
+	if (!(*line))
+		return (0);
+	while (line[++i] != '\0')
+	{
+		if (line[i] != '\0' && line[i] == '\"' && c == '\'')
+		{
+			i++;
+			while (line[i] != '\0' && line[i] != '\"')
+				i++;
+			i++;
+		}
+		else if (line[i] != '\0' && line[i] == '\'' && c == '\"')
+		{
+			i++;
+			while (line[i] != '\0' && line[i] != '\'')
+				i++;
+			i++;
+		}
+		else if (line[i] != '\0' && line[i] == c)
+		{
+			compt++;
+			i++;
+			while (line[i] != '\0' && line[i] != c)
+				i++;
+			if (line[i] == c)
+				compt++;
+			i++;
+		}
+		if (line[i] == '\0')
+			break;
+	}
+	return (compt);
+}
+
+int	invalid_quote(char *line)
+{
+	//printf("\": %d || \': %d\n", countofquotes(line, '\"', 0), countofquotes(line, '\'', 0));
+	if (countofquotes(line, '\"', 0) % 2 != 0 || countofquotes(line, '\'', 0) % 2 != 0)
+		return (printf("Syntax error\n"), 1);
+	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '|' && line[ft_strlen(line) - 1] == '|')
+		return (printf("Syntax error\n"), 1);
+	else if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '|')
+		return (printf("Syntax error\n"), 1);
+	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '&' && line[ft_strlen(line) - 1] == '&')
+		return (printf("Syntax error\n"), 1);
+	return (0);
+}
 
 t_tree *parsingator(char *line, t_all *p)
 {
-	//reste a gerer les quotes, les meta carateres
-	// fonction qui anticipe les quotes (calcul de la somme)
 	t_tree *start;
 	char **line_bis;
 
@@ -69,10 +121,12 @@ t_tree *parsingator(char *line, t_all *p)
 	*line_bis = ft_strdup(line);
 	if (!line || !p || !(*line_bis))
 		return (NULL);
-	//ajout d'emblee d'une securite qui traite les quotes
+	if (invalid_quote(*line_bis) == 1)
+		return (free(*line_bis), free(line_bis), NULL);
 	p->here_docs = get_here_docs(line_bis);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
 		return (free(*line_bis), NULL);
+	printf("c");
 	start = init_tree(replace_var(line_bis, p));
 	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
 		return (free(*line_bis), free(line_bis), free(start->cmd), free(start), NULL);
@@ -99,17 +153,15 @@ void print_all(t_all *p)
 
 
 //revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
-//definir une politique claire sur le cas ou il n' a qu'une seule quote
-//traite le cas "cat " OU "cat |" // En gros le bloquer et dire syntax error 
 //cas du heredoc avec $"" (traduit en \0) + heredoc chelou si il y a pas de commande avant 
-//souci de parsing et de reecriture des chaines A PRIORI GOOD
 //Refaire des test sur le traitement des variables
 //Faire les tests sur les operateurs logiques
-//regarder fct chdir pour les paths a executer
+//regarder fct chdir pour les paths a executer, good CHECK LEAKS + PATH ../exec
 // gerer les differents statuts de sortie
 //TEST=tptp
-//traiter l'env em moins (env -i | bash)
-//reprendre la tilde, bug avec la nvlle struct de env
+//integrer le code de la struct env aux fonctions
+//reprendre tous les builtins pour leaks (ftstdup)
+//revoir la gestion d'erreur du here docs
 
 
 //PB DE BUILTINS
@@ -118,6 +170,10 @@ void print_all(t_all *p)
 //cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss + pouvoir lire les chemins de fichier qui ramene en arriere (../../...)
 //cas special avec le cd ou on peut creer deux dossier puis rm le parent
 
+//traiter l'env em moins (env -i | bash) GOOD
+//empecher l'exec si nombre de quotes impaires GOOD
+//definir une politique claire sur le cas ou il n' a qu'une seule quote GOOD
+//traite le cas "cat " OU "cat |" // En gros le bloquer et dire syntax error GOOD
 //reintegrer la struct env GOOD
 //regarder aussi le segfault si " | "    "| || etc" GOOD
 //regarder l'histoire du $? GOOD
@@ -130,24 +186,24 @@ void print_all(t_all *p)
 //cas des ulltiples $ : $$$USER GOOD
 //cas du "'$USER'" GOOD
 
-void	check_builtins(char *str, t_env *env)
-{
-	// printf("Builtins !\n");
-	if (!strncmp(str, "pwd", 3))
-		ft_pwd();
-	else if (!strncmp(str, "echo", 4))
-		ft_echo(str + 4);
-	else if (!strncmp(str, "cd", 2))
-		ft_cd(env, str);
-	else if (!strncmp(str, "env", 3))
-		ft_env(env);
-	else if (!strncmp(str, "export", 6))
-		ft_export(env, str + 7);
-	else if (!strncmp(str, "unset", 5))
-		ft_unset(env, str + 6);
-	//else if (!strncmp(str, "exit", 4))
-	//	ft_exit();
-}
+// void	check_builtins(char *str, t_env *env)
+// {
+// 	// printf("Builtins !\n");
+// 	if (!strncmp(str, "pwd", 3))
+// 		ft_pwd();
+// 	else if (!strncmp(str, "echo", 4))
+// 		ft_echo(str + 4);
+// 	else if (!strncmp(str, "cd", 2))
+// 		ft_cd(env, str);
+// 	else if (!strncmp(str, "env", 3))
+// 		ft_env(env);
+// 	else if (!strncmp(str, "export", 6))
+// 		ft_export(env, str + 7);
+// 	else if (!strncmp(str, "unset", 5))
+// 		ft_unset(env, str + 6);
+// 	//else if (!strncmp(str, "exit", 4))
+// 	//	ft_exit();
+// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -160,21 +216,19 @@ int	main(int argc, char **argv, char **env)
 	if (!p)
 		return (1);
 	line = NULL;
+	signal(SIGINT, &sig_int);
+    signal(SIGQUIT, &sig_quit);
 	while (line == NULL)
 	{
+		init_signal(p);
 		line = ft_epur(readline("Minishell> "));
 		// //line = ft_strdup("cat test | (wc && (ls || ifconfig))");
-		// p->start = parsingator(line, p);
-		// // if (p->start == NULL)
-		// // 	free_start(p->start)
-		// print_all(p);
-		// if (p->start != NULL && executor(p->start, p) == -1)
-		// 	printf("ERRRRROOOOOR\n");
-		// //if (!strncmp(line, "pwd", 3))
-		// //	ft_pwd();
-		// //else if (!strncmp(line, "echo", 4))
-		// //	ft_echo(line);
-		check_builtins(line, p->env);
+		p->line = line;
+		p->start = parsingator(line, p);
+		print_all(p);
+		if (p->start != NULL && executor(p->start, p, line) == -1)
+			printf("ERRRRROOOOOR\n");
+		//check_builtins(line, p->env);
 		free_here_docs(p->here_docs);
 		free(line);
 		line = NULL;

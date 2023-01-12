@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/11 15:03:18 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/12 15:10:16 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char *get_var(char **line, t_env *env, int i, int *leng)
 	e = -1;
 	while (env != NULL)
 	{
-		if (ft_strncmp(env->key, var, ft_strlen(var)) == 0)
+		if (ft_strncmp(env->key, var, ft_strlen(var)) == 0) //est ce que les variables detenues que par export sont gardees la dedans ?
 			return (free(var), env->value);
 	}
 	e = 0;
@@ -58,16 +58,17 @@ char *tilde(t_env *env)
 {
 	char *tild;
 	char *subst;
-	int	e;
 
-	e = -1;
 	if (!env || env == NULL)
 		return (NULL);
 	tild = ft_strdup("HOME");
+	if (!tild || tild == NULL)
+		return (NULL);
 	while (env != NULL)
 	{
 		if (ft_strncmp(env->key, tild, ft_strlen(tild)) == 0)
 			return (free(tild), env->value);
+		env = env->next;
 	}
 	subst = malloc(2);
 	if (!subst)
@@ -91,7 +92,6 @@ static char *change_line(char *line, char *var, int i, int *leng)
 	if (new_line == NULL || !new_line)
 		return (free(line), free(var), NULL);
 	reste = ft_substr(line, i + *leng + 1, ft_strlen(line));
-	printf("reste : %s\n", reste);
 	if (reste == NULL || !reste)
 		return (free(line), free(var), free(new_line), NULL);
 	new_line = ft_strjoin_spe(new_line, reste);

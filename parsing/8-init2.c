@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/11 13:02:55 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/12 16:07:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ char	*ft_trim_quotes(char *s1, int *alert)
 	if (!s1)
 		return (NULL);
 	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"') || (s1[0] == '\'' && s1[1] == '\'')))
-		return (NULL);
+		return (free(s1), NULL);
 	if ((s1[0] == '\'' && s1[ft_strlen(s1) - 1] == '\'') || (s1[0] == '\"' && s1[ft_strlen(s1) - 1] == '\"'))
 	{
 		s1_bis = malloc((ft_strlen(s1) -1) * sizeof(char));
 		if (!s1_bis)
-			return ((*alert)++, s1);
+			return ((*alert)= -1, free(s1), NULL);
 		while (s1[++i + 1] != '\0')
 			s1_bis[i - 1] = s1[i];
 		s1_bis[i - 1] = '\0';
@@ -71,7 +71,7 @@ char **trim_tab(char **tab)
 	{
 		tab[i] = ft_trim_quotes(tab[i], &alert);
 		i++;
-		if (alert == 1)
+		if (alert == -1)
 			return(free_tab(tab), NULL);
 	}
 	return(tab);

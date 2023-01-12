@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/11 16:22:39 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/12 16:49:04 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,15 @@
 # include <fcntl.h>
 # include <limits.h>
 # include <string.h>
+# include <signal.h>
 
 # include "../libft/libft.h"
-
-// < == 0 input
-// > == 1 output
-// >> == 2 output
 
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
-	int				code;
+	int				code; // 1 si membre du env, 0 sinon, -1 si membre ni de env, ni de export
 	struct s_env	*next;
 }	t_env;
 
@@ -82,12 +79,29 @@ typedef struct s_all
 	char **here_docs;
 	t_tree *start;
 	int last_status;
+	int exit;
+	char *line;
 	//t_minishell *first_elem;
 }	t_all;
 
+typedef struct s_sig
+{
+	int	sig_quit;
+	int	sig_int;
+	t_all *p;
+} t_sig;
+
+extern t_sig g_sig;
+
 # define BUFFER_SIZE 42
+//# define PATH_MAX 100
 
 t_env	*env_to_struct(char **env);
+
+//signal.c
+void	init_signal(t_all *p);
+void    sig_quit(int code);
+void    sig_int(int code);
 
 //parsing/1-init.c
 t_all *init_env(char **env);
@@ -144,6 +158,7 @@ int	init_cmd(t_tree *start, t_all *p);
 int recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p);
 char	*ft_trim_quotes(char *s1, int *alert);
 char	*ft_trim(char *s1);
+char	*ft_trim_quotes(char *s1, int *alert);
 
 //parsing/9-redir.c
 char *erase_redir(char *cmd);
@@ -160,16 +175,16 @@ char	**ft_split_spe(char *s, char c);
 char	**replace_var(char **line, t_all *p);
 
 //pipex/executor.c
-int	executor(t_tree *start, t_all *p);
+int	executor(t_tree *start, t_all *p, char *line);
 int	opening(char *file, int port, int append, int mode);
-int	exec_command(char **paths, char **cmd, t_env *env);
+int	exec_command(char **paths, char **cmd, t_all *p);
 int	opening_in(t_infile *file_org, int port);
 int	opening_out(t_outfile *file_org, int port);
 void error_process(t_all *p);
 
 //pipex/exec_builtins.c
 int path_comp_builtins(char **paths);
-void exec_builtin(int nb, char **cmd);
+int exec_builtin(int nb, char **cmd, t_all *p);
 
 //pipex/pipe.c
 int	first_pipe(t_minishell *elem, t_all *p);
@@ -217,12 +232,13 @@ void	remove_sub(char **str, int start, int end);
 int	get_redirection(char *str, t_minishell *minishell);
 
 // BUILTINS
-int	ft_pwd(void);
-int	ft_echo(char *str);
+int	ft_pwd(char **cmd);
+int	ft_echo(char **split);
 int	ft_env(t_env *env);
 int	ft_unset(t_env *env, char *to_unset);
-int	ft_export(t_env *env, char *str);
+int	ft_export(t_env *env, char **split);
 int	ft_cd(t_env *env, char *new_cd);
+int ft_exit(t_all *p);
 
 // ENV STRUCT
 t_env	*ft_envlast(t_env *lst);
