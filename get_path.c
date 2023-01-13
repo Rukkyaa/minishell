@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:27:26 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/11 14:05:17 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 22:55:36 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,8 @@
 */
 char	*get_env_var(t_env *envp, char	*var)
 {
-	int		i;
 	t_env *temp;
 
-	i = -1;
 	if (!envp || envp == NULL)
 		return (NULL);
 	temp = envp;

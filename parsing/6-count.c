@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6-count.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:29:25 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/10 19:35:32 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:15:54 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	countof_spe(char **line, char c, int compt)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (!(*line))
@@ -38,14 +38,14 @@ int	countof_spe(char **line, char c, int compt)
 		if ((*line)[i] != '\0' && (*line)[i] == c)
 			compt++;
 		if ((*line)[i] == '\0')
-			break;
+			break ;
 	}
 	return (compt);
 }
 
-int avoid_quotes(char *line, int i)
+int	avoid_quotes(char *line, int i)
 {
-	int ibis;
+	int	ibis;
 
 	ibis = i;
 	if (line[i] == '\"')
@@ -61,14 +61,14 @@ int avoid_quotes(char *line, int i)
 			i++;
 	}
 	if (line[i] == '\0')
-		return(++ibis);
+		return (++ibis);
 	return (++i);
 }
 
-int last_char_spe(char *line, char c)
+int	last_char_spe(char *line, char c)
 {
-	int i;
-	int res;
+	int	i;
+	int	res;
 
 	i = 0;
 	res = -1;
@@ -77,7 +77,7 @@ int last_char_spe(char *line, char c)
 		if (line[i] == '\"' || line[i] == '\'')
 			i = avoid_quotes(line, i);
 		if (i == ft_strlen(line))
-			break;
+			break ;
 		if (line[i] == c)
 			res = i;
 		i++;
@@ -85,9 +85,9 @@ int last_char_spe(char *line, char c)
 	return (res);
 }
 
-int first_char_spe(char *line, char c, int index)
+int	first_char_spe(char *line, char c, int index)
 {
-	int i;
+	int	i;
 
 	i = index;
 	while (line[i] != '\0')
@@ -101,10 +101,10 @@ int first_char_spe(char *line, char c, int index)
 	return (-1);
 }
 
-int count_pipe(char *cmd)
+int	count_pipe(char *cmd)
 {
-	int i;
-	int compt;
+	int	i;
+	int	compt;
 
 	i = 0;
 	compt = 1;
@@ -116,7 +116,7 @@ int count_pipe(char *cmd)
 		{
 			i = avoid_quotes(cmd, i);
 			if (i == ft_strlen(cmd))
-				break;
+				break ;
 		}
 		if (cmd[i] == '|')
 			compt++;

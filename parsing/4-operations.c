@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4-operations.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:47:45 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/10 19:38:31 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:11:19 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	op_found(char *line)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (line[i] != '\0' && line[i + 1] != '\0')
@@ -23,7 +23,7 @@ int	op_found(char *line)
 		{
 			i = avoid_quotes(line, i);
 			if (i == ft_strlen(line))
-				break;
+				break ;
 		}
 		if (line[i] == '&' && line[i + 1] == '&')
 			return (i);
@@ -34,9 +34,9 @@ int	op_found(char *line)
 	return (-1);
 }
 
-char *clean_rest_op(t_tree *start, int index)
+char	*clean_rest_op(t_tree *start, int index)
 {
-	int i;
+	int	i;
 
 	i = index;
 	while (start->cmd[i] != '\0')
@@ -44,9 +44,9 @@ char *clean_rest_op(t_tree *start, int index)
 	return (start->cmd);
 }
 
-void clean_res(char *reserve, int index)
+void	clean_res(char *reserve, int index)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < index)

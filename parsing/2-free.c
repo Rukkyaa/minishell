@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   2-free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/12 16:47:28 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:09:21 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void free_files_in(t_infile *lst)
+void	free_files_in(t_infile *lst)
 {
-	t_infile *p;
+	t_infile	*p;
 
 	if (lst == NULL || !lst)
 		return ;
@@ -28,9 +28,9 @@ void free_files_in(t_infile *lst)
 	return ;
 }
 
-void free_env(t_env *envp)
+void	free_env(t_env *envp)
 {
-	t_env *temp;
+	t_env	*temp;
 
 	if (!envp || envp == NULL)
 		return ;
@@ -45,9 +45,9 @@ void free_env(t_env *envp)
 	return ;
 }
 
-void free_files_out(t_outfile *lst, int mode)
+void	free_files_out(t_outfile *lst, int mode)
 {
-	t_outfile *p;
+	t_outfile	*p;
 
 	if (lst == NULL || !lst)
 		return ;
@@ -112,7 +112,7 @@ void	free_here_docs(char **here_docs)
 // 	free_here_docs(p->here_docs);
 // }
 
-void free_all(t_all *p)
+void	free_all(t_all *p)
 {
 	free_tab(p->paths);
 	free_env(p->env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/13 15:58:13 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:14:29 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	ft_strcmp(char *s1, char *s2)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-int heredoc_count(char *line, int index)
+int	heredoc_count(char *line, int index)
 {
-	int i;
-	int compt;
+	int	i;
+	int	compt;
 
 	i = index;
 	compt = 0;
@@ -38,7 +38,7 @@ int heredoc_count(char *line, int index)
 		if (line[i] == '\"' || line[i] == '\'')
 			i = avoid_quotes(line, i);
 		if (i == ft_strlen(line))
-			break;
+			break ;
 		if (line[i] != '\0' && line[i] == '<' && line[i + 1] != '\0' && line[i + 1] == '<' && line[i + 2] != '\0' && line[i + 2] != '<')
 			compt++;
 		i++;
@@ -71,12 +71,12 @@ char	*generate_name(char *limiter)
 	return (free(limiter), title);
 }
 
-char *find_lim(char *line, int *alert)
+char	*find_lim(char *line, int *alert)
 {
-	int i;
-	int compt;
-	int d;
-	char *limiter;
+	int		i;
+	int		compt;
+	int		d;
+	char	*limiter;
 
 	i = 0;
 	compt = 0;
@@ -182,11 +182,11 @@ char	*gen_new_limiter(char *limiter)
 // 	return (-1);
 // }
 
-char *clean_heredoc_line(char *line, char *filename, char *LIM, int *alert)
+char	*clean_heredoc_line(char *line, char *filename, char *LIM, int *alert)
 {
-	int i;
-	char *new_line;
-	char *reste;
+	int		i;
+	char	*new_line;
+	char	*reste;
 
 	if (*alert == -1)
 		return (free(line), NULL);
@@ -212,19 +212,19 @@ char *clean_heredoc_line(char *line, char *filename, char *LIM, int *alert)
 	return (free(LIM), free(line), free(reste), new_line);
 }
 
-void alert_case(char *str)
+void	alert_case(char *str)
 {
 	if (str != NULL)
 		free(str);
 	return ;
 }
 
-int fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas avec quotes
+int	fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas avec quotes
 {
-	int fd;
-	char *newlimiter;
-	char *lect;
-	int alert;
+	int		fd;
+	char	*newlimiter;
+	char	*lect;
+	int		alert;
 
 	alert = 0;
 	if (nb == max)
@@ -257,9 +257,9 @@ int fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas av
 //regler le sujet si il n'y a pas d'espace entre le limiter et <<
 //sujet quand il y en a plus de 1 
 
-char **get_here_docs(char **line)
+char	**get_here_docs(char **line)
 {
-	char **here_docs;
+	char	**here_docs;
 
 	if (heredoc_count(*line, 0) == 0) // || ft_strlen(*line) < 3)
 		return (NULL);

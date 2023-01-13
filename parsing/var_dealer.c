@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/12 15:10:16 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:29:02 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int avoid_quotes_spe(char *line, int i)
+static int	avoid_quotes_spe(char *line, int i)
 {
-	int ibis;
+	int	ibis;
 
 	ibis = i;
 	if (line[i] == '\'')
@@ -24,24 +24,25 @@ static int avoid_quotes_spe(char *line, int i)
 			i++;
 	}
 	if (line[i] == '\0')
-		return(++ibis);
+		return (++ibis);
 	return (++i);
 }
 
-static char *get_var(char **line, t_env *env, int i, int *leng)
+static char	*get_var(char **line, t_env *env, int i, int *leng)
 {
-	int e;
-	char *var;
+	int		e;
+	char	*var;
 
 	e = i + 1;
 	if (*line == NULL || env == NULL)
 		return (NULL);
-	while ((*line)[e] != '\0' && is_whitespace((*line)[e]) == 0 && (*line)[e] != '\"' && (*line)[e] != '\'' && (*line)[e] != '$')
+	while ((*line)[e] != '\0' && is_whitespace((*line)[e]) == 0
+			&& (*line)[e] != '\"' && (*line)[e] != '\'' && (*line)[e] != '$')
 		e++;
 	var = ft_substr(*line, i + 1, e - i - 1);
 	if (!var)
 		return (NULL);
-	*leng = ft_strlen(var);;
+	*leng = ft_strlen(var);
 	e = -1;
 	while (env != NULL)
 	{
@@ -54,10 +55,10 @@ static char *get_var(char **line, t_env *env, int i, int *leng)
 	return (var);
 }
 
-char *tilde(t_env *env)
+char	*tilde(t_env *env)
 {
-	char *tild;
-	char *subst;
+	char	*tild;
+	char	*subst;
 
 	if (!env || env == NULL)
 		return (NULL);
@@ -78,10 +79,10 @@ char *tilde(t_env *env)
 	return (free(tild), subst);
 }
 
-static char *change_line(char *line, char *var, int i, int *leng)
+static char	*change_line(char *line, char *var, int i, int *leng)
 {
-	char *new_line;
-	char *reste;
+	char	*new_line;
+	char	*reste;
 
 	if (!var || var == NULL)
 		return (free(line), NULL);
@@ -102,7 +103,7 @@ static char *change_line(char *line, char *var, int i, int *leng)
 
 int	find_other(char *line, int i)
 {
-	int a;
+	int	a;
 
 	a = i + 1;
 	while (line[++a] != '\0')
@@ -114,30 +115,14 @@ int	find_other(char *line, int i)
 	return (0);
 }
 
-// char **treatment_portion(char **line, int i, char **env)
-// {
-// 	int leng;
-
-// 	if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '$')
-// 		i += 2;
-// 	else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' &&  is_whitespace((*line)[i + 1]) == 0)
-// 	{
-// 		//if ((*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
-// 			//WHAT THE FUCK
-// 		(*line)[i] = ' ';
-// 		*line = change_line(*line, get_var(line, env, i, &leng), i, &leng);
-// 	}
-// 	return (line);
-// }
-
-char *gen_status(int nb)
+char	*gen_status(int nb)
 {
-	char *stat;
+	char	*stat;
 
 	stat = malloc(2);
 	if (!stat)
 		return (NULL);
-	stat[0] =  nb + '0';
+	stat[0] = nb + '0';
 	stat[1] = '\0';
 	return (stat);
 }
@@ -145,9 +130,9 @@ char *gen_status(int nb)
 char	**replace_var(char **line, t_all *p)
 {
 	int	i;
-	int leng;
-	int e;
-	int init;
+	int	leng;
+	int	e;
+	int	init;
 
 	i = 0;
 	leng = 0;
@@ -172,7 +157,7 @@ char	**replace_var(char **line, t_all *p)
 					e = find_other(*line, init);
 					i = init;
 				}
-				else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' &&  is_whitespace((*line)[i + 1]) == 0)
+				else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' && is_whitespace((*line)[i + 1]) == 0)
 				{
 		//if ((*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
 			//WHAT THE FUCK
@@ -192,7 +177,7 @@ char	**replace_var(char **line, t_all *p)
 		{
 			i = avoid_quotes_spe(*line, i);
 			if (i == ft_strlen(*line))
-				break;
+				break ;
 		}
 		//if (i < ft_strlen(*line) - 2 && (*line)[i] == ' ' && (*line)[i + 1] == '~' && (((*line)[i + 2] != '\0' && (*line)[i + 2] == ' ') || i == ft_strlen(*line) -1))
 		if ((*line)[i] == ' ' && (*line)[i + 1] == '~' && (i == ft_strlen(*line) - 2 || (*line)[i + 2] == ' '))
@@ -213,7 +198,7 @@ char	**replace_var(char **line, t_all *p)
 				return (free(line), NULL);
 			i = 0;
 		}
-		else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' &&  is_whitespace((*line)[i + 1]) == 0)
+		else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' && is_whitespace((*line)[i + 1]) == 0)
 		{
 		//if ((*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
 			//WHAT THE FUCK
@@ -227,6 +212,7 @@ char	**replace_var(char **line, t_all *p)
 			i++;
 	}
 	return (line);
+}
 
 // 	char	**replace_var(char **line, char **env)
 // {
@@ -244,8 +230,7 @@ char	**replace_var(char **line, t_all *p)
 // 		{
 // 			e = find_other(*line, i)
 // 			while (i <= e)
-// 			{
-				
+// 			{				
 // 			}
 // 		}
 // 		if ((*line)[i] == '\'')
@@ -271,4 +256,3 @@ char	**replace_var(char **line, t_all *p)
 // 		}
 // 	}
 // 	return (line);
-}
