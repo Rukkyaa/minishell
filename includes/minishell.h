@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/11 16:22:39 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/13 15:19:39 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,4 +230,7 @@ void	ft_env_add_back(t_env **lst, t_env *new);
 t_env	*env_to_struct(char **env);
 t_env	*ft_envnew(char *key, char *value);
 bool	ft_is_in_env(t_env *env, char *str);
+char	**sort_env(char **env);
+char	**env_to_char_export(t_env *env);
+
 #endif

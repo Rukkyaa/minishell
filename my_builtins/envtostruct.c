@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envtostruct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 13:48:04 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/11 14:52:09 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 15:20:12 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ t_env	*env_to_struct(char **env)
 			return (free(tmp), free(value), NULL); // FREE
 		// free(tmp);
 		// free(value);
+		tmp_env->code = 1;
 		ft_env_add_back(&env_struct, tmp_env);
 		env++;
 	}

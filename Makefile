@@ -6,7 +6,7 @@
 #    By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2023/01/11 16:20:33 by axlamber         ###   ########.fr        #
+#    Updated: 2023/01/13 15:58:29 by axlamber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirecti
 			parsing/6-count.c parsing/7-print.c parsing/8-init2.c parsing/9-redir.c \
 			pipex/executor.c pipex/pipe.c parsing/spe_split.c parsing/var_dealer.c \
 			pipex/exec_builtins.c my_builtins/envtostruct.c my_builtins/ft_cd.c my_builtins/ft_env.c \
-			my_builtins/ft_export.c my_builtins/ft_unset.c
+			my_builtins/ft_export.c my_builtins/ft_unset.c my_builtins/sort_env.c
 			
 OBJS	= ${SRCS:.c=.o}
 NAME	= minishell
