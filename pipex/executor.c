@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/12 17:47:19 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 15:28:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,8 @@ void error_process(t_all *p)
 	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);
+	if (g_sig.sig_int == 1)
+		exit(134);
 	exit(1);
 }
 
@@ -203,19 +205,24 @@ int	exec_command_one(t_minishell *elem, t_all *p)
 		return (-1);
 	if (elem->pid == 0)
 	{
-		if (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1)
+		if (signal(SIGINT, &sig_int) == SIG_ERR || signal(SIGQUIT, &sig_quit) == SIG_ERR)
 			error_process(p);
-		if (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1)
+		init_signal(-1);
+		if (g_sig.sig_int != 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
 			error_process(p);
-		if (exec_command(p->paths, elem->cmd, p) == -1)
+		if (g_sig.sig_int != 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
+			error_process(p);
+		if (g_sig.sig_int != 0 || exec_command(p->paths, elem->cmd, p) == -1)
 			error_process(p);
 		exit(0);
 	}
-	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 134))
-		return (printf("%d\n", status1), 134);
-	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 1))
-		return (printf("%d\n", status1),-1);
-	return (printf("%d\n", status1), 0);
+	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))
+		return (WEXITSTATUS(status1));
+	// if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 134))
+	// 	return (printf("%d--%d\n", status1, WEXITSTATUS(status1)), 134);
+	// if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 1))
+	// 	return (printf("%d\n", status1),-1);
+	return (0);
 }
 
 int	pipex(t_minishell *first_elem, t_all *p)
@@ -231,31 +238,28 @@ void kill_process(t_tree *start, t_all *p, char *line)
 {
 	free_start(start, 1);
 	free_here_docs(p->here_docs);
-	free(line);
+	free(line); //A ACTIVER AVEC LE MAIN PRINCIPAL
+	//printf("%s\n", line);
 	free_all(p);
 	exit (0);
 }
 int	executor(t_tree *start, t_all *p, char *line)
 {
-	int status;
-
 	if (start == NULL || !start)
 		return (-1);
-	status = pipex(start->first_elem, p);
-	if (status == -1)
-		p->last_status = 1;
-	if (status == 134)
-		sig_int(0);
+	p->last_status = pipex(start->first_elem, p);
+	if (p->last_status == 134)
+		kill_process(start, p, line);
 	free(start->cmd);
-	if (status == -1)
+	if (p->last_status == -1)
 		free_minishell(start->first_elem, 1);
 	else
 		free_minishell(start->first_elem, 0);
-	if (start->and != NULL && status != -1)
+	if (start->and != NULL && p->last_status != -1)
 		return (executor(start->and, p, line));
-	else if (start->or != NULL && status == -1)
+	else if (start->or != NULL && p->last_status == -1)
 		return (executor(start->or, p, line));
-	else if (status == -1)
+	else if (p->last_status == -1)
 		return (free(start), -1); //quid en cas d'erreur
 	return (free(start), 0);
 }

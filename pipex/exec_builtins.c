@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:42:24 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/12 14:35:58 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 14:29:33 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ int exec_builtin(int nb, char **cmd, t_all *p)
 	else if (nb == 6)
 		return (ft_env(p->env));
 	else if (nb == 7)
-		return (ft_exit(p));
+		ft_exit(p);
 	return (-1);
 }

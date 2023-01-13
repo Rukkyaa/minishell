@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/12 16:50:00 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 15:58:13 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ char	*gen_new_limiter(char *limiter)
 {
 	char	*newlimiter;
 
-	if (!limiter || limiter == NULL)
-		return (NULL);
+	// if (!limiter || limiter == NULL)
+	// 	return (NULL);
 	newlimiter = malloc((ft_strlen(limiter) + 2) * sizeof(char));
 	if (!newlimiter)
 		return (NULL);
@@ -200,7 +200,10 @@ char *clean_heredoc_line(char *line, char *filename, char *LIM, int *alert)
 	new_line = ft_strjoin_spe(new_line, filename);
 	if (new_line == NULL || !new_line)
 		return (free(LIM), free(line), NULL);
-	reste = ft_substr(line, *alert + ft_strlen(LIM), ft_strlen(line));
+	if (ft_strlen(LIM) == 0)
+		reste = ft_substr(line, *alert + 2, ft_strlen(line)); //verifier si il n'y a pas plus de cas particuliers style <<"''"
+	else
+		reste = ft_substr(line, *alert + ft_strlen(LIM), ft_strlen(line));
 	if (!reste || reste == NULL)
 		return (free(LIM), free(line), free(new_line), NULL);
 	new_line = ft_strjoin_spe(new_line, reste);
@@ -236,7 +239,7 @@ int fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas av
 	if (newlimiter == NULL || alert == -1)
 		return (alert_case(newlimiter), free(here_docs[nb]), -1);
 	lect = get_next_line(0);
-	while (ft_strcmp(lect, newlimiter) != 0)
+	while (ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0)
 	{
 		write(fd, lect, ft_strlen(lect));
 		free(lect);

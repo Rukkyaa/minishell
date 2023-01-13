@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/12 16:49:04 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 15:28:59 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # include <limits.h>
 # include <string.h>
 # include <signal.h>
+# include <curses.h>
+# include <term.h>
 
 # include "../libft/libft.h"
 
@@ -80,7 +82,6 @@ typedef struct s_all
 	t_tree *start;
 	int last_status;
 	int exit;
-	char *line;
 	//t_minishell *first_elem;
 }	t_all;
 
@@ -88,7 +89,8 @@ typedef struct s_sig
 {
 	int	sig_quit;
 	int	sig_int;
-	t_all *p;
+	int	p_status;
+	char *line;
 } t_sig;
 
 extern t_sig g_sig;
@@ -99,7 +101,7 @@ extern t_sig g_sig;
 t_env	*env_to_struct(char **env);
 
 //signal.c
-void	init_signal(t_all *p);
+void	init_signal(int nb);
 void    sig_quit(int code);
 void    sig_int(int code);
 
@@ -202,7 +204,7 @@ char	*error_case(char *buf, char *reserve, int p);
 
 //ft_slit.c
 char	**ft_split(char *s, char c);
-void	free_tab(char **tab);
+void	free_tab(char **tabl);
 int	count_words(char const *str, char c);
 int	words_length(char const *str, int i, char c);
 
@@ -238,7 +240,7 @@ int	ft_env(t_env *env);
 int	ft_unset(t_env *env, char *to_unset);
 int	ft_export(t_env *env, char **split);
 int	ft_cd(t_env *env, char *new_cd);
-int ft_exit(t_all *p);
+void	ft_exit(t_all *p);
 
 // ENV STRUCT
 t_env	*ft_envlast(t_env *lst);

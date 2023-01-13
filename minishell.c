@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/12 16:49:36 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 15:58:50 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,10 @@ void print_all(t_all *p)
 //integrer le code de la struct env aux fonctions
 //reprendre tous les builtins pour leaks (ftstdup)
 //revoir la gestion d'erreur du here docs
-
+//verifier l'impact de exit si on le met dans une commande avec differents fichiers et redirections
+//pb dans l'organisation des operations de pipe en cas de exit
+//double free du exit avec par ex "cat Makefile && exit"
+//integrer la comprehension des signaux dans les get nex line
 
 //PB DE BUILTINS
 //cas des mutiples exit et lancement de minishell dans le minishell
@@ -186,6 +189,11 @@ void print_all(t_all *p)
 //cas des ulltiples $ : $$$USER GOOD
 //cas du "'$USER'" GOOD
 
+int event(void) 
+{
+	return (42);
+}
+
 // void	check_builtins(char *str, t_env *env)
 // {
 // 	// printf("Builtins !\n");
@@ -205,33 +213,40 @@ void print_all(t_all *p)
 // 	//	ft_exit();
 // }
 
+
+//valgrind --leak-check=full --show-leak-kinds=all --suppressions=./.readline.supp ./minishell
+
 int	main(int argc, char **argv, char **env)
 {
 	t_all *p;
-	char *line;
 
 	(void)argc;
 	(void) **argv;
 	p = init_env(env);
 	if (!p)
 		return (1);
-	line = NULL;
-	signal(SIGINT, &sig_int);
-    signal(SIGQUIT, &sig_quit);
-	while (line == NULL)
+	g_sig.line = NULL;
+	if (signal(SIGINT, &sig_int) == SIG_ERR || signal(SIGQUIT, &sig_quit) == SIG_ERR)
+		return (free_all(p), 1);
+	while (g_sig.line == NULL)
 	{
-		init_signal(p);
-		line = ft_epur(readline("Minishell> "));
-		// //line = ft_strdup("cat test | (wc && (ls || ifconfig))");
-		p->line = line;
-		p->start = parsingator(line, p);
+		init_signal(0);
+		rl_event_hook = event;
+		g_sig.line = readline("Minishell> ");
+		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_int == 1)
+			return (free(g_sig.line), free_all(p), EXIT_SUCCESS);
+		g_sig.p_status = 1;
+		g_sig.line = ft_epur(g_sig.line);
+		p->start = parsingator(g_sig.line, p); //leaks
+		if (g_sig.sig_int == 1)
+			return (free_start(p->start, 1), free_here_docs(p->here_docs), free(g_sig.line), free_all(p), EXIT_SUCCESS);
 		print_all(p);
-		if (p->start != NULL && executor(p->start, p, line) == -1)
+		if (p->start != NULL && executor(p->start, p, g_sig.line) == -1)
 			printf("ERRRRROOOOOR\n");
 		//check_builtins(line, p->env);
 		free_here_docs(p->here_docs);
-		free(line);
-		line = NULL;
+		free(g_sig.line);
+		g_sig.line = NULL;
 	}
 	free_all(p);
 	return (EXIT_SUCCESS);
@@ -244,11 +259,9 @@ int	main(int argc, char **argv, char **env)
 
 // 	(void)argc;
 // 	p = init_env(env);
-// 	if (!p || p == NULL)
-// 		return (printf("Error in setting environment\n"), 1);
 // 	p->start = parsingator(argv[1], p);
 // 	print_all(p);
-// 	if (executor(p->start, p) == -1)
+// 	if (executor(p->start, p, argv[1]) == -1)
 // 		printf("ERRRRROOOOOR\n");
 // 	printf("finito");
 // 	free_here_docs(p->here_docs);
