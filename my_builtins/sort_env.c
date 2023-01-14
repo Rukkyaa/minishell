@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 17:57:53 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/13 17:59:30 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/14 01:03:38 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static char	*get_join(t_env *env)
 {
 	char	*str;
 
+	printf("Code : %d\n", env->code);
 	if (env->code == 1)
 	{
 		str = ft_strjoin(env->key, "=\"");

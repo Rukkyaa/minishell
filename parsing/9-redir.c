@@ -3,30 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   9-redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/10 13:35:51 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:22:57 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void clean_rest(t_tree *start, int i, int end)
+void	clean_rest(t_tree *start, int i, int end)
 {
 	while (i <= end)
 		start->cmd[i++] = ' ';
 }
 
-
-char *get_filename(char *line, int i) //attention a gerer les quotes
+char	*get_filename(char *line, int i) //attention a gerer les quotes
 {
-	char *text;
-	int a;
-	int len;
+	char	*text;
+	int		a;
+	int		len;
 
 	len = 0;
-	while(is_whitespace(line[i]) == 1)
+	while (is_whitespace(line[i]) == 1)
 		i++;
 	a = i;
 	while (ft_isprint(line[a]) == 1)
@@ -47,9 +46,9 @@ char *get_filename(char *line, int i) //attention a gerer les quotes
 
 t_infile	*add_file_in(t_infile *lst, char *file)
 {
-	t_infile *p;
-	t_infile *new_elem;
-	t_infile *p_bis;
+	t_infile	*p;
+	t_infile	*new_elem;
+	t_infile	*p_bis;
 
 	if (lst == NULL)
 	{
@@ -72,12 +71,11 @@ t_infile	*add_file_in(t_infile *lst, char *file)
 	return (p->next = new_elem, p_bis);
 }
 
-
 t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
 {
-	t_outfile *p;
-	t_outfile *new_elem;
-	t_outfile *p_bis;
+	t_outfile	*p;
+	t_outfile	*new_elem;
+	t_outfile	*p_bis;
 
 	if (lst == NULL)
 	{
@@ -118,9 +116,9 @@ t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
 	return (p->next = new_elem, p_bis);
 }
 
-int check_redirection(char *cmd, t_minishell *maillon) //fonction bancale (risque de invalid read)
+int	check_redirection(char *cmd, t_minishell *maillon) //fonction bancale (risque de invalid read)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i + 2 < ft_strlen(cmd)) //ft_strlen(cmd) > 3 && cmd[i + 2] != '\0') //il y a sans doute une plus opti a faire
@@ -157,10 +155,10 @@ int check_redirection(char *cmd, t_minishell *maillon) //fonction bancale (risqu
 	return (1);
 }
 
-char *erase_redir(char *cmd)
+char	*erase_redir(char *cmd)
 {
-	int i;
-	int end;
+	int	i;
+	int	end;
 
 	i = 0;
 	while (cmd[i] != '\0' && cmd[i + 1] != '\0') //il y a sans doute une plus opti a faire
@@ -187,7 +185,7 @@ char *erase_redir(char *cmd)
 			}
 		}
 		if (cmd[i] == '\0')
-			break;
+			break ;
 		i++;
 	}
 	return (cmd);

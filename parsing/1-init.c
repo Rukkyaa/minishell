@@ -3,39 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/11 14:22:58 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:08:23 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_all *init_env(char **env)
+t_all	*init_env(char **env)
 {
-	t_all *p;
+	t_all	*p;
 
 	p = malloc(sizeof(t_all));
 	if (!p)
 		return (NULL);
-	// /////
-	// int i = 0;
-	// while (env[i] != NULL)
-	// 	printf("%s\n", env[i++]);
-	// /// 
 	p->env = env_to_struct(env);
 	if (!p->env)
 		return (free(p), NULL);
 	p->paths = split_path(get_env_var(p->env, "PATH"), ':');
-	if (!p->paths) // || p->paths == NULL)
-		return (free_env(p->env), free(p), NULL);
+	if (!p->paths)
+		p->paths = NULL;//return (free_env(p->env), free(p), NULL);
 	p->last_status = 0;
+	p->exit = 0;
 	//p->here_docs = NULL; //ligne add, voir si ca impacte le fonctionnement
 	return (p);
 }
 
-t_tree *init_tree(char **line)
+t_tree	*init_tree(char **line)
 {
 	t_tree	*start;
 
@@ -54,9 +50,9 @@ t_tree *init_tree(char **line)
 	return (start);
 }
 
-t_tree *init_m_tree(int length)
+t_tree	*init_m_tree(int length)
 {
-	t_tree *start;
+	t_tree	*start;
 
 	start = malloc(sizeof(t_tree));
 	if (!start)
@@ -67,9 +63,9 @@ t_tree *init_m_tree(int length)
 	return (start);
 }
 
-t_tree *fill_branch(char *reserve, int i)
+t_tree	*fill_branch(char *reserve, int i)
 {
-	t_tree *new_elem;
+	t_tree	*new_elem;
 
 	new_elem = malloc(sizeof(t_tree));
 	if (!new_elem)

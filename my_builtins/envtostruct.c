@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envtostruct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 13:48:04 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/13 15:20:12 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/14 00:38:16 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_env	*ft_envnew(char *key, char *value)
 	list->key = key;
 	list->value = value;
 	list->next = NULL;
+	list->code = 1;
 	return (list);
 }
 

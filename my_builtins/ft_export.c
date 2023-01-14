@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/13 18:01:02 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/14 01:10:15 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	change_value(t_env *env, char *key, char *value)
 {
 	t_env	*new;
 
+	printf("Basic\n");
 	if (ft_is_in_env(env, key))
 	{
 		while (env)
@@ -92,30 +93,36 @@ void	change_value_empty(t_env *env, char *key)
 	}
 }
 
-int	ft_export(t_env *env, char *str)
+int	before(char *str)
 {
-	char	**split;
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+		++i;
+	return (i);
+}
+
+int	ft_export(t_env *env, char **cmd)
+{
 	char	*key;
 	char	*value;
 
-	split = ft_split(str, '=');
-	if (!split)
-		return (EXIT_FAILURE);
-	if (!split[0])
+	if (!cmd[1])
 		sort_env(env_to_char_export(env));
-	key = ft_strdup(split[0]);
+	key = ft_strndup(cmd[1], before(cmd[1]));
 	if (!key)
-		return (free_tab(split), EXIT_FAILURE);
-	if (!(split[1]) && str[ft_strlen(split[0])] == '=')
+		return (EXIT_FAILURE);
+	if (cmd[1][ft_strlen(key)] == '=' && !(cmd[1][ft_strlen(key) + 1]))
 		change_value_equal(env, key);
-	else if (!(split[1]) && !str[ft_strlen(split[0])])
+	else if (!cmd[1][ft_strlen(key)])
 		change_value_empty(env, key);
 	else
 	{
-		value = ft_strdup(split[1]);
+		value = ft_strdup(cmd[1] + ft_strlen(key) + 1);
 		if (!value)
-			return (free_tab(split), free(key), EXIT_FAILURE);
+			return (free(key), EXIT_FAILURE);
 		change_value(env, key, value);
 	}
-	return (free_tab(split), EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

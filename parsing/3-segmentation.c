@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   3-segmentation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:43:39 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/05 12:25:09 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:10:34 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int op_segmentation(t_tree *start, int i, int end, char *reserve)
+int	op_segmentation(t_tree *start, int i, int end, char *reserve)
 {
-	t_tree *new;
+	t_tree	*new;
 
 	if (i == end || i + 1 == end)
 		return (start->cmd[last_char_spe(start->cmd, '(')] = ' ', start->cmd[end] = ' ', 1);
@@ -45,10 +45,10 @@ int op_segmentation(t_tree *start, int i, int end, char *reserve)
 	return (op_segmentation(start, ++i, end, reserve));
 }
 
-int first_segmentation(t_tree *start, t_tree *init)
+int	first_segmentation(t_tree *start, t_tree *init)
 {
-	int end;
-	char *reserve;
+	int		end;
+	char	*reserve;
 
 	if (last_char_spe(start->cmd, '(') == -1 && start->and == NULL && start->or == NULL)
 		return (1);
@@ -70,9 +70,9 @@ int first_segmentation(t_tree *start, t_tree *init)
 	return (free(reserve), first_segmentation(start, init));
 }
 
-int op_scd(t_tree *start, int i, char *reserve)
+int	op_scd(t_tree *start, int i, char *reserve)
 {
-	t_tree *new;
+	t_tree	*new;
 
 	if (reserve[i] == '\0')
 		return (1);
@@ -105,9 +105,9 @@ int op_scd(t_tree *start, int i, char *reserve)
 	return (op_scd(start, ++i, reserve));
 }
 
-int scnd_segmentation(t_tree *start, t_tree *init)
+int	scnd_segmentation(t_tree *start, t_tree *init)
 {
-	char *reserve;
+	char	*reserve;
 
 	if (op_found(start->cmd) == -1 && start->and == NULL && start->or == NULL)
 		return (1);

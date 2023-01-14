@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/11 14:38:48 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 15:28:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ char **env_to_char(t_env *env)
 	return (reforged[e] = NULL, reforged);
 }
 
-int	exec_command(char **paths, char **cmd, t_env *env)
+int	exec_command(char **paths, char **cmd, t_all *p)
 {
 	int		i;
 	char	*path;
@@ -146,11 +146,16 @@ int	exec_command(char **paths, char **cmd, t_env *env)
 	i = -1;
 	if (!cmd || ft_strlen(cmd[0]) == 0)
 		return (ft_putstr_fd("'' : command not found\n", 2), -1);
-	reforged_env = env_to_char(env);
-	if (reforged_env == NULL && env != NULL)
+	if (path_comp_builtins(cmd) > 0)
+	{
+		printf("---entering builtins---\n");
+		if (exec_builtin(path_comp_builtins(cmd), cmd, p) == EXIT_FAILURE)
+			return (-1);
+		return (0);
+	}
+	reforged_env = env_to_char(p->env);
+	if (reforged_env == NULL && p->env != NULL)
 		return (-1);
-	// if (path_comp_builtins(cmd) > 0)
-	// 	exec_builtin(path_comp_builtins(cmd), cmd);
 	while (paths[++i] != NULL)
 	{
 		path = ft_strjoin(paths[i], cmd[0]);
@@ -186,6 +191,8 @@ void error_process(t_all *p)
 	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);
+	if (g_sig.sig_int == 1)
+		exit(134);
 	exit(1);
 }
 
@@ -198,16 +205,23 @@ int	exec_command_one(t_minishell *elem, t_all *p)
 		return (-1);
 	if (elem->pid == 0)
 	{
-		if (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1)
+		if (signal(SIGINT, &sig_int) == SIG_ERR || signal(SIGQUIT, &sig_quit) == SIG_ERR)
 			error_process(p);
-		if (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1)
+		init_signal(-1);
+		if (g_sig.sig_int != 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
 			error_process(p);
-		if (exec_command(p->paths, elem->cmd, p->env) == -1)
+		if (g_sig.sig_int != 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
+			error_process(p);
+		if (g_sig.sig_int != 0 || exec_command(p->paths, elem->cmd, p) == -1)
 			error_process(p);
 		exit(0);
 	}
-	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 1))
-		return (-1);
+	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))
+		return (WEXITSTATUS(status1));
+	// if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 134))
+	// 	return (printf("%d--%d\n", status1, WEXITSTATUS(status1)), 134);
+	// if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 1))
+	// 	return (printf("%d\n", status1),-1);
 	return (0);
 }
 
@@ -220,25 +234,32 @@ int	pipex(t_minishell *first_elem, t_all *p)
 	return (first_pipe(first_elem, p));
 }
 
-int	executor(t_tree *start, t_all *p)
+void kill_process(t_tree *start, t_all *p, char *line)
 {
-	int status;
-
+	free_start(start, 1);
+	free_here_docs(p->here_docs);
+	free(line); //A ACTIVER AVEC LE MAIN PRINCIPAL
+	//printf("%s\n", line);
+	free_all(p);
+	exit (0);
+}
+int	executor(t_tree *start, t_all *p, char *line)
+{
 	if (start == NULL || !start)
 		return (-1);
-	status = pipex(start->first_elem, p);
-	if (status == -1)
-		p->last_status = 1;
+	p->last_status = pipex(start->first_elem, p);
+	if (p->last_status == 134)
+		kill_process(start, p, line);
 	free(start->cmd);
-	if (status == -1)
+	if (p->last_status == -1)
 		free_minishell(start->first_elem, 1);
 	else
 		free_minishell(start->first_elem, 0);
-	if (start->and != NULL && status != -1)
-		return (executor(start->and, p));
-	else if (start->or != NULL && status == -1)
-		return (executor(start->or, p));
-	else if (status == -1)
+	if (start->and != NULL && p->last_status != -1)
+		return (executor(start->and, p, line));
+	else if (start->or != NULL && p->last_status == -1)
+		return (executor(start->or, p, line));
+	else if (p->last_status == -1)
 		return (free(start), -1); //quid en cas d'erreur
 	return (free(start), 0);
 }

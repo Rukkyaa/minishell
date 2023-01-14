@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 12:13:55 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/11 13:27:38 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:04:25 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,17 @@ int	words_length(char const *str, int i, char c)
 	return (compteur);
 }
 
-void	free_tab(char **tab)
+void	free_tab(char **tabl)
 {
 	int	i;
 
 	i = 0;
-	if (!tab || tab == NULL)
+	if (!tabl || tabl == NULL)
 		return ;
-	while (tab[i])
-		free(tab[i++]);
-	if (tab != (char **)0)
-		free(tab);
+	while (tabl[i])
+		free(tabl[i++]);
+	if (tabl != (char **)0)
+		free(tabl);
 }
 
 /*
@@ -66,7 +66,7 @@ void	free_tab(char **tab)
 */
 char	**split_path(char *s, char c)
 {
-	char	**tab;
+	char	**tabl;
 	int		a;
 	int		i;
 	int		d;
@@ -75,22 +75,22 @@ char	**split_path(char *s, char c)
 	a = 0;
 	if (!s || s == NULL)
 		return (NULL);
-	tab = malloc((count_words(s, c) + 1) * sizeof(char *));
-	if (!(tab))
+	tabl = malloc((count_words(s, c) + 1) * sizeof(char *));
+	if (!(tabl))
 		return (0);
 	while (a < count_words(s, c) && s[i] != '\0')
 	{
-		tab[a] = malloc((words_length(s, i, c) + 2) * sizeof(char));
-		if (!(tab[a]))
-			return (free_tab(tab), (char **)0);
+		tabl[a] = malloc((words_length(s, i, c) + 2) * sizeof(char));
+		if (!(tabl[a]))
+			return (free_tab(tabl), (char **)0);
 		d = 0;
 		while (s[i] == c && s[i] != '\0')
 			i++;
 		while (s[i] != c && s[i] != '\0')
-			tab[a][d++] = s[i++];
-		tab[a][d++] = '/';
-		tab[a][d] = '\0';
+			tabl[a][d++] = s[i++];
+		tabl[a][d++] = '/';
+		tabl[a][d] = '\0';
 		a++;
 	}
-	return (tab[a] = 0, tab);
+	return (tabl[a] = 0, tabl);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spe_split.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 12:28:52 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/10 19:33:43 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:23:26 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,37 +59,37 @@ static int	words_length2(char *str, int i, char c)
 	return (compteur);
 }
 
-static char	**free_tab2(char **tab, int a)
+static char	**free_tab2(char **tabl, int a)
 {
 	while (a >= 0)
 	{
-		if (tab[a] != NULL)
-			free(tab[a]);
+		if (tabl[a] != NULL)
+			free(tabl[a]);
 		a--;
 	}
-	if (tab != NULL)
-		free(tab);
+	if (tabl != NULL)
+		free(tabl);
 	return (0);
 }
 
 char	**ft_split_spe(char *s, char c)
 {
-	char	**tab;
+	char	**tabl;
 	int		a;
 	int		i;
 	int		d;
-	int end;
+	int		end;
 
 	i = 0;
 	a = 0;
-	tab = malloc((count_words2(s, c) + 1) * sizeof(char *));
-	if (!(tab))
+	tabl = malloc((count_words2(s, c) + 1) * sizeof(char *));
+	if (!(tabl))
 		return (NULL);
 	while (a < count_words2(s, c) && s[i] != '\0')
 	{
-		tab[a] = malloc((words_length2(s, i, c) + 1) * sizeof(char));
-		if (!(tab[a]))
-			return (free_tab2(tab, a));
+		tabl[a] = malloc((words_length2(s, i, c) + 1) * sizeof(char));
+		if (!(tabl[a]))
+			return (free_tab2(tabl, a));
 		d = 0;
 		while (s[i] == c && s[i] != '\0')
 			i++;
@@ -99,14 +99,14 @@ char	**ft_split_spe(char *s, char c)
 			{
 				end = avoid_quotes(s, i);
 				while (s[i] != '\0' && i <= end)
-					tab[a][d++] = s[i++];
+					tabl[a][d++] = s[i++];
 			}
 			else
-				tab[a][d++] = s[i++];
+				tabl[a][d++] = s[i++];
 		}
-		tab[a][d] = '\0';
+		tabl[a][d] = '\0';
 		a++;
 	}
-	tab[a] = 0;
-	return (tab);
+	tabl[a] = 0;
+	return (tabl);
 }

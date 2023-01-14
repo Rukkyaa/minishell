@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   7-print.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:24:51 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/09 18:46:54 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 23:16:33 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void print_tree(t_tree *start, int i)
+void	print_tree(t_tree *start, int i)
 {
 	printf("B%d       %s\n", i, start->cmd);
 	if (start->and != NULL)
@@ -27,11 +27,11 @@ void print_tree(t_tree *start, int i)
 	}
 }
 
-void print_pipe(t_minishell *elem, int i)
+void	print_pipe(t_minishell *elem, int i)
 {
-	int d;
-	t_infile *f1;
-	t_outfile *f2;
+	int			d;
+	t_infile	*f1;
+	t_outfile	*f2;
 
 	d = 0;
 	printf("\n	|PIPE %d\n", i);
@@ -69,7 +69,7 @@ void print_pipe(t_minishell *elem, int i)
 		print_pipe(elem->next, ++i);
 }
 
-void print_cmd(t_tree *start, int i)
+void	print_cmd(t_tree *start, int i)
 {
 	printf("	|OPERATION N^%d---------- (%s)\n", i, start->cmd);
 	print_pipe(start->first_elem, 1);
@@ -86,9 +86,9 @@ void print_cmd(t_tree *start, int i)
 	}
 }
 
-void print_here_doc(char **here_docs)
+void	print_here_doc(char **here_docs)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (here_docs == NULL)

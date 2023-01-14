@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 19:11:54 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/22 15:26:37 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/13 14:03:23 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_epur(char *str)
 	i = 0;
 	j = 0;
 	new_str = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!new_str)
+	if (!new_str || new_str == NULL)
 		return (NULL);
 	while (str[i] != '\0')
 	{
