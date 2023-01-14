@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/13 15:58:50 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/15 00:18:51 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,12 @@
 
 t_sig g_sig;
 
-//int	redir_non_null(char **redir)
-//{
-//	if (redir[0] && ft_strlen(redir[0]) != 0)
-//		return (1);
-//	if (redir[1] && ft_strlen(redir[1]) != 0)
-//		return (1);
-//	if (redir[2] && ft_strlen(redir[2]) != 0)
-//		return (1);
-//	return (0);
-//}
-
-//int redirecting(char *file, int port) // ajout d'une option append qui va lire tout le fichier avant de renvoyer le port
-//{
-//	int fdt;
-
-//	if (access(file, F_OK) != 0)
-//		return (perror(""), -1);
-//	fdt = open(file, O_RDONLY);
-//	if (fdt == -1)
-//		return (perror(""), -1);
-//	if (dup2(fdt, port) < 0)
-//		return (perror(""), -1);
-//	return (0);
-//}
-
-//int count_op(char *line, int i, int compt, int indic)
-//{
-//	if (line[i] == '\0' || line[i + 1] == '\0' || line[i + 2] == '\0')
-//		return (compt);
-//	if (indic == 1 && line[i] == ')')
-//		return (compt);
-//	else if (indic == 0 && line[i] == ')')
-//		return (-1);
-//	if (line[i] == '(')
-//	{
-//		compt *= count_op(line, ++i, 1, 1);
-//		return (count_op(line, ++i, compt, 0));
-//	}
-//	if ((line[i] == '&' && line[i + 1] == '&')||(line[i] == '|' && line[i + 1] == '|'))
-//		return (count_op(line, ++i, ++compt, 0));
-//	return (-1);
-//}
+int	countbis(int i, char d, char *line)
+{
+	while (line[i] != '\0' && line[i] != d)
+		i++;
+	return (++i);
+}
 
 int	countofquotes(char *line, char c, int compt)
 {
@@ -67,28 +31,17 @@ int	countofquotes(char *line, char c, int compt)
 	while (line[++i] != '\0')
 	{
 		if (line[i] != '\0' && line[i] == '\"' && c == '\'')
-		{
-			i++;
-			while (line[i] != '\0' && line[i] != '\"')
-				i++;
-			i++;
-		}
+			i = countbis(++i, '\"', line);
 		else if (line[i] != '\0' && line[i] == '\'' && c == '\"')
-		{
-			i++;
-			while (line[i] != '\0' && line[i] != '\'')
-				i++;
-			i++;
-		}
+			i = countbis(++i, '\'', line);
 		else if (line[i] != '\0' && line[i] == c)
 		{
 			compt++;
 			i++;
 			while (line[i] != '\0' && line[i] != c)
 				i++;
-			if (line[i] == c)
+			if (line[i++] == c)
 				compt++;
-			i++;
 		}
 		if (line[i] == '\0')
 			break;
@@ -98,22 +51,24 @@ int	countofquotes(char *line, char c, int compt)
 
 int	invalid_quote(char *line)
 {
-	//printf("\": %d || \': %d\n", countofquotes(line, '\"', 0), countofquotes(line, '\'', 0));
-	if (countofquotes(line, '\"', 0) % 2 != 0 || countofquotes(line, '\'', 0) % 2 != 0)
+	if (countofquotes(line, '\"', 0) % 2 != 0
+		|| countofquotes(line, '\'', 0) % 2 != 0)
 		return (printf("Syntax error\n"), 1);
-	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '|' && line[ft_strlen(line) - 1] == '|')
+	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '|'
+		&& line[ft_strlen(line) - 1] == '|')
 		return (printf("Syntax error\n"), 1);
 	else if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '|')
 		return (printf("Syntax error\n"), 1);
-	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '&' && line[ft_strlen(line) - 1] == '&')
+	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '&'
+		&& line[ft_strlen(line) - 1] == '&')
 		return (printf("Syntax error\n"), 1);
 	return (0);
 }
 
 t_tree *parsingator(char *line, t_all *p)
 {
-	t_tree *start;
-	char **line_bis;
+	t_tree	*start;
+	char	**line_bis;
 
 	line_bis = malloc(sizeof(char *));
 	if (!line_bis)
@@ -126,7 +81,6 @@ t_tree *parsingator(char *line, t_all *p)
 	p->here_docs = get_here_docs(line_bis);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
 		return (free(*line_bis), NULL);
-	printf("c");
 	start = init_tree(replace_var(line_bis, p));
 	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
 		return (free(*line_bis), free(line_bis), free(start->cmd), free(start), NULL);
@@ -144,28 +98,37 @@ void print_all(t_all *p)
 	print_here_doc(p->here_docs);
 }
 
+//1- CORRIGER LE PB DE STATUTS
+//2- AJOUTER LE BONUS DU WILDCARD
+//3- REVOIR TOUTES LES LEAKS
+//4- REVOIR TOUTE LA GESTION D'ERREURS
+//5- VOIR CAS SPECIFIQUES DES BUILTINS
+//6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
 
-//effacer tous les strncmp
+
+//TESTS FINAUX
+//test de la var $? (0 - 1 - 134 - 127)
+//Refaire des test sur le traitement des variables
+//verifier les leaks avec la manipulaiton des signaux
+//Faire les tests sur les operateurs logiques
+
 //integrer les signaux (AXEL)
 //integrer les quotes (a priori good) (GAB) il se passe un truc bizarre si il 'y en a qu'une
 //ajout de l'historique (AXEL)
 // faire les builtins sous forme de fonctions (AXEL)
 
 
+//REVOIR LA SORTIE DE STATUT BUG COMPLET
+
 //revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
-//cas du heredoc avec $"" (traduit en \0) + heredoc chelou si il y a pas de commande avant 
-//Refaire des test sur le traitement des variables
-//Faire les tests sur les operateurs logiques
+//cas du heredoc avec le free a corriger
 //regarder fct chdir pour les paths a executer, good CHECK LEAKS + PATH ../exec
-// gerer les differents statuts de sortie
-//TEST=tptp
-//integrer le code de la struct env aux fonctions
 //reprendre tous les builtins pour leaks (ftstdup)
 //revoir la gestion d'erreur du here docs
 //verifier l'impact de exit si on le met dans une commande avec differents fichiers et redirections
-//pb dans l'organisation des operations de pipe en cas de exit
-//double free du exit avec par ex "cat Makefile && exit"
-//integrer la comprehension des signaux dans les get nex line
+//pb dans l'organisation des operations de pipe en cas de exit /// Quel est le bon fonctionnement ??
+
+
 
 //PB DE BUILTINS
 //cas des mutiples exit et lancement de minishell dans le minishell
@@ -189,10 +152,6 @@ void print_all(t_all *p)
 //cas des ulltiples $ : $$$USER GOOD
 //cas du "'$USER'" GOOD
 
-int event(void) 
-{
-	return (42);
-}
 
 // void	check_builtins(char *str, t_env *env)
 // {
@@ -216,35 +175,40 @@ int event(void)
 
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=./.readline.supp ./minishell
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env) //ajout du clear history
 {
 	t_all *p;
 
 	(void)argc;
 	(void) **argv;
 	p = init_env(env);
-	if (!p)
+	if (!p || p == NULL)
 		return (1);
 	g_sig.line = NULL;
-	if (signal(SIGINT, &sig_int) == SIG_ERR || signal(SIGQUIT, &sig_quit) == SIG_ERR)
-		return (free_all(p), 1);
 	while (g_sig.line == NULL)
 	{
 		init_signal(0);
 		rl_event_hook = event;
 		g_sig.line = readline("Minishell> ");
-		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_int == 1)
+		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
 			return (free(g_sig.line), free_all(p), EXIT_SUCCESS);
-		g_sig.p_status = 1;
-		g_sig.line = ft_epur(g_sig.line);
-		p->start = parsingator(g_sig.line, p); //leaks
-		if (g_sig.sig_int == 1)
-			return (free_start(p->start, 1), free_here_docs(p->here_docs), free(g_sig.line), free_all(p), EXIT_SUCCESS);
-		print_all(p);
-		if (p->start != NULL && executor(p->start, p, g_sig.line) == -1)
-			printf("ERRRRROOOOOR\n");
-		//check_builtins(line, p->env);
-		free_here_docs(p->here_docs);
+		if (g_sig.sig_int == 0 && g_sig.sig_quit == 0)
+		{
+			add_history(g_sig.line);
+			g_sig.p_status = 1;
+			g_sig.line = ft_epur(g_sig.line);
+			p->start = parsingator(g_sig.line, p); //leaks
+			if (g_sig.sig_int == 1) // ajouter l'autre var globale ?
+			{
+				free_start(p->start, 1);
+				p->start = NULL;
+			}
+			print_all(p);
+			if (p->start != NULL && g_sig.sig_int == 0 && executor(p->start, p, g_sig.line) == -1) //distinguer les erreurs de fct des erreurs volontaires dans la gestion
+				printf("ERRRRROOOOOR\n");  //UTILISER -1 UNIQUEMENT POUR LES FAILS DE FONCTIONS
+			//check_builtins(line, p->env);
+			free_here_docs(p->here_docs);
+		}
 		free(g_sig.line);
 		g_sig.line = NULL;
 	}

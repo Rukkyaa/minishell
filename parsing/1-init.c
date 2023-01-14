@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/13 23:08:23 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/14 23:42:50 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 t_all	*init_env(char **env)
 {
 	t_all	*p;
+	int	i;
 
+	i = 0;
 	p = malloc(sizeof(t_all));
 	if (!p)
 		return (NULL);
@@ -24,11 +26,14 @@ t_all	*init_env(char **env)
 		return (free(p), NULL);
 	p->paths = split_path(get_env_var(p->env, "PATH"), ':');
 	if (!p->paths)
-		p->paths = NULL;//return (free_env(p->env), free(p), NULL);
+		p->paths = NULL;
 	p->last_status = 0;
-	p->exit = 0;
-	//p->here_docs = NULL; //ligne add, voir si ca impacte le fonctionnement
-	return (p);
+	p->here_docs = NULL;
+	if (create_signal() == -1)
+		return (free_all(p), NULL);
+	g_sig.cmd_stat = 0;
+	//printf("%d\n", *g_sig.cmd_stat);
+	return ( p);
 }
 
 t_tree	*init_tree(char **line)

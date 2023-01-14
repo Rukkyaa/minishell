@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/13 15:28:55 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/14 23:43:18 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,16 +128,19 @@ char **env_to_char(t_env *env)
 		return (NULL);
 	while (e < i)
 	{
-		reforged[e] = ft_strjoin(env->key, "=");
-		reforged[e] = ft_strjoin_spe(reforged[e], env->value); //securite direc dans le spe pour le reforged
-		if (reforged[e++] == NULL)
-			return (free_tab(reforged), NULL);
+		if (env->code == 1 || env->code == 2)
+		{
+			reforged[e] = ft_strjoin(env->key, "=");
+			reforged[e] = ft_strjoin_spe(reforged[e], env->value); //securite direc dans le spe pour le reforged
+			if (reforged[e++] == NULL)
+				return (free_tab(reforged), NULL);
+		}
 		env = env->next;
 	}
 	return (reforged[e] = NULL, reforged);
 }
 
-int	exec_command(char **paths, char **cmd, t_all *p)
+int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 {
 	int		i;
 	char	*path;
@@ -149,7 +152,7 @@ int	exec_command(char **paths, char **cmd, t_all *p)
 	if (path_comp_builtins(cmd) > 0)
 	{
 		printf("---entering builtins---\n");
-		if (exec_builtin(path_comp_builtins(cmd), cmd, p) == EXIT_FAILURE)
+		if (exec_builtin(path_comp_builtins(cmd), cmd, p, start) == EXIT_FAILURE)
 			return (-1);
 		return (0);
 	}
@@ -181,7 +184,7 @@ int	exec_command(char **paths, char **cmd, t_all *p)
 	}
 	ft_putstr_fd(cmd[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
-	return (free_tab(reforged_env), -1);
+	return (free_tab(reforged_env), g_sig.cmd_stat = 127, 0);
 }
 
 void error_process(t_all *p)
@@ -191,12 +194,15 @@ void error_process(t_all *p)
 	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);
-	if (g_sig.sig_int == 1)
+	if (g_sig.sig_quit == 1)
 		exit(134);
+	else if (g_sig.sig_int == 1)
+		exit(0);
+	g_sig.cmd_stat = 1;
 	exit(1);
 }
 
-int	exec_command_one(t_minishell *elem, t_all *p)
+int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 {
 	int	status1;
 
@@ -205,33 +211,29 @@ int	exec_command_one(t_minishell *elem, t_all *p)
 		return (-1);
 	if (elem->pid == 0)
 	{
-		if (signal(SIGINT, &sig_int) == SIG_ERR || signal(SIGQUIT, &sig_quit) == SIG_ERR)
+		if (signal(SIGINT, &sighandler) == SIG_ERR || signal(SIGQUIT, &sig_eof) == SIG_ERR)
 			error_process(p);
 		init_signal(-1);
-		if (g_sig.sig_int != 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
+		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
 			error_process(p);
-		if (g_sig.sig_int != 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
+		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
 			error_process(p);
-		if (g_sig.sig_int != 0 || exec_command(p->paths, elem->cmd, p) == -1)
+		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || exec_command(p->paths, elem->cmd, p, start) == -1)
 			error_process(p);
 		exit(0);
 	}
 	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))
 		return (WEXITSTATUS(status1));
-	// if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 134))
-	// 	return (printf("%d--%d\n", status1, WEXITSTATUS(status1)), 134);
-	// if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) == 1))
-	// 	return (printf("%d\n", status1),-1);
 	return (0);
 }
 
-int	pipex(t_minishell *first_elem, t_all *p)
+int	pipex(t_minishell *first_elem, t_all *p, t_tree *start)
 {
 	if (first_elem == NULL || !first_elem)
 		return (0);
 	else if (first_elem->next == NULL)
-		return (exec_command_one(first_elem, p));
-	return (first_pipe(first_elem, p));
+		return (exec_command_one(first_elem, p, start));
+	return (first_pipe(first_elem, p, start));
 }
 
 void kill_process(t_tree *start, t_all *p, char *line)
@@ -247,19 +249,19 @@ int	executor(t_tree *start, t_all *p, char *line)
 {
 	if (start == NULL || !start)
 		return (-1);
-	p->last_status = pipex(start->first_elem, p);
+	p->last_status = pipex(start->first_elem, p, start);
 	if (p->last_status == 134)
 		kill_process(start, p, line);
 	free(start->cmd);
-	if (p->last_status == -1)
+	if (p->last_status != 0) //verifier que c'est bien ce qui est attendu
 		free_minishell(start->first_elem, 1);
 	else
 		free_minishell(start->first_elem, 0);
-	if (start->and != NULL && p->last_status != -1)
+	if (start->and != NULL && p->last_status == 0)
 		return (executor(start->and, p, line));
-	else if (start->or != NULL && p->last_status == -1)
+	else if (start->or != NULL && p->last_status != 0)
 		return (executor(start->or, p, line));
-	else if (p->last_status == -1)
-		return (free(start), -1); //quid en cas d'erreur
+	else if (p->last_status != 0)
+		return (free(start), p->last_status); //quid en cas d'erreur
 	return (free(start), 0);
 }

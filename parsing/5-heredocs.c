@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/13 23:14:29 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/14 18:43:06 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ int	heredoc_count(char *line, int index)
 			i = avoid_quotes(line, i);
 		if (i == ft_strlen(line))
 			break ;
-		if (line[i] != '\0' && line[i] == '<' && line[i + 1] != '\0' && line[i + 1] == '<' && line[i + 2] != '\0' && line[i + 2] != '<')
+		if (line[i] != '\0' && line[i] == '<' && line[i + 1] != '\0'
+			&& line[i + 1] == '<' && line[i + 2] != '\0'
+			&& line[i + 2] != '<')
 			compt++;
 		i++;
 	}
@@ -121,67 +123,6 @@ char	*gen_new_limiter(char *limiter)
 
 //cas d'erreur a traiter si le malloc de find lim echoue
 
-// char *clean_heredoc_line(char *line, char *filename, char *LIM)
-// {
-// 	int i;
-// 	int length;
-// 	int length2;
-// 	char *new_line;
-
-// 	length = 0;
-// 	length2 = 0;
-// 	i = 0;
-// 	while (line[i + 1] != '\0' && !(line[i] == '<' && line[i + 1] == '<'))
-// 	{
-// 		length++;
-// 		i++;
-// 	}
-// 	i += 2;
-// 	while (line[i] != '\0' && is_whitespace(line[i]) == 1)
-// 		i++;
-// 	i += ft_strlen(LIM);
-// 	while (line[i] != '\0' && i++ < ft_strlen(line))
-// 		length2++;
-// 	new_line = malloc((++length + length2 + ft_strlen(filename) + 1) * sizeof(char));
-// 	if (!new_line)
-// 		return (free(LIM), NULL);
-// 	i = -1;
-// 	while (++i < length)
-// 		new_line[i] = line[i];
-// 	new_line[i] = '\0';
-// 	new_line = ft_strcat(new_line, filename);
-// 	length = i + ft_strlen(filename);
-// 	i += 2;
-// 	while (is_whitespace(line[i]) == 1)
-// 		i++;
-// 	i += ft_strlen(LIM);
-// 	while (line[i] != '\0')
-// 		new_line[length++] = line[i++];
-// 	return (free(LIM), new_line);
-// }
-
-// int ft_strnspe(const char *big, const char *little, size_t len)
-// {
-// 	size_t	i;
-// 	size_t	j;
-
-// 	i = 0;
-// 	if (!(*little))
-// 		return (-1);
-// 	if (!len)
-// 		return (-1);
-// 	while (big[i] && i < len)
-// 	{
-// 		j = 0;
-// 		while (big[i + j] == little[j] && big[i + j] && i + j < len)
-// 			j ++;
-// 		if (little[j] == '\0')
-// 			return (i);
-// 		i++;
-// 	}
-// 	return (-1);
-// }
-
 char	*clean_heredoc_line(char *line, char *filename, char *LIM, int *alert)
 {
 	int		i;
@@ -238,15 +179,21 @@ int	fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas av
 	newlimiter = gen_new_limiter(find_lim(*line, &alert));
 	if (newlimiter == NULL || alert == -1)
 		return (alert_case(newlimiter), free(here_docs[nb]), -1);
+	g_sig.p_status = 2;
 	lect = get_next_line(0);
-	while (ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0)
+	while (ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0 && g_sig.sig_quit == 0)
 	{
 		write(fd, lect, ft_strlen(lect));
-		free(lect);
-		lect = get_next_line(0);
+		if (g_sig.sig_quit == 0 && g_sig.sig_int == 0)
+		{
+			//free(lect); //reactiver pour  limiter les leaks, pb avec par exemple deux cat<<"" a la suite
+			lect = get_next_line(0);
+		}
 	}
-	free(lect);
-	if (nb + 1 == max)
+	g_sig.p_status = 1;
+	if (g_sig.sig_quit == 0 && g_sig.sig_int == 0)
+		free(lect);
+	if (nb + 1 == max && g_sig.sig_quit == 0 && g_sig.sig_int == 0) //GROS CHECK DE LEAKS A FAIRE SUITE A INTEGRATION DES SIGNAUX
 		lect = get_next_line(-42);
 	*line = clean_heredoc_line(*line, here_docs[nb], find_lim(*line, &alert), &alert);
 	if (*line == NULL)
@@ -261,12 +208,11 @@ char	**get_here_docs(char **line)
 {
 	char	**here_docs;
 
-	if (heredoc_count(*line, 0) == 0) // || ft_strlen(*line) < 3)
+	if (heredoc_count(*line, 0) == 0)
 		return (NULL);
 	here_docs = malloc((heredoc_count(*line, 0) + 1) * sizeof(char *));
 	if (!here_docs)
 		return (NULL);
-	//text = get_text(find_last_limiter(line));
 	if (fill_file(here_docs, line, heredoc_count(*line, 0), 0) == -1)
 		return (NULL); //clean all
 	return (here_docs);

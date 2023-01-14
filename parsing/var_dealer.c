@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/13 23:29:02 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/14 23:43:11 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,18 +115,6 @@ int	find_other(char *line, int i)
 	return (0);
 }
 
-char	*gen_status(int nb)
-{
-	char	*stat;
-
-	stat = malloc(2);
-	if (!stat)
-		return (NULL);
-	stat[0] = nb + '0';
-	stat[1] = '\0';
-	return (stat);
-}
-
 char	**replace_var(char **line, t_all *p)
 {
 	int	i;
@@ -151,7 +139,7 @@ char	**replace_var(char **line, t_all *p)
 				else if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
 				{
 					leng = 1;
-					*line = change_line(*line, gen_status(p->last_status), i, &leng);
+					*line = change_line(*line, ft_itoa(g_sig.cmd_stat), i, &leng);
 					if (*line == NULL)
 						return (free(line), NULL);
 					e = find_other(*line, init);
@@ -193,7 +181,7 @@ char	**replace_var(char **line, t_all *p)
 		else if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
 		{
 			leng = 1;
-			*line = change_line(*line, gen_status(p->last_status), i, &leng);
+			*line = change_line(*line, ft_itoa(g_sig.cmd_stat), i, &leng);
 			if (*line == NULL)
 				return (free(line), NULL);
 			i = 0;

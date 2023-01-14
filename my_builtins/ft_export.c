@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/12 13:49:17 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/14 10:54:14 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	change_value(t_env *env, char *key, char *value)
 {
 	t_env	*new;
 
+	printf("Basic\n");
 	if (ft_is_in_env(env, key))
 	{
 		while (env)
@@ -35,6 +36,7 @@ void	change_value(t_env *env, char *key, char *value)
 			{
 				free(env->value);
 				env->value = value;
+				env->code = 1;
 				return ;
 			}
 			env = env->next;
@@ -45,23 +47,82 @@ void	change_value(t_env *env, char *key, char *value)
 		new = ft_envnew(key, value);
 		if (!new)
 			return ;
+		new->code = 1;
 		ft_env_add_back(&env, new);
 	}
 }
 
-int	ft_export(t_env *env, char **split)
+void	change_value_equal(t_env *env, char *key)
+{
+	t_env	*new;
+
+	if (ft_is_in_env(env, key))
+	{
+		while (env)
+		{
+			if (!ft_strncmp(env->key, key, ft_strlen(key)))
+			{
+				free(env->value);
+				env->code = 2;
+				return ;
+			}
+			env = env->next;
+		}
+	}
+	else
+	{
+		new = ft_envnew(key, NULL);
+		if (!new)
+			return ;
+		new->code = 2;
+		ft_env_add_back(&env, new);
+	}
+}
+
+void	change_value_empty(t_env *env, char *key)
+{
+	t_env	*new;
+
+	if (!ft_is_in_env(env, key))
+	{
+		new = ft_envnew(key, NULL);
+		if (!new)
+			return ;
+		new->code = 3;
+		ft_env_add_back(&env, new);
+	}
+}
+
+int	before(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+		++i;
+	return (i);
+}
+
+int	ft_export(t_env *env, char **cmd)
 {
 	char	*key;
 	char	*value;
 
-	if (!(split[0]) || !(split[1]))
-		return (EXIT_FAILURE);
-	key = ft_strdup(split[0]);
+	if (!cmd[1])
+		sort_env(env_to_char_export(env));
+	key = ft_strndup(cmd[1], before(cmd[1]));
 	if (!key)
 		return (EXIT_FAILURE);
-	value = ft_strdup(split[1]);
-	if (!value)
-		return (free_tab(split), free(key), EXIT_FAILURE);
-	change_value(env, key, value);
-	return (free_tab(split), EXIT_SUCCESS);
+	if (cmd[1][ft_strlen(key)] == '=' && !(cmd[1][ft_strlen(key) + 1]))
+		change_value_equal(env, key);
+	else if (!cmd[1][ft_strlen(key)])
+		change_value_empty(env, key);
+	else
+	{
+		value = ft_strdup(cmd[1] + ft_strlen(key) + 1);
+		if (!value)
+			return (free(key), EXIT_FAILURE);
+		change_value(env, key, value);
+	}
+	return (EXIT_SUCCESS);
 }

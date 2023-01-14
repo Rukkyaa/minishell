@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:42:24 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/13 14:29:33 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/14 17:24:41 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int path_comp_builtins(char **cmd) //check si il n'y a pas de leak avec le secon
 		return (3);
 	else if (ft_strcmp(cmd[0], "export") == 0) //a reprendre
 		return (4);
-	else if (ft_strcmp(cmd[0], "unset") == 0 && cmd[1] == NULL)
+	else if (ft_strcmp(cmd[0], "unset") == 0)
 		return (5);
 	else if (ft_strcmp(cmd[0], "env") == 0 && cmd[1] == NULL)
 		return (6);
@@ -46,14 +46,14 @@ int path_comp_builtins(char **cmd) //check si il n'y a pas de leak avec le secon
 	return (0);
 }
 
-int exec_builtin(int nb, char **cmd, t_all *p)
+int exec_builtin(int nb, char **cmd, t_all *p, t_tree *start)
 {
 	if (nb == 1)
 		return (ft_echo(cmd));
 	// else if (nb == 2)
 	// 	return (cd) reprendre cd
 	else if (nb == 3)
-		return (ft_pwd(cmd));
+		return (ft_pwd());
 	else if (nb == 4)
 		return (ft_export(p->env, cmd));
 	// else if (nb == 5)
@@ -61,6 +61,6 @@ int exec_builtin(int nb, char **cmd, t_all *p)
 	else if (nb == 6)
 		return (ft_env(p->env));
 	else if (nb == 7)
-		ft_exit(p);
+		ft_exit(p, start);
 	return (-1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:37:21 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/12 14:35:14 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/14 10:56:56 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_cmd(char *cmd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (cmd == NULL)
@@ -28,7 +28,7 @@ int	check_cmd(char *cmd)
 
 int	check_options(char **cmd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (cmd[i] != NULL)
@@ -39,12 +39,10 @@ int	check_options(char **cmd)
 	return (0);
 }
 
-int	ft_pwd(char **cmd)
+int	ft_pwd(void)
 {
 	char	buffer[PATH_MAX];
 
-	if (cmd[1] == NULL || check_cmd(cmd[1]) == 1)
-		return (printf("Invalid command\n"), EXIT_FAILURE);
 	if (getcwd(buffer, PATH_MAX))
 	{
 		ft_putendl_fd(buffer, 1);

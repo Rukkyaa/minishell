@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4-operations.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:47:45 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/13 23:11:19 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/14 21:20:52 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,11 @@ void	clean_res(char *reserve, int index)
 	i = 0;
 	while (i < index)
 		reserve[i++] = ' ';
+}
+
+void	free_all(t_all *p)
+{
+	free_tab(p->paths);
+	free_env(p->env);
+	free(p);
 }

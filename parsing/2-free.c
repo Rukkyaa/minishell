@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2-free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/13 23:09:21 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/14 21:20:37 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,18 +103,4 @@ void	free_here_docs(char **here_docs)
 		i++;
 	}
 	free(here_docs);
-}
-
-// void free_cmd(t_all *p)
-// {
-// 	//free_tab(p->paths);
-// 	free_start(p->start);
-// 	free_here_docs(p->here_docs);
-// }
-
-void	free_all(t_all *p)
-{
-	free_tab(p->paths);
-	free_env(p->env);
-	free(p);
 }
