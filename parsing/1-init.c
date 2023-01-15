@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/14 23:42:50 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/15 00:47:07 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 t_all	*init_env(char **env)
 {
 	t_all	*p;
-	int	i;
 
-	i = 0;
 	p = malloc(sizeof(t_all));
 	if (!p)
 		return (NULL);
