@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/14 18:49:22 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/16 11:02:44 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	sighandler(int code)
 			rl_on_new_line();
 			rl_replace_line("", 0);
 			rl_redisplay();
+			g_sig.cmd_stat = 130;
 			rl_done = 1;
 		}
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/14 10:54:14 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/16 16:13:38 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	before(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != '=')
+	while (str[i] != '\0' && str[i] != '=')
 		++i;
 	return (i);
 }
@@ -109,7 +109,7 @@ int	ft_export(t_env *env, char **cmd)
 	char	*value;
 
 	if (!cmd[1])
-		sort_env(env_to_char_export(env));
+		return (sort_env(env_to_char_export(env)), 0);
 	key = ft_strndup(cmd[1], before(cmd[1]));
 	if (!key)
 		return (EXIT_FAILURE);

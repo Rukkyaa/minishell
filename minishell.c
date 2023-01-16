@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/15 00:18:51 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/16 15:39:16 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,18 @@ void print_all(t_all *p)
 	print_here_doc(p->here_docs);
 }
 
-//1- CORRIGER LE PB DE STATUTS
+//REGARDER L'HISTORIQUE
 //2- AJOUTER LE BONUS DU WILDCARD
 //3- REVOIR TOUTES LES LEAKS
 //4- REVOIR TOUTE LA GESTION D'ERREURS
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
 
+//segfault apres double export
+//double free exit
+//lancer cd export et unset dans le parent process direct (test avec les pipes)
 
+// cas particulier : ls -l | grep mi > axel | cat < axel
 //TESTS FINAUX
 //test de la var $? (0 - 1 - 134 - 127)
 //Refaire des test sur le traitement des variables
@@ -191,7 +195,7 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 		rl_event_hook = event;
 		g_sig.line = readline("Minishell> ");
 		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
-			return (free(g_sig.line), free_all(p), EXIT_SUCCESS);
+			return (free(g_sig.line), free_all(p), rl_clear_history(), EXIT_SUCCESS);
 		if (g_sig.sig_int == 0 && g_sig.sig_quit == 0)
 		{
 			add_history(g_sig.line);
@@ -212,6 +216,7 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 		free(g_sig.line);
 		g_sig.line = NULL;
 	}
+	rl_clear_history();
 	free_all(p);
 	return (EXIT_SUCCESS);
 }

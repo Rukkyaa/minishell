@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+         #
+#    By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2023/01/14 10:51:59 by gabrielduha      ###   ########.fr        #
+#    Updated: 2023/01/16 10:34:25 by gduhau           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT	= all
 
-SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirection.c ft_epur.c \
+SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c ft_epur.c \
 			my_builtins/ft_pwd.c my_builtins/ft_echo.c parsing/1-init.c parsing/2-free.c \
 			parsing/3-segmentation.c parsing/4-operations.c parsing/5-heredocs.c \
 			parsing/get_next_line/get_next_line.c parsing/get_next_line/get_next_line_utils.c \
@@ -20,7 +20,7 @@ SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c redirecti
 			pipex/executor.c pipex/pipe.c parsing/spe_split.c parsing/var_dealer.c \
 			pipex/exec_builtins.c my_builtins/envtostruct.c my_builtins/ft_cd.c my_builtins/ft_env.c \
 			my_builtins/ft_export.c my_builtins/ft_unset.c my_builtins/ft_exit.c signal/signal.c \
-			my_builtins/sort_env.c
+			my_builtins/sort_env.c wildcard.c
 			
 OBJS	= ${SRCS:.c=.o}
 NAME	= minishell

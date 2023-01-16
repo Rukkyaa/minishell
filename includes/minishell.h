@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/14 23:42:59 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/16 16:07:59 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <curses.h>
 # include <term.h>
 # include <termios.h>
+# include <dirent.h>
 
 # include "../libft/libft.h"
 
@@ -73,6 +74,7 @@ typedef struct s_tree
 	char *cmd;
 	struct s_tree *and;
 	struct s_tree *or;
+	int nb_cmd;
 }	t_tree;
 
 typedef struct s_all
@@ -81,7 +83,6 @@ typedef struct s_all
 	t_env *env;
 	char **here_docs;
 	t_tree *start;
-	int last_status;
 }	t_all;
 
 typedef struct s_sig
@@ -89,8 +90,8 @@ typedef struct s_sig
 	int	sig_quit;
 	int	sig_int;
 	int	p_status;
+	int	cmd_stat;
 	char *line;
-	int cmd_stat;
 } t_sig;
 
 extern t_sig g_sig;
@@ -126,6 +127,7 @@ void free_files_out(t_outfile *lst, int mode);
 void	free_minishell(t_minishell *elem, int mode);
 void	free_here_docs(char **here_docs);
 void free_env(t_env *envp);
+void free_megatab(char ***tabl);
 
 //parsing/3-segmentation.c
 int op_segmentation(t_tree *start, int i, int end, char *reserve);
@@ -163,6 +165,7 @@ int recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p);
 char	*ft_trim_quotes(char *s1, int *alert);
 char	*ft_trim(char *s1);
 char	*ft_trim_quotes(char *s1, int *alert);
+int	length_tab(char **tabl);
 
 //parsing/9-redir.c
 char *erase_redir(char *cmd);
@@ -239,9 +242,9 @@ int	get_redirection(char *str, t_minishell *minishell);
 int	ft_pwd(void);
 int	ft_echo(char **split);
 int	ft_env(t_env *env);
-int	ft_unset(t_env *env, char *to_unset);
+int	ft_unset(t_env *env, char **to_unset);
 int	ft_export(t_env *env, char **split);
-int	ft_cd(t_env *env, char *new_cd);
+int	ft_cd(t_env *env, char **split);
 void	ft_exit(t_all *p, t_tree *start);
 
 // ENV STRUCT

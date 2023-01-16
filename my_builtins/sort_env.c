@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 17:57:53 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/14 01:03:38 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/16 16:11:47 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ char	**sort_env(char **env)
 		}
 	}
 	i = -1;
-	while (env[++i])
+	while (env[++i] != NULL)
 		printf("declare -x %s\n", env[i]);
+	printf("SORTIE\n");
 	return (free_tab(env), NULL);
 }

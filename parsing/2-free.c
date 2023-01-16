@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2-free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/14 21:20:37 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/16 14:36:54 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,19 @@ void	free_files_out(t_outfile *lst, int mode)
 	}
 	return ;
 }
+
+// void free_megatab(char ***tabl)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	if (!tabl || tabl == NULL)
+// 		return ;
+// 	while (tabl[i])
+// 		free_tab(tabl[i++]);
+// 	if (tabl != (char ***)0)
+// 		free(tabl);
+// }
 
 void	free_minishell(t_minishell *elem, int mode)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/13 23:20:42 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/16 14:56:47 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,101 @@ char	**trim_tab(char **tabl)
 	int	i;
 	int	alert;
 
-	i = 0;
+	i = -1;
 	alert = 0;
-	while (tabl[i] != NULL)
+	while (tabl[++i] != NULL)
 	{
 		tabl[i] = ft_trim_quotes(tabl[i], &alert);
-		i++;
 		if (alert == -1)
-			return (free_tab(tabl), NULL);
+			return (tabl[i] = NULL, free_tab(tabl), NULL); //risque de leak
+		i++;
 	}
 	return (tabl);
+}
+
+char **tab_generator(char *str)
+{
+	char **minitab;
+
+	minitab = malloc(2 * sizeof(char *));
+	if (!minitab)
+		return (NULL);
+	minitab[0] = str;
+	minitab[1] = NULL;
+	return (minitab);
+}
+
+int	length_tab(char **tabl)
+{
+	int i;
+	
+	i = 0;
+	while (tabl[i] != NULL)
+		i++;
+	return (i);
+}
+
+int	w_found(char *str)
+{
+	int i;
+
+	i = 0;
+	if ((str[0] == '\'' || str[ft_strlen(str) - 1] == '\'')
+		|| (str[0] == '\"' || str[ft_strlen(str) - 1] == '\"'))
+		return (0);
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+			i = avoid_quotes(str, i);
+		if (str[i++] == '*')
+			return (1);
+	}
+	return (0);
+}
+
+char *tab_to_str(char **tabl)
+{
+	char *str;
+	int	i;
+
+	i = 0;
+	if (!tabl || tabl == NULL)
+		return (NULL);
+	str = ft_strdup(tabl[0]);
+	if (str == NULL && tabl[0] != NULL)
+		return (free_tab(tabl), NULL);
+	while (tabl[++i] != NULL)
+	{
+		str = ft_strjoin_spe(str, " ");
+		str = ft_strjoin_spe(str, tabl[i]);
+		if (str == NULL)
+			return (free_tab(tabl), NULL);
+	}
+	return (str);
+}
+
+char **w_finder(char **tabl) //cas particulier du grep a gerer 
+{
+	int i;
+	char **tabfinal;
+
+	i = 0;
+	tabfinal = malloc((length_tab(tabl) + 1) * sizeof(char *));
+	if (!tabfinal)
+		return (free_tab(tabl), NULL);
+	while (tabl[i] != NULL)
+	{
+		if (w_found(tabl[i]) == 1)
+			tabfinal[i] = ft_strdup(tabl[i]);//tab_generator(tabl[i]); //= fct qui genere un tab;
+		else
+			tabfinal[i] = ft_strdup(tabl[i]);
+		if (tabfinal[i++] == NULL)
+			return (free_tab(tabfinal), free_tab(tabl), NULL);
+	}
+	tabfinal[i] = NULL;
+	// if (length_tab(tabl) > 0 && megatab[0][1] != NULL) //securite a add
+	// 	return (free_megatab(megatab), free_tab(tabl), NULL);
+	return (free_tab(tabl), tabfinal);
 }
 
 int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
@@ -92,7 +177,8 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	if (check_redirection(cmd[nb], init) == -1)
 		return (-1);
 	cmd[nb] = erase_redir(cmd[nb]);
-	init->cmd = trim_tab(ft_split_spe(cmd[nb], ' '));
+	//printf("cmd[%d] = %s\n", nb, cmd[nb]);
+	init->cmd = trim_tab(w_finder(ft_split_spe(cmd[nb], ' ')));
 	if (!init->cmd)
 		return (-1); //traiter cas erruer
 	if (cmd[nb + 1] == NULL)
@@ -159,6 +245,7 @@ int	init_shell(t_tree *start, t_all *p)
 
 	if (!start || start == NULL)
 		return (-1);
+	//
 	ret = init_cmd(start, p);
 	if (ret != 1)
 		return (-1);

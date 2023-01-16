@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/14 23:43:18 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/16 16:06:00 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,44 @@ char **env_to_char(t_env *env)
 	return (reforged[e] = NULL, reforged);
 }
 
+int	lengthmegatab(char ***cmd)
+{
+	int i;
+	int len;
+
+	i = 0;
+	len = 0;
+	while (cmd[i] != NULL)
+		len += length_tab(cmd[i++]);
+	return (len);
+}
+
+char **mega_to_tab(char ***cmd)
+{
+	char **reforged_cmd;
+	int i;
+	int e;
+
+	i = -1;
+	reforged_cmd = malloc((lengthmegatab(cmd) + 1) * sizeof(char *));
+	if (!reforged_cmd)
+		return (NULL);
+	while (cmd[++i] != NULL)
+	{
+		reforged_cmd[i] = ft_strdup(cmd[i][0]);
+		if (reforged_cmd[i] == NULL)
+			return (free_tab(reforged_cmd), NULL);
+		e = 0;
+		while (cmd[i][++e] != NULL)
+		{
+			reforged_cmd[i] = ft_strjoin_spe(reforged_cmd[i], " ");
+			reforged_cmd[i] = ft_strjoin_spe(reforged_cmd[i], cmd[i][e]); // add securite
+		}
+	}
+	reforged_cmd[i] = NULL;
+	return (reforged_cmd);
+}
+
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 {
 	int		i;
@@ -147,7 +185,7 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 	char	**reforged_env;
 
 	i = -1;
-	if (!cmd || ft_strlen(cmd[0]) == 0)
+	if (!cmd || !*cmd || ft_strlen(cmd[0]) == 0)
 		return (ft_putstr_fd("'' : command not found\n", 2), -1);
 	if (path_comp_builtins(cmd) > 0)
 	{
@@ -156,6 +194,8 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 			return (-1);
 		return (0);
 	}
+	else if (path_comp_builtins(cmd) < 0)
+		return (0);
 	reforged_env = env_to_char(p->env);
 	if (reforged_env == NULL && p->env != NULL)
 		return (-1);
@@ -177,14 +217,14 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 	if (access(cmd[0], F_OK) == 0)
 	{
 		if (access(cmd[0], X_OK) != 0)
-			return (perror(""), free(path), free_tab(reforged_env), -1);
+			return (perror(""), free(path), free_tab(reforged_env),  -1);
 		if (execve(cmd[0], cmd, reforged_env) == -1)
-			return (free_tab(reforged_env), -1);
+			return (free_tab(reforged_env),  -1);
 		return (free_tab(reforged_env), 0);
 	}
 	ft_putstr_fd(cmd[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
-	return (free_tab(reforged_env), g_sig.cmd_stat = 127, 0);
+	return (free_tab(reforged_env), free(g_sig.line), g_sig.cmd_stat = 127, 127);
 }
 
 void error_process(t_all *p)
@@ -198,7 +238,8 @@ void error_process(t_all *p)
 		exit(134);
 	else if (g_sig.sig_int == 1)
 		exit(0);
-	g_sig.cmd_stat = 1;
+	else if (g_sig.cmd_stat == 127)
+		exit (127);
 	exit(1);
 }
 
@@ -206,6 +247,10 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 {
 	int	status1;
 
+	// if (g_sig.sig_int == 0 && g_sig.sig_quit == 0 && ft_strcmp(elem->cmd[0], "cd") == 0)
+	// 	return(ft_cd(p->env, elem->cmd));
+	if (path_comp_builtins(elem->cmd) < 0)
+		return (exec_builtin(path_comp_builtins(elem->cmd), elem->cmd, p, start));
 	elem->pid = fork();
 	if (elem->pid < 0)
 		return (-1);
@@ -218,7 +263,7 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 			error_process(p);
 		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
 			error_process(p);
-		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || exec_command(p->paths, elem->cmd, p, start) == -1)
+		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || exec_command(p->paths, elem->cmd, p, start) != 0)
 			error_process(p);
 		exit(0);
 	}
@@ -243,25 +288,44 @@ void kill_process(t_tree *start, t_all *p, char *line)
 	free(line); //A ACTIVER AVEC LE MAIN PRINCIPAL
 	//printf("%s\n", line);
 	free_all(p);
+	clear_history();
 	exit (0);
 }
+
+// int wildcard_treat(t_minishell *first_elem, t_all *p, t_tree *start)
+// {
+// 	int ret;
+// 	// if (start->first_elem->other_w == NULL)
+// 	// 	return (pipex(start->first_elem, p, start));
+// 	ret == pipex(start->first_elem, p, start);
+// 	if (ret != 0)
+// 		return (ret);
+// 	else if (start->first_elem->other_w == NULL)
+// 		return (0);
+// 	else
+// 		return (wildcard_treat())
+// }
+
 int	executor(t_tree *start, t_all *p, char *line)
 {
+	t_tree	*intermed;
+
 	if (start == NULL || !start)
 		return (-1);
-	p->last_status = pipex(start->first_elem, p, start);
-	if (p->last_status == 134)
+	g_sig.cmd_stat = pipex(start->first_elem, p, start);
+	//g_sig.cmd_stat = pipex(start->first_elem, p, start);
+	if (g_sig.cmd_stat == 134)
 		kill_process(start, p, line);
 	free(start->cmd);
-	if (p->last_status != 0) //verifier que c'est bien ce qui est attendu
+	if (g_sig.cmd_stat != 0) //verifier que c'est bien ce qui est attendu
 		free_minishell(start->first_elem, 1);
 	else
 		free_minishell(start->first_elem, 0);
-	if (start->and != NULL && p->last_status == 0)
-		return (executor(start->and, p, line));
-	else if (start->or != NULL && p->last_status != 0)
-		return (executor(start->or, p, line));
-	else if (p->last_status != 0)
-		return (free(start), p->last_status); //quid en cas d'erreur
-	return (free(start), 0);
+	if (start->and != NULL && g_sig.cmd_stat == 0)
+		return (intermed = start->and, free(start), executor(intermed, p, line));
+	else if (start->or != NULL && g_sig.cmd_stat != 0)
+		return (intermed = start->or, free(start), executor(intermed, p, line));
+	//else if (p->last_status != 0)
+	return (free(start), g_sig.cmd_stat); //quid en cas d'erreur
+	//return (free(start), 0);
 }

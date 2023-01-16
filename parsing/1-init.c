@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/15 00:47:07 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/16 11:00:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,10 @@ t_all	*init_env(char **env)
 	p->paths = split_path(get_env_var(p->env, "PATH"), ':');
 	if (!p->paths)
 		p->paths = NULL;
-	p->last_status = 0;
 	p->here_docs = NULL;
 	if (create_signal() == -1)
 		return (free_all(p), NULL);
 	g_sig.cmd_stat = 0;
-	//printf("%d\n", *g_sig.cmd_stat);
 	return ( p);
 }
 

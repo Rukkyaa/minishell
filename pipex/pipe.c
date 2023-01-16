@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 16:07:10 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/14 17:24:17 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/16 10:42:52 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,9 +124,7 @@ int	last_pipe(t_minishell *elem, t_all *p, t_tree *start)
 	close(elem->fd[1]);
 	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))
 		return (kill1(elem, WEXITSTATUS(status1)));
-	close(elem->next->fd[0]);
-	close(elem->next->fd[1]);
-	if (waitpid(elem->pid, &status2, 0) < -1 || ((WIFEXITED(status2)) && WEXITSTATUS(status2) != 0))
+	if (waitpid(elem->next->pid, &status2, 0) < -1 || ((WIFEXITED(status2)) && WEXITSTATUS(status2) != 0))
 		return (WEXITSTATUS(status2));
 	// if (close_all(elem->fd[0], elem->fd[1], &status1, elem->pid) == -1
 	// 	|| waitpid(elem->next->pid, &status2, 0) == -1
