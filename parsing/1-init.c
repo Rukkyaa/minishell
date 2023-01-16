@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/16 11:00:55 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/16 19:49:54 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_tree	*init_tree(char **line)
 		return (free_start(start, 0), NULL);
 	if (scnd_segmentation(start, start) == -1)
 		return (free_start(start, 0), NULL);
-	return (start);
+	return (free(*line), free(line), start);
 }
 
 t_tree	*init_m_tree(int length)

@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 10:20:56 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/16 15:57:49 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/16 21:22:07 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@
 // 		return (NULL);
 // 	tabl[nb_file] = NULL;
 // 	i = 0;
-// 	while (1ls )
+// 	while (1)
 // 	{
 // 		f = readdir(dir);
 // 		if (!f)
@@ -128,14 +128,107 @@
 // 	return (tabl);
 // }
 
-// char	**wildcard(char *extension)
+// int	matching(char *str, char *pattern, int i, int e)
 // {
-// 	char	**tabl;
-
-// 	if (extension)// *.c
-// 		tabl = get_wildcard_extension(".", extension);
-// 	else //*
-// 		tabl = get_wildcard(".", extension);
-// 	if (!tabl)
-// 		return (NULL);
+// 	if (!str || str == NULL)
+// 		return (0);
+// 	else if (ft_strlen(pattern) == 1 && pattern[0] == '*')
+// 		return (1);
+// 	if (ft_strlen(pattern) > 1 && pattern[0] == '*' && str[0] == '*')
+// 		e = 1;
+// 	else if (ft_strlen(pattern) > 1 && pattern[0] == '*')
+// 	{
+// 		while (str[i] != '\0' && str[i] != pattern[1])
+// 			i++;
+// 		if (str[i] == pattern[1])
+// 			e = 2;
+// 		else if (str[i] == '\0')
+// 			return (0);
+// 	}
+// 	else if (str[0] != pattern[0])
+// 		return (0);
+// 	while (e < ft_strlen(pattern) - 1)
+// 	{
+// 		//if ((pattern[e] == '*' && str[i] == '*') || (pattern[e] ))
+// 		if (pattern[e] != '*' && str[i] != '\0' && str[i] != pattern[e])
+// 			return (0);
+// 		else if (!(pattern[e] == '*' && str[i] == '*'))
+// 			return (0);
+// 		e++;
+// 		i++;
+// 	}
+// 	if (pattern[e] == '*' && str[i] != '\0' && str[i] == '*')
+// 		return (1);
+// 	else if (pattern[e] != '*' && str[i] != '\0' && str[i] != pattern[e])
+// 		return (0);
+// 	else if (pattern[e] == '*' && str[i] != '\0')
+// 		return (1);
+// 	return (printf("impossible\n"), 1);
 // }
+
+int	matching(char *str, char *pattern, int i, int e)
+{
+	if (!str || str == NULL)
+		return (0);
+	else if (ft_strlen(pattern) == 1 && pattern[0] == '*')
+		return (1);
+	if (e == 0 && pattern[e] == '*')
+	{
+		if (i >= 1 && pattern[e + 1] == str[i])
+			return (matching(str, pattern, ++i, e + 2));
+		else if (str[i] == '*')
+			return (matching(str, pattern, ++i, ++e));
+		else
+			return (matching(str, pattern, ++i, e));
+	}
+	else if (e != ft_strlen(pattern) -1)
+	{
+		if (pattern[e] == '*')
+			return (matching(str, pattern, ++i, ++e));
+		else if (pattern[e] != '*' && str[i] != pattern[e])
+			return (0);
+		else
+			return (matching(str, pattern, ++i, ++e));
+	}
+	if (e == ft_strlen(pattern) -1)
+	{
+		if (pattern[e] == '*' && str[i] != '\0')
+			return (1);
+		else if (pattern[e] != '*' && str[i] == pattern[e] && i == ft_strlen(str) -1)
+			return (1);
+		return (0);
+	}
+	return (0);
+}
+
+char	*wildcard(char *extension)
+{
+	DIR				*dir;
+	char *str;
+	struct dirent	*f;
+
+	dir = opendir(".");
+	str = NULL;
+	if (!dir || dir == NULL)
+		return (free(extension), NULL);
+	f = readdir(dir);
+	while (f != NULL)
+	{
+		if (ft_strncmp(f->d_name, ".", 1) != 0 && ft_strncmp(f->d_name, "..", 2) != 0 && matching(f->d_name, extension, 0, 0) == 1)
+		{
+			if (str == NULL)
+				str = ft_strdup(f->d_name);
+			else
+			{
+				str = ft_strjoin_spe(str, " "); //gestion erreur
+				str = ft_strjoin_spe(str, f->d_name);
+			}
+			if (str == NULL)
+				return (closedir(dir), printf("no found\n"),free(extension), NULL);
+			printf("%s\n", str);
+		}
+		f = readdir(dir);
+	}
+	closedir(dir);
+	return (free(extension), str);
+}

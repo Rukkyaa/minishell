@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 16:07:59 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/16 19:39:12 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ extern t_sig g_sig;
 //# define PATH_MAX 100
 
 t_env	*env_to_struct(char **env);
+char	*wildcard(char *extension);
 
 //signal/signal.c
 int		event(void);

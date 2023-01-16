@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 23:15:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 15:44:51 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/16 17:01:14 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,5 @@ int ft_cd(t_env *env, char **split)
 	else
 		printf("Error\n");
 	printf("PWD : %s\n", get_in_env(env, "PWD"));
-	return (free(pwd), free(oldpwd), 0);
+	return (0);
 }
