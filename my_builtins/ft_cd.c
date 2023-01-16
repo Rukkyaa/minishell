@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 23:15:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 17:01:14 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/16 21:32:23 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ static void	update_env(t_env *env, char *old, char *new)
 		free(env->value);
 		env->value = new;
 	}
-	else
-		printf("Error update env\n");
 }
 
 static void	update_pwd(t_env *env)
@@ -48,49 +46,50 @@ static void	update_pwd(t_env *env)
 	}
 }
 
-char	*go_home(t_env *env)
+char	*go_option(t_env *env, int flag)
 {
-	if (ft_is_in_env(env, "HOME"))
-		return (get_in_env(env, "HOME"));
+	if (flag == 1)
+	{
+		if (ft_is_in_env(env, "HOME"))
+			return (get_in_env(env, "HOME"));
+		else
+			ft_putendl_fd("cd : HOME not set", 2);
+	}
+	else
+	{
+		if (ft_is_in_env(env, "OLDPWD"))
+			return (get_in_env(env, "OLDPWD"));
+		else
+			ft_putendl_fd("cd : OLDPWD not set", 2);
+	}
 	return (NULL);
 }
 
-char	*go_back(t_env *env)
-{
-	if (ft_is_in_env(env, "OLDPWD"))
-		return (get_in_env(env, "OLDPWD"));
-	printf("Error go back\n");
-	return (NULL);
-}
-
-int ft_cd(t_env *env, char **split)
+int	ft_cd(t_env *env, char **split)
 {
 	char	*oldpwd;
 	char	*pwd;
 
-	printf("ici\n");
-	pwd = NULL;
+	if (length_tab(split) > 2)
+		return (ft_putendl_fd("cd : too many arguments", 2), 1);
 	if (ft_is_in_env(env, "PWD"))
 		oldpwd = ft_strdup(get_in_env(env, "PWD"));
 	else
 		oldpwd = ft_strdup("error");
 	if (split[1] == NULL)
-	{
-		pwd = ft_strdup(go_home(env));
-		printf("Pwd : %s\n", pwd);
-	}
+		pwd = ft_strdup(go_option(env, 1));
 	else if (!ft_strcmp(split[1], "-"))
-		pwd = ft_strdup(go_back(env));
+		pwd = ft_strdup(go_option(env, 42424242));
 	else
 		pwd = ft_strdup(split[1]);
+	if (!pwd)
+		return (1);
 	if (!chdir(pwd))
 	{
-		printf("Old pwd : %s\n", oldpwd);
 		update_pwd(env);
 		update_env(env, "OLDPWD", oldpwd);
 	}
 	else
-		printf("Error\n");
-	printf("PWD : %s\n", get_in_env(env, "PWD"));
-	return (0);
+		return (ft_putendl_fd("cd : No such file or directory", 2), 1);
+	return (free(pwd), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 21:09:02 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/16 21:32:07 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ void print_all(t_all *p)
 
 //integrer les signaux (AXEL)
 //integrer les quotes (a priori good) (GAB) il se passe un truc bizarre si il 'y en a qu'une
-//ajout de l'historique (AXEL)
-// faire les builtins sous forme de fonctions (AXEL)
+//ajout de l'historique (AXEL) GOOD
+// faire les builtins sous forme de fonctions (AXEL) GOOD
 
 
 //REVOIR LA SORTIE DE STATUT BUG COMPLET
@@ -134,29 +134,11 @@ void print_all(t_all *p)
 //verifier l'impact de exit si on le met dans une commande avec differents fichiers et redirections
 //pb dans l'organisation des operations de pipe en cas de exit /// Quel est le bon fonctionnement ??
 
-
-
 //PB DE BUILTINS
 //cas des mutiples exit et lancement de minishell dans le minishell
 //TRAITER LE CAS DES ./ ET ../ AVEC LA FCT CD AXEL
 //cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss + pouvoir lire les chemins de fichier qui ramene en arriere (../../...)
 //cas special avec le cd ou on peut creer deux dossier puis rm le parent
-
-//traiter l'env em moins (env -i | bash) GOOD
-//empecher l'exec si nombre de quotes impaires GOOD
-//definir une politique claire sur le cas ou il n' a qu'une seule quote GOOD
-//traite le cas "cat " OU "cat |" // En gros le bloquer et dire syntax error GOOD
-//reintegrer la struct env GOOD
-//regarder aussi le segfault si " | "    "| || etc" GOOD
-//regarder l'histoire du $? GOOD
-//leaks a gerer pour | GOOD
-//trouver pq les multiples outfiles bugs avec le pipe GOOD
-//ajourter la tilde ~ GOOD
-//gerer les destructions de fichiers en cas d'erreur de la commande GOOD
-//env -i, savoir gerer sans l'env et copier dans le dur le reste du env GOOD
-//verifier que le parsing encaisse bien plusieurs redirections semblables et supprime ou garde les fichiers vides selon bash GOOD
-//cas des ulltiples $ : $$$USER GOOD
-//cas du "'$USER'" GOOD
 
 
 // void	check_builtins(char *str, t_env *env)

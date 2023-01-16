@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envtostruct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 13:48:04 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/14 10:54:17 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/16 18:16:26 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ t_env	*env_to_struct(char **env)
 	t_env			*env_struct;
 	unsigned int	i;
 
-	tmp_env = NULL;
 	env_struct = NULL;
 	while (*env)
 	{
@@ -83,16 +82,13 @@ t_env	*env_to_struct(char **env)
 			;
 		tmp = ft_strndup(*env, i);
 		if (!tmp)
-			return (NULL); // FREE
+			return (NULL);
 		value = ft_strdup(*env + i + 1);
 		if (!value)
-			return (free(tmp), NULL); // FREE
+			return (free(tmp), NULL);
 		tmp_env = ft_envnew(tmp, value);
 		if (!tmp_env)
-			return (free(tmp), free(value), NULL); // FREE
-		// free(tmp);
-		// free(value);
-		tmp_env->code = 1;
+			return (free(tmp), free(value), NULL);
 		ft_env_add_back(&env_struct, tmp_env);
 		env++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:42:24 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/16 16:06:30 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/16 17:10:54 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ int exec_builtin(int nb, char **cmd, t_all *p, t_tree *start)
 	else if (nb == -2)
 		return (ft_cd(p->env, cmd)); //reprendre cd
 	else if (nb == 3)
+	{
+		printf("PWD !\n");
 		return (ft_pwd());
+	}
 	else if (nb == -4)
 		return (ft_export(p->env, cmd));
 	else if (nb == -5)
