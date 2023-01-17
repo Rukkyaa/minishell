@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2-free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/16 14:36:54 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 17:00:33 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ void	free_env(t_env *envp)
 		return ;
 	while (envp != NULL)
 	{
-		free(envp->key);
-		free(envp->value);
+		if (!(!envp->key || envp->key == NULL))
+			free(envp->key);
+		if (!(envp->value || envp->value == NULL))
+			free(envp->value);
 		temp = envp;
 		envp = envp->next;
 		free(temp);

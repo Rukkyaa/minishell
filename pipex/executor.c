@@ -3,49 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/17 12:38:07 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 18:18:36 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// int	opening(char *file, int port, int append, int mode)
-// {
-// 	int fdt;
-// 	char *line;
+t_env	*shlvl(int nb, t_env *env)
+{
+	t_env	*envbis;
 
-// 	if (file == NULL || !file)
-// 		return (-1);
-// 	if (mode == 0 && (access(file, F_OK) != 0 || access(file, R_OK) != 0))
-// 		return (perror(""), -1);
-// 	else if (mode == 1 && (access(file, F_OK) == 0 && access(file, W_OK) != 0))
-// 		return (perror(""), -1);
-// 	else if (mode == 1 && access(file, F_OK) != 0)
-// 		fdt = open(file, O_WRONLY | O_CREAT, S_IRWXU);
-// 	else if (mode == 1)
-// 		fdt = open(file, O_WRONLY);
-// 	else if (mode == 0)
-// 		fdt = open(file, O_RDONLY);
-// 	else
-// 		fdt = -1;
-// 	if (append == 1 && mode == 1 && fdt != -1)
-// 	{
-// 		line = get_next_line(fdt);
-// 		while (line != NULL)
-// 		{
-// 			free(line);
-// 			line = get_next_line(fdt);
-// 		}
-// 	}
-// 	if (fdt == -1)
-// 		return (perror(""), -1);
-// 	if (dup2(fdt, port) < 0)
-// 		return (perror(""), close(fdt), -1);
-// 	return (close(fdt), 0);
-// }
+	envbis = env;
+	while (envbis != NULL)
+	{
+		if (ft_strcmp(envbis->key, "SHLVL") == 0 && (envbis->code == 1 || envbis->code == 2))
+			return (envbis->value += nb, env);
+	}
+	return (env);
+}
+//que se passe t'il si unset du shlvl ??
 
 int	opening_out(t_outfile *file_org, int port)
 {
@@ -251,6 +230,12 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 
 	// if (g_sig.sig_int == 0 && g_sig.sig_quit == 0 && ft_strcmp(elem->cmd[0], "cd") == 0)
 	// 	return(ft_cd(p->env, elem->cmd));
+	if (check_minishell(elem->cmd) == 1)
+	{
+		g_sig.sig_int = -1;
+		g_sig.sig_quit = -1;
+		p->env = shlvl(1, p->env);
+	}
 	if (path_comp_builtins(elem->cmd) < 0)
 		return (exec_builtin(path_comp_builtins(elem->cmd), elem->cmd, p, start));
 	elem->pid = fork();
@@ -261,16 +246,30 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 		if (signal(SIGINT, &sighandler) == SIG_ERR || signal(SIGQUIT, &sig_eof) == SIG_ERR)
 			error_process(p);
 		init_signal(-1);
-		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
 			error_process(p);
-		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
 			error_process(p);
-		if (g_sig.sig_int != 0 || g_sig.sig_quit != 0 || exec_command(p->paths, elem->cmd, p, start) != 0)
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(p->paths, elem->cmd, p, start) != 0)
 			error_process(p);
 		exit(0);
 	}
 	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))
 		return (WEXITSTATUS(status1));
+	return (0);
+}
+
+int	find_cat(t_minishell *elem)
+{
+	t_minishell	*p;
+
+	p = elem;
+	while (p != NULL)
+	{
+		if (ft_strcmp(p->cmd[0], "cat") == 0 && p->cmd[1] == NULL && p->file_in == NULL && p->file_out == NULL)
+			return (1);
+		p = p->next;
+	}
 	return (0);
 }
 
@@ -280,8 +279,8 @@ int	pipex(t_minishell *first_elem, t_all *p, t_tree *start)
 		return (0);
 	else if (first_elem->next == NULL)
 		return (exec_command_one(first_elem, p, start));
-	else if (first_elem->next != NULL && first_elem->next->next != NULL && ft_strcmp(first_elem->cmd[0], "cat") == 0)
-		return (printf("spe\n"), first_pipe_al(first_elem, p, start));
+	else if (first_elem->next != NULL && first_elem->next->next != NULL && find_cat(first_elem) == 1)
+		return (first_pipe_cat(first_elem, p, start));
 	return (first_pipe(first_elem, p, start));
 }
 
@@ -321,6 +320,7 @@ int	executor(t_tree *start, t_all *p, char *line)
 	{
 		g_sig.sig_int = 0;
 		g_sig.sig_quit = 0;
+		p->env = shlvl(-1, p->env);
 	}
 	if (g_sig.cmd_stat == 134)
 		kill_process(start, p, line);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/17 11:45:30 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 17:56:36 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,13 @@ t_tree *parsingator(char *line, t_all *p)
 		return (NULL);
 	if (invalid_quote(*line_bis) == 1)
 		return (free(*line_bis), free(line_bis), NULL);
-	p->here_docs = get_here_docs(line_bis);
+	p->here_docs = get_here_docs(line_bis, p);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
-		return (free(*line_bis), NULL);
-	start = init_tree(replace_var(line_bis, p));
+		return (free(*line_bis), free(line_bis), NULL);
+	*line_bis = replace_var(*line_bis, p);
+	if (*line_bis == NULL)
+		return (free(line_bis), NULL);
+	start = init_tree(line_bis);
 	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
 		return (free(start->cmd), free(start), NULL);
 	return (start);
@@ -107,7 +110,6 @@ void print_all(t_all *p)
 // trim quote des var a l'exec uniquement et l$test avec test = "s -la"
 //arg pour exit
 //increment le shlvl 
-//echo $PWD bug
 //gerer les signaux sur des minishell mutiples, revoir ce qui est fait
 // faire le traitement des vars dans le heredoc
 // faire le traitement des vars quand elles sont envoyees direct 
@@ -117,7 +119,6 @@ void print_all(t_all *p)
 //ne pas activer le ctrl d dans readline si la ligne est pas vide 
 
 //segfault apres double export
-//double free exit
 //lancer cd export et unset dans le parent process direct (test avec les pipes)
 
 // cas particulier : ls -l | grep mi > axel | cat < axel

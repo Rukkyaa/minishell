@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/14 18:43:06 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/17 17:53:58 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void	alert_case(char *str)
 	return ;
 }
 
-int	fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas avec quotes
+int	fill_file(t_all *p, char **line, int max, int nb) //gerer les cas avec quotes
 {
 	int		fd;
 	char	*newlimiter;
@@ -169,51 +169,49 @@ int	fill_file(char **here_docs, char **line, int max, int nb) //gerer les cas av
 
 	alert = 0;
 	if (nb == max)
-		return (here_docs[nb] = NULL, 1);
-	here_docs[nb] = generate_name(find_lim(*line, &alert));
-	if (alert == -1 || here_docs[nb] == NULL)
-		return (alert_case(here_docs[nb]), -1);
-	fd = open(here_docs[nb], O_CREAT | O_RDWR | O_EXCL);
+		return (p->here_docs[nb] = NULL, 1);
+	p->here_docs[nb] = generate_name(find_lim(*line, &alert));
+	if (alert == -1 || p->here_docs[nb] == NULL)
+		return (alert_case(p->here_docs[nb]), -1);
+	fd = open(p->here_docs[nb], O_CREAT | O_RDWR | O_EXCL);
 	if (fd == -1)
-		return (free(here_docs[nb]), -1);
+		return (free(p->here_docs[nb]), -1);
 	newlimiter = gen_new_limiter(find_lim(*line, &alert));
 	if (newlimiter == NULL || alert == -1)
-		return (alert_case(newlimiter), free(here_docs[nb]), -1);
+		return (alert_case(newlimiter), free(p->here_docs[nb]), -1);
 	g_sig.p_status = 2;
-	lect = get_next_line(0);
-	while (ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0 && g_sig.sig_quit == 0)
+	lect = replace_var(get_next_line(0), p);
+	while (lect != NULL && ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0 && g_sig.sig_quit == 0)
 	{
 		write(fd, lect, ft_strlen(lect));
 		if (g_sig.sig_quit == 0 && g_sig.sig_int == 0)
 		{
 			//free(lect); //reactiver pour  limiter les leaks, pb avec par exemple deux cat<<"" a la suite
-			lect = get_next_line(0);
+			lect = replace_var(get_next_line(0), p);
 		}
 	}
 	g_sig.p_status = 1;
-	if (g_sig.sig_quit == 0 && g_sig.sig_int == 0)
-		free(lect);
-	if (nb + 1 == max && g_sig.sig_quit == 0 && g_sig.sig_int == 0) //GROS CHECK DE LEAKS A FAIRE SUITE A INTEGRATION DES SIGNAUX
-		lect = get_next_line(-42);
-	*line = clean_heredoc_line(*line, here_docs[nb], find_lim(*line, &alert), &alert);
+	//if (g_sig.sig_quit == 0 && g_sig.sig_int == 0 && lect != NULL) CHECK LEAKS
+	//	free(lect);
+	//if (nb + 1 == max && g_sig.sig_quit == 0 && g_sig.sig_int == 0) //GROS CHECK DE LEAKS A FAIRE SUITE A INTEGRATION DES SIGNAUX
+	//	lect = get_next_line(-42);
+	*line = clean_heredoc_line(*line, p->here_docs[nb], find_lim(*line, &alert), &alert);
 	if (*line == NULL)
-		return (free(newlimiter), close (fd), free(here_docs[nb]), -1);
-	return (free(newlimiter), close (fd), fill_file(here_docs, line, max, ++nb));
+		return (free(newlimiter), close (fd), free(p->here_docs[nb]), -1);
+	return (free(newlimiter), close (fd), fill_file(p, line, max, ++nb));
 }
 
 //regler le sujet si il n'y a pas d'espace entre le limiter et <<
 //sujet quand il y en a plus de 1 
 
-char	**get_here_docs(char **line)
+char	**get_here_docs(char **line, t_all *p)
 {
-	char	**here_docs;
-
 	if (heredoc_count(*line, 0) == 0)
 		return (NULL);
-	here_docs = malloc((heredoc_count(*line, 0) + 1) * sizeof(char *));
-	if (!here_docs)
+	p->here_docs = malloc((heredoc_count(*line, 0) + 1) * sizeof(char *));
+	if (!p->here_docs)
 		return (NULL);
-	if (fill_file(here_docs, line, heredoc_count(*line, 0), 0) == -1)
+	if (fill_file(p, line, heredoc_count(*line, 0), 0) == -1)
 		return (NULL); //clean all
-	return (here_docs);
+	return (p->here_docs);
 }

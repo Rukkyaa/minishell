@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/17 12:26:09 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 18:16:19 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ char *clean_rest_op(t_tree *start, int index);
 void clean_res(char *reserve, int index);
 
 //parsing/5-heredocs.c
-char **get_here_docs(char **line);
+char	**get_here_docs(char **line, t_all *p);
 int heredoc_count(char *line, int index);
 int	ft_strcmp(char *s1, char *s2);
 
@@ -181,7 +181,7 @@ t_infile	*add_file_in(t_infile *lst, char *file);
 char	**ft_split_spe(char *s, char c);
 
 //parsing/var_dealer.c
-char	**replace_var(char **line, t_all *p);
+char	*replace_var(char *line, t_all *p);
 
 //pipex/executor.c
 int	executor(t_tree *start, t_all *p, char *line);
@@ -190,6 +190,7 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start);
 int	opening_in(t_infile *file_org, int port);
 int	opening_out(t_outfile *file_org, int port);
 void error_process(t_all *p);
+t_env	*shlvl(int nb, t_env *env);
 
 //pipex/exec_builtins.c
 int path_comp_builtins(char **paths);
@@ -199,9 +200,11 @@ int exec_builtin(int nb, char **cmd, t_all *p, t_tree *start);
 int	first_pipe(t_minishell *elem, t_all *p, t_tree *start);
 int	mid_pipe(t_minishell *elem, t_all *p, t_tree *start);
 int	last_pipe(t_minishell *elem, t_all *p, t_tree *start);
-int	first_pipe_al(t_minishell *elem, t_all *p, t_tree *start);
-int	mid_pipe_al(t_minishell *elem, t_all *p, t_tree *start);
-int	last_pipe_al(t_minishell *elem, t_all *p, t_tree *start);
+
+//pipex/pipe_spe.c
+int	first_pipe_cat(t_minishell *elem, t_all *p, t_tree *start);
+int	mid_pipe_cat(t_minishell *elem, t_all *p, t_tree *start);
+int	last_pipe_cat(t_minishell *elem, t_all *p, t_tree *start);
 
 //get_next_line
 char	*get_next_line(int fd);
