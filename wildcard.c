@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 10:20:56 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/16 21:22:07 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 00:21:14 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,16 +181,23 @@ int	matching(char *str, char *pattern, int i, int e)
 		else
 			return (matching(str, pattern, ++i, e));
 	}
-	else if (e != ft_strlen(pattern) -1)
+	else if (e == 0 && pattern[e] != '*')
+	{
+		if (pattern[e] == str[i])
+			return(matching(str, pattern, ++i, ++e));
+		else
+			return (matching(str, pattern, ++i, e));
+	}
+	else if (e != ft_strlen(pattern) - 1)
 	{
 		if (pattern[e] == '*')
 			return (matching(str, pattern, ++i, ++e));
-		else if (pattern[e] != '*' && str[i] != pattern[e])
-			return (0);
-		else
+		else if (pattern[e] != '*' && str[i] == pattern[e])
 			return (matching(str, pattern, ++i, ++e));
+		else
+			return (0);
 	}
-	if (e == ft_strlen(pattern) -1)
+	if (e == ft_strlen(pattern) - 1)
 	{
 		if (pattern[e] == '*' && str[i] != '\0')
 			return (1);
