@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/16 16:06:00 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 12:38:07 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	opening_in(t_infile *file_org, int port)
 	while(file->next != NULL)
 	{
 		if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
-			return (perror(file->file_in), -1);
+			return (perror(file->file_in),  -1);
 		file = file->next;
 	}
 	if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
@@ -140,43 +140,43 @@ char **env_to_char(t_env *env)
 	return (reforged[e] = NULL, reforged);
 }
 
-int	lengthmegatab(char ***cmd)
-{
-	int i;
-	int len;
+// int	lengthmegatab(char ***cmd)
+// {
+// 	int i;
+// 	int len;
 
-	i = 0;
-	len = 0;
-	while (cmd[i] != NULL)
-		len += length_tab(cmd[i++]);
-	return (len);
-}
+// 	i = 0;
+// 	len = 0;
+// 	while (cmd[i] != NULL)
+// 		len += length_tab(cmd[i++]);
+// 	return (len);
+// }
 
-char **mega_to_tab(char ***cmd)
-{
-	char **reforged_cmd;
-	int i;
-	int e;
+// char **mega_to_tab(char ***cmd)
+// {
+// 	char **reforged_cmd;
+// 	int i;
+// 	int e;
 
-	i = -1;
-	reforged_cmd = malloc((lengthmegatab(cmd) + 1) * sizeof(char *));
-	if (!reforged_cmd)
-		return (NULL);
-	while (cmd[++i] != NULL)
-	{
-		reforged_cmd[i] = ft_strdup(cmd[i][0]);
-		if (reforged_cmd[i] == NULL)
-			return (free_tab(reforged_cmd), NULL);
-		e = 0;
-		while (cmd[i][++e] != NULL)
-		{
-			reforged_cmd[i] = ft_strjoin_spe(reforged_cmd[i], " ");
-			reforged_cmd[i] = ft_strjoin_spe(reforged_cmd[i], cmd[i][e]); // add securite
-		}
-	}
-	reforged_cmd[i] = NULL;
-	return (reforged_cmd);
-}
+// 	i = -1;
+// 	reforged_cmd = malloc((lengthmegatab(cmd) + 1) * sizeof(char *));
+// 	if (!reforged_cmd)
+// 		return (NULL);
+// 	while (cmd[++i] != NULL)
+// 	{
+// 		reforged_cmd[i] = ft_strdup(cmd[i][0]);
+// 		if (reforged_cmd[i] == NULL)
+// 			return (free_tab(reforged_cmd), NULL);
+// 		e = 0;
+// 		while (cmd[i][++e] != NULL)
+// 		{
+// 			reforged_cmd[i] = ft_strjoin_spe(reforged_cmd[i], " ");
+// 			reforged_cmd[i] = ft_strjoin_spe(reforged_cmd[i], cmd[i][e]); // add securite
+// 		}
+// 	}
+// 	reforged_cmd[i] = NULL;
+// 	return (reforged_cmd);
+// }
 
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 {
@@ -207,7 +207,7 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 		if (access(path, F_OK) == 0)
 		{
 			if (access(path, X_OK) != 0)
-				return (perror(""), free(path), -1);
+				return (perror(""), free(path), g_sig.cmd_stat = 126, 126);
 			if (execve(path, cmd, reforged_env) == -1)
 				return (free(path), free_tab(reforged_env), -1);
 			return (free(path), free_tab(reforged_env), 0);
@@ -217,7 +217,7 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 	if (access(cmd[0], F_OK) == 0)
 	{
 		if (access(cmd[0], X_OK) != 0)
-			return (perror(""), free(path), free_tab(reforged_env),  -1);
+			return (perror(""), free(path), free_tab(reforged_env), g_sig.cmd_stat = 126, 126);
 		if (execve(cmd[0], cmd, reforged_env) == -1)
 			return (free_tab(reforged_env),  -1);
 		return (free_tab(reforged_env), 0);
@@ -240,6 +240,8 @@ void error_process(t_all *p)
 		exit(0);
 	else if (g_sig.cmd_stat == 127)
 		exit (127);
+	else if (g_sig.cmd_stat == 126)
+		exit (126);
 	exit(1);
 }
 
@@ -278,6 +280,8 @@ int	pipex(t_minishell *first_elem, t_all *p, t_tree *start)
 		return (0);
 	else if (first_elem->next == NULL)
 		return (exec_command_one(first_elem, p, start));
+	else if (first_elem->next != NULL && first_elem->next->next != NULL && ft_strcmp(first_elem->cmd[0], "cat") == 0)
+		return (printf("spe\n"), first_pipe_al(first_elem, p, start));
 	return (first_pipe(first_elem, p, start));
 }
 
@@ -313,7 +317,11 @@ int	executor(t_tree *start, t_all *p, char *line)
 	if (start == NULL || !start)
 		return (-1);
 	g_sig.cmd_stat = pipex(start->first_elem, p, start);
-	//g_sig.cmd_stat = pipex(start->first_elem, p, start);
+	if (check_minishell(start->first_elem->cmd) == 1 && g_sig.sig_int < 0 && g_sig.sig_quit < 0)
+	{
+		g_sig.sig_int = 0;
+		g_sig.sig_quit = 0;
+	}
 	if (g_sig.cmd_stat == 134)
 		kill_process(start, p, line);
 	free(start->cmd);

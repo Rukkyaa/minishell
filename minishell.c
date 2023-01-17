@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 21:32:07 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 11:45:30 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,17 @@ void print_all(t_all *p)
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
 
-//wildcard
-//gerer les signaux sur des minishell mutiples
+// trim quote des var a l'exec uniquement et l$test avec test = "s -la"
+//arg pour exit
+//increment le shlvl 
+//echo $PWD bug
+//gerer les signaux sur des minishell mutiples, revoir ce qui est fait
+// faire le traitement des vars dans le heredoc
+// faire le traitement des vars quand elles sont envoyees direct 
+// valgrind pendant here docs --> LEAKS
+// ligne avec que ds espaces, pas de syntax error et pas d'historique 
+//truc pourri | << here
+//ne pas activer le ctrl d dans readline si la ligne est pas vide 
 
 //segfault apres double export
 //double free exit
@@ -163,62 +172,62 @@ void print_all(t_all *p)
 
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=./.readline.supp ./minishell
 
-// int	main(int argc, char **argv, char **env) //ajout du clear history
-// {
-// 	t_all *p;
-
-// 	(void)argc;
-// 	(void) **argv;
-// 	p = init_env(env);
-// 	if (!p || p == NULL)
-// 		return (1);
-// 	g_sig.line = NULL;
-// 	while (g_sig.line == NULL)
-// 	{
-// 		init_signal(0);
-// 		rl_event_hook = event;
-// 		g_sig.line = readline("Minishell> ");
-// 		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
-// 			return (free(g_sig.line), free_all(p), rl_clear_history(), EXIT_SUCCESS);
-// 		if (g_sig.sig_int == 0 && g_sig.sig_quit == 0)
-// 		{
-// 			add_history(g_sig.line);
-// 			g_sig.p_status = 1;
-// 			g_sig.line = ft_epur(g_sig.line);
-// 			p->start = parsingator(g_sig.line, p); //leaks
-// 			if (g_sig.sig_int == 1) // ajouter l'autre var globale ?
-// 			{
-// 				free_start(p->start, 1);
-// 				p->start = NULL;
-// 			}
-// 			print_all(p);
-// 			if (p->start != NULL && g_sig.sig_int == 0 && executor(p->start, p, g_sig.line) == -1) //distinguer les erreurs de fct des erreurs volontaires dans la gestion
-// 				printf("ERRRRROOOOOR\n");  //UTILISER -1 UNIQUEMENT POUR LES FAILS DE FONCTIONS
-// 			//check_builtins(line, p->env);
-// 			free_here_docs(p->here_docs);
-// 		}
-// 		free(g_sig.line);
-// 		g_sig.line = NULL;
-// 	}
-// 	rl_clear_history();
-// 	free_all(p);
-// 	return (EXIT_SUCCESS);
-// }
-
-//MAIN SANS READLINE POUR CHECK LEAKS
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env) //ajout du clear history
 {
 	t_all *p;
 
 	(void)argc;
+	(void) **argv;
 	p = init_env(env);
-	p->start = parsingator(argv[1], p);
-	print_all(p);
-	if (executor(p->start, p, argv[1]) == -1)
-		printf("ERRRRROOOOOR\n");
-	printf("finito");
-	free_here_docs(p->here_docs);
+	if (!p || p == NULL)
+		return (1);
+	g_sig.line = NULL;
+	while (g_sig.line == NULL)
+	{
+		init_signal(0);
+		rl_event_hook = event;
+		g_sig.line = readline("Minishell> ");
+		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
+			return (free(g_sig.line), free_all(p), rl_clear_history(), EXIT_SUCCESS);
+		if (g_sig.sig_int == 0 && g_sig.sig_quit == 0)
+		{
+			add_history(g_sig.line);
+			g_sig.p_status = 1;
+			g_sig.line = ft_epur(g_sig.line);
+			p->start = parsingator(g_sig.line, p); //leaks
+			if (g_sig.sig_int == 1) // ajouter l'autre var globale ?
+			{
+				free_start(p->start, 1);
+				p->start = NULL;
+			}
+			print_all(p);
+			if (p->start != NULL && g_sig.sig_int == 0 && executor(p->start, p, g_sig.line) == -1) //distinguer les erreurs de fct des erreurs volontaires dans la gestion
+				printf("ERRRRROOOOOR\n");  //UTILISER -1 UNIQUEMENT POUR LES FAILS DE FONCTIONS
+			//check_builtins(line, p->env);
+			free_here_docs(p->here_docs);
+		}
+		free(g_sig.line);
+		g_sig.line = NULL;
+	}
+	rl_clear_history();
 	free_all(p);
 	return (EXIT_SUCCESS);
 }
+
+//MAIN SANS READLINE POUR CHECK LEAKS
+// int main(int argc, char **argv, char **env)
+// {
+// 	t_all *p;
+
+// 	(void)argc;
+// 	p = init_env(env);
+// 	p->start = parsingator(argv[1], p);
+// 	print_all(p);
+// 	if (executor(p->start, p, argv[1]) == -1)
+// 		printf("ERRRRROOOOOR\n");
+// 	printf("finito");
+// 	free_here_docs(p->here_docs);
+// 	free_all(p);
+// 	return (EXIT_SUCCESS);
+// }
 

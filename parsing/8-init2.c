@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/16 21:23:57 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 12:26:14 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,19 @@ char **w_finder(char **tabl) //cas particulier du grep a gerer
 	return (free(str), free_tab(tabl), tabfinal);
 }
 
+int	check_minishell(char **tabl)
+{
+	int	i;
+
+	i = -1;
+	while (tabl[++i] != NULL)
+	{
+		if (ft_strcmp(tabl[i], "./minishell") == 0)
+			return (1);
+	}
+	return (0);
+}
+
 int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 {
 	t_minishell	*new_elem;
@@ -234,6 +247,11 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	init->cmd = trim_tab(w_finder(ft_split_spe(cmd[nb], ' ')));
 	if (!init->cmd)
 		return (-1); //traiter cas erruer
+	if (check_minishell(init->cmd) == 1)
+	{
+		g_sig.sig_int = -1;
+		g_sig.sig_quit = -1;
+	}
 	if (cmd[nb + 1] == NULL)
 		return (free_tab(cmd), 1);
 	new_elem = malloc(sizeof(t_minishell));

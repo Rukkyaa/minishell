@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 19:39:12 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 12:26:09 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ extern t_sig g_sig;
 
 t_env	*env_to_struct(char **env);
 char	*wildcard(char *extension);
+int	check_minishell(char **tabl);
 
 //signal/signal.c
 int		event(void);
@@ -198,6 +199,9 @@ int exec_builtin(int nb, char **cmd, t_all *p, t_tree *start);
 int	first_pipe(t_minishell *elem, t_all *p, t_tree *start);
 int	mid_pipe(t_minishell *elem, t_all *p, t_tree *start);
 int	last_pipe(t_minishell *elem, t_all *p, t_tree *start);
+int	first_pipe_al(t_minishell *elem, t_all *p, t_tree *start);
+int	mid_pipe_al(t_minishell *elem, t_all *p, t_tree *start);
+int	last_pipe_al(t_minishell *elem, t_all *p, t_tree *start);
 
 //get_next_line
 char	*get_next_line(int fd);
