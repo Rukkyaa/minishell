@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 16:13:38 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/17 16:25:38 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/minishell.h"
 
 #include "../includes/minishell.h"
 
@@ -27,7 +29,6 @@ void	change_value(t_env *env, char *key, char *value)
 {
 	t_env	*new;
 
-	printf("Basic\n");
 	if (ft_is_in_env(env, key))
 	{
 		while (env)
@@ -98,9 +99,32 @@ int	before(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] != '\0' && str[i] != '=')
+	while (str[i])
+	{
+		if (str[i] == '+' && str[i + 1] == '=')
+			break ;			
+		else if (str[i] == '+' && str[i + 1] != '=')
+			return (ft_putstr_fd(str, 2), ft_putendl_fd(": not a valid identifier", 2), -1);
+		else if (str[i] == '=')
+			break ;
 		++i;
+	}
 	return (i);
+}
+
+int	change_concat(t_env *env, char *key, char *cmd)
+{
+	char	*value;
+	
+	value = NULL;
+	if (ft_is_in_env(env, key))
+		if (get_env_var(env, key))
+			value = ft_strjoin(get_env_var(env, key), cmd + ft_strlen(key) + 2);
+	if (!value)
+		return (free(key), EXIT_FAILURE);
+	change_value(env, key, value);
+	free(key);
+	return (EXIT_SUCCESS);
 }
 
 int	ft_export(t_env *env, char **cmd)
@@ -110,6 +134,8 @@ int	ft_export(t_env *env, char **cmd)
 
 	if (!cmd[1])
 		return (sort_env(env_to_char_export(env)), 0);
+	if (before(cmd[1]) == -1)
+		return (EXIT_FAILURE);
 	key = ft_strndup(cmd[1], before(cmd[1]));
 	if (!key)
 		return (EXIT_FAILURE);
@@ -119,6 +145,8 @@ int	ft_export(t_env *env, char **cmd)
 		change_value_empty(env, key);
 	else
 	{
+		if (cmd[1][ft_strlen(key)] == '+' && cmd[1][ft_strlen(key) + 1] == '=')
+			return (change_concat(env, key, cmd[1]));
 		value = ft_strdup(cmd[1] + ft_strlen(key) + 1);
 		if (!value)
 			return (free(key), EXIT_FAILURE);
@@ -126,3 +154,4 @@ int	ft_export(t_env *env, char **cmd)
 	}
 	return (EXIT_SUCCESS);
 }
+
