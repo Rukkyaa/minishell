@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 19:43:36 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 20:16:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,10 +148,10 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 		if (access(path, F_OK) == 0)
 		{
 			if (access(path, X_OK) != 0)
-				return (perror(""), free(path), g_sig.cmd_stat = 126, 126);
+				return (perror(""), free(path),free_tab(reforged_env), free(g_sig.line), g_sig.cmd_stat = 126, 126);
 			if (execve(path, cmd, reforged_env) == -1)
-				return (free(path), free_tab(reforged_env), -1);
-			return (free(path), free_tab(reforged_env), 0);
+				return (free(path), free_tab(reforged_env), free(g_sig.line), -1);
+			return (free(path), free_tab(reforged_env), free(g_sig.line), 0);
 		}
 		free(path);
 	}
