@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 15:01:56 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 23:43:26 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,27 +132,31 @@ int	ft_export(t_env *env, char **cmd)
 {
 	char	*key;
 	char	*value;
-
+	int		i;
+	
 	if (!cmd[1])
 		return (sort_env(env_to_char_export(env)), 0);
-	if (before(cmd[1]) == -1)
-		return (EXIT_FAILURE);
-	key = ft_strndup(cmd[1], before(cmd[1]));
-	if (!key)
-		return (EXIT_FAILURE);
-	if (cmd[1][ft_strlen(key)] == '=' && !(cmd[1][ft_strlen(key) + 1]))
-		change_value_equal(env, key);
-	else if (!cmd[1][ft_strlen(key)])
-		change_value_empty(env, key);
-	else
+	i = 0;
+	while (cmd[++i])
 	{
-		if (cmd[1][ft_strlen(key)] == '+' && cmd[1][ft_strlen(key) + 1] == '=')
-			return (change_concat(env, key, cmd[1]));
-		value = ft_strdup(cmd[1] + ft_strlen(key) + 1);
-		if (!value)
-			return (free(key), EXIT_FAILURE);
-		change_value(env, key, value);
+		if (before(cmd[i]) == -1)
+			return (EXIT_FAILURE);
+		key = ft_strndup(cmd[i], before(cmd[i]));
+		if (!key)
+			return (EXIT_FAILURE);
+		if (cmd[i][ft_strlen(key)] == '=' && !(cmd[i][ft_strlen(key) + 1]))
+			change_value_equal(env, key);
+		else if (!cmd[i][ft_strlen(key)])
+			change_value_empty(env, key);
+		else
+		{
+			if (cmd[i][ft_strlen(key)] == '+' && cmd[i][ft_strlen(key) + 1] == '=')
+				return (change_concat(env, key, cmd[i]));
+			value = ft_strdup(cmd[i] + ft_strlen(key) + 1);
+			if (!value)
+				return (free(key), EXIT_FAILURE);
+			change_value(env, key, value);
+		}
 	}
 	return (EXIT_SUCCESS);
 }
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:42:24 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/16 17:10:54 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/18 23:44:08 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int path_comp_builtins(char **cmd) //check si il n'y a pas de leak avec le secon
 		return (-5);
 	else if (ft_strcmp(cmd[0], "env") == 0 && cmd[1] == NULL)
 		return (6);
-	else if (ft_strcmp(cmd[0], "exit") == 0 && cmd[1] == NULL)
+	else if (ft_strcmp(cmd[0], "exit") == 0)
 		return (7);
 	return (0);
 }
@@ -64,6 +64,6 @@ int exec_builtin(int nb, char **cmd, t_all *p, t_tree *start)
 	else if (nb == 6)
 		return (ft_env(p->env));
 	else if (nb == 7)
-		ft_exit(p, start);
+		ft_exit(p, start, cmd);
 	return (-1);
 }

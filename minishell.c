@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 20:00:42 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 23:45:11 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 	{
 		init_signal(0);
 		rl_event_hook = event;
-		g_sig.line = readline("Minishell> ");
+		g_sig.line = readline("\033[1;033mMinishell> \033[m");
 		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
 			return (free(g_sig.line), free_all(p), rl_clear_history(), EXIT_SUCCESS);
 		if (check_whitespace(g_sig.line) == 1)

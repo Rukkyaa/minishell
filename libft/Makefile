@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+         #
+#    By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 17:19:09 by rukkyaa           #+#    #+#              #
-#    Updated: 2023/01/18 15:11:02 by gduhau           ###   ########.fr        #
+#    Updated: 2023/01/18 23:41:32 by rukkyaa          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,10 +49,12 @@ CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 HEADERS = -I includes/
 
+flag:=1
+
 .build/%.o : %.c
 		@setterm -cursor off
 		@mkdir -p .build
-		@printf "\033[32mCompiling $@... \033[K\033[m\r"
+		@printf "\033[C\033[32mCompiling $@... \033[K\033[m\r"
 		@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
 
 all: $(NAME)
@@ -62,7 +64,7 @@ $(NAME): \
 	$(PRINT_OBJS) $(CHECKING_OBJS)
 	@$(AR) $(NAME) $(STRING_OBJS) $(MEMORY_OBJS) $(CONVERTION_OBJS) \
 	$(PRINT_OBJS) $(CHECKING_OBJS)
-	@printf "\033[K\033[1;32m Libft : compiled\n\033[m"
+	@printf "\033[1;32m Libft     : compiled                       \n\033[m"
 	@setterm -cursor on
 
 bonus: $(OBJS) $(BONUS_OBJS)

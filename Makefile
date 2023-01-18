@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+         #
+#    By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2023/01/17 16:37:11 by gabrielduha      ###   ########.fr        #
+#    Updated: 2023/01/18 23:41:20 by rukkyaa          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c ft_epur.c
 			my_builtins/ft_export.c my_builtins/ft_unset.c my_builtins/ft_exit.c signal/signal.c \
 			my_builtins/sort_env.c wildcard.c pipex/pipe_spe.c
 			
-OBJS	= ${SRCS:.c=.o}
+OBJS	= $(SRCS:.c=.o)
 NAME	= minishell
 CC		= cc
 RM		= rm -f
@@ -31,22 +31,42 @@ HEADERS = -I includes/ -I libft/
 
 LIBFT = -L libft/ -lft
 
+flag:=1
 .c.o:
-		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+		@setterm -cursor off
+		@if [ $(flag) = "1" ]; then\
+			clear ;\
+			printf "\033[1;35m========================================\n";\
+			printf "|           MINISHELL LOADING          |\n";\
+			printf "========================================\n";\
+		fi
+		@printf "\033[C\033[32mCompiling $@... \033[K\033[m\r"
+		@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+		$(eval flag=$(shell echo $$(($(flag)+1))))
 
-${NAME}:	${OBJS}
-			make -C libft/
-			${CC} ${CFLAGS} ${OBJS} -lreadline $(LIBFT) ${HEADERS} -o ${NAME}
+$(NAME):	$(OBJS)
+			@echo "\033[K\033[1;32m Minishell : compiled\033[m"
+			@make --no-print-directory -C libft/
+			@$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBFT) $(HEADERS) -o $(NAME)
+			@printf "\033[1;32m========================================\n"
+			@printf "|         COMPILATION FINISHED !       |\n"
+			@printf "========================================\n\033[m"
+			@setterm -cursor on
 
-all: ${NAME}
+all: $(NAME)
 
 clean:
-			make clean -C libft/
-			${RM} ${OBJS}
+			@printf "\033[1;31m========================================\n"
+			@printf "|           MINISHELL CLEANING         |\n"
+			@printf "========================================\n\033[m"
+			@printf "\033[K\033[1;33m Destroying objects\n\033[m"
+			@make --no-print-directory clean -C libft/
+			@$(RM) $(OBJS)
 
 fclean:	clean
-			make fclean -C libft/
-			${RM} ${NAME}
+			@printf "\033[K\033[1;31m Destroying all\n\033[m"
+			@make --no-print-directory fclean -C libft/
+			@$(RM) $(NAME)
 
 re:		fclean all
 
