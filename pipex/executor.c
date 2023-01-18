@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 18:03:05 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 19:43:36 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,20 @@ char **env_to_char(t_env *env)
 	return (reforged[e] = NULL, reforged);
 }
 
+int	check_directory(char *path)
+{
+	struct stat	st;
+
+	if (stat(path, &st) == -1)
+		return (-1);
+	if (S_ISDIR(st.st_mode) == 0)
+		return (0);
+	ft_putstr_fd(path, 2);
+	ft_putstr_fd(": Is a directory\n", 2);
+	g_sig.cmd_stat = 126;
+	return (126);
+}
+
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 {
 	int		i;
@@ -141,6 +155,8 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 		}
 		free(path);
 	}
+	if (check_directory(cmd[0]) != 0)
+		return (free_tab(reforged_env), free(g_sig.line), -1);
 	if (access(cmd[0], F_OK) == 0)
 	{
 		if (access(cmd[0], X_OK) != 0)

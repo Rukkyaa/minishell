@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/18 14:18:04 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 19:52:16 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*find_lim(char *line, int *alert)
 
 	i = 0;
 	compt = 0;
-	while (line[i + 1] != '\0' && !(line[i] == '<' && line[i + 1] == '<'))
+	while (line[i] != '\0' && line[i + 1] != '\0' && !(line[i] == '<' && line[i + 1] == '<'))
 	{
 		if (line[i] == '\"' || line[i] == '\'')
 			i = avoid_quotes(line, i);
@@ -90,17 +90,17 @@ char	*find_lim(char *line, int *alert)
 			i++;
 	}
 	i += 2;
-	while (is_whitespace(line[i]) == 1)
+	while (line[i] != '\0' && is_whitespace(line[i]) == 1)
 		i++;
 	d = i;
 	*alert = i;
-	while (is_whitespace(line[d++]) == 0)
+	while (line[d] != '\0' && is_whitespace(line[d++]) == 0)
 		compt++;
 	limiter = malloc((compt + 1) * sizeof(char));
 	if (!limiter)
 		return (NULL);
 	compt = 0;
-	while (i < d)
+	while (line[i] != '\0' && i < d)
 		limiter[compt++] = line[i++];
 	return (limiter[compt] = '\0', ft_trim_quotes(limiter, alert));
 }

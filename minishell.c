@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 18:05:59 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 20:00:42 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	first_check(char *line)
 	if (all_spaces(tab_cmd, line_bis) == 1)
 		return (printf("syntax error near unexpected token `|'\n"),
 			free_tab(tab_cmd), free(line_bis), g_sig.cmd_stat = 2, 1);
-	return (0);
+	return (free_tab(tab_cmd), free(line_bis), 0);
 }
 
 t_tree *parsingator(char *line, t_all *p)
@@ -130,13 +130,10 @@ void print_all(t_all *p)
 	print_here_doc(p->here_docs);
 }
 
-//2- AJOUTER LE BONUS DU WILDCARD
 //3- REVOIR TOUTES LES LEAKS
 //4- REVOIR TOUTE LA GESTION D'ERREURS
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
-
-// cas de l'exec d'un directory
 
 // trim quote des var a l'exec uniquement et l$test avec test = "s -la"
 //arg pour exit
