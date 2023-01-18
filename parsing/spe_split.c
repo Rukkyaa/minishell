@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   spe_split.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 12:28:52 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/13 23:23:26 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/18 14:27:11 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	count_words2(char *str, char c)
+int	count_words2(char *str, char c)
 {
 	int	i;
 	int	compteur;

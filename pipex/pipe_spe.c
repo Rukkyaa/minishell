@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_spe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:29:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/17 18:17:48 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 14:51:04 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ static int	wait_all(t_tree *start)
 
 int	first_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 {
-	if (check_minishell(elem->cmd) == 1)
-	{
-		g_sig.sig_int = -1;
-		g_sig.sig_quit = -1;
-		p->env = shlvl(1, p->env);
-	}
+	// if (check_minishell(elem->cmd) == 1)
+	// {
+	// 	g_sig.sig_int = -1;
+	// 	g_sig.sig_quit = -1;
+	// 	p->env = shlvl(1, p->env);
+	// }
 	if (!elem || elem == NULL || !p->paths || !p->env || pipe(elem->fd) == -1)
 		return (-1);
 	elem->pid = fork();
@@ -70,12 +70,12 @@ int	first_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 
 int	mid_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 {
-	if (check_minishell(elem->next->cmd) == 1)
-	{
-		g_sig.sig_int = -1;
-		g_sig.sig_quit = -1;
-		p->env = shlvl(1, p->env);
-	}
+	// if (check_minishell(elem->next->cmd) == 1)
+	// {
+	// 	g_sig.sig_int = -1;
+	// 	g_sig.sig_quit = -1;
+	// 	p->env = shlvl(1, p->env);
+	// }
 	if (pipe(elem->next->fd) == -1)
 		return (-1);
 	elem->next->pid = fork();
@@ -107,12 +107,12 @@ int	mid_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 
 int	last_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 {
-	if (check_minishell(elem->next->cmd) == 1)
-	{
-		g_sig.sig_int = -1;
-		g_sig.sig_quit = -1;
-		p->env = shlvl(1, p->env);
-	}
+	// if (check_minishell(elem->next->cmd) == 1)
+	// {
+	// 	g_sig.sig_int = -1;
+	// 	g_sig.sig_quit = -1;
+	// 	p->env = shlvl(1, p->env);
+	// }
 	elem->next->pid = fork();
 	if (elem->next->pid < 0)
 		return (-1);

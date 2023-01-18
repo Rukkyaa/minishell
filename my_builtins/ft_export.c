@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/17 16:25:38 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/18 15:01:56 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../includes/minishell.h"
 
 #include "../includes/minishell.h"
 
@@ -126,6 +124,9 @@ int	change_concat(t_env *env, char *key, char *cmd)
 	free(key);
 	return (EXIT_SUCCESS);
 }
+
+//trim les quotes en sortie des value
+//gerer plusieurs export en une cmd 
 
 int	ft_export(t_env *env, char **cmd)
 {

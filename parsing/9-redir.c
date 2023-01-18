@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/13 23:22:57 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/18 14:35:53 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,42 @@ char	*erase_redir(char *cmd)
 		{
 			cmd[i] = ' ';
 			if (cmd[i + 1] == '>')
+				cmd[++i] = ' ';
+			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 1)
+				i++;
+			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 0)
+			{
+				if (cmd[i] == '\"' || cmd[i] == '\'')
+				{
+					end = avoid_quotes(cmd, i);
+					while (i < end)
+						cmd[i++] = ' ';
+				}
+				else
+					cmd[i++] = ' ';
+			}
+		}
+		if (cmd[i] == '\0')
+			break ;
+		i++;
+	}
+	return (cmd);
+}
+
+char	*erase_redirbis(char *cmd)
+{
+	int	i;
+	int	end;
+
+	i = 0;
+	while (cmd[i] != '\0' && cmd[i + 1] != '\0') //il y a sans doute une plus opti a faire
+	{
+		if (cmd[i] == '\"' || cmd[i] == '\'')
+			i = avoid_quotes(cmd, i);
+		if (cmd[i] == '>' || cmd[i] == '<')
+		{
+			cmd[i] = ' ';
+			if (cmd[i + 1] == '>' || cmd[i + 1] == '<')
 				cmd[++i] = ' ';
 			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 1)
 				i++;

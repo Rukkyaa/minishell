@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 16:07:10 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/17 18:18:09 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 14:51:39 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ int	kill1(t_minishell *elem, int stat)
 
 int	first_pipe(t_minishell *elem, t_all *p, t_tree *start)
 {
-	if (check_minishell(elem->next->cmd) == 1)
-	{
-		g_sig.sig_int = -1;
-		g_sig.sig_quit = -1;
-		p->env = shlvl(1, p->env);
-	}
+	// if (check_minishell(elem->next->cmd) == 1)
+	// {
+	// 	g_sig.sig_int = -1;
+	// 	g_sig.sig_quit = -1;
+	// 	p->env = shlvl(1, p->env);
+	// }
 	if (!elem || elem == NULL || !p->paths || !p->env || pipe(elem->fd) == -1)
 		return (-1);
 	elem->pid = fork();
@@ -69,12 +69,12 @@ int	mid_pipe(t_minishell *elem, t_all *p, t_tree *start)
 {
 	int	status1;
 
-	if (check_minishell(elem->next->cmd) == 1)
-	{
-		g_sig.sig_int = -1;
-		g_sig.sig_quit = -1;
-		p->env = shlvl(1, p->env);
-	}
+	// if (check_minishell(elem->next->cmd) == 1)
+	// {
+	// 	g_sig.sig_int = -1;
+	// 	g_sig.sig_quit = -1;
+	// 	p->env = shlvl(1, p->env);
+	// }
 	if (pipe(elem->next->fd) == -1)
 		return (-1);
 	elem->next->pid = fork();
@@ -113,12 +113,12 @@ int	last_pipe(t_minishell *elem, t_all *p, t_tree *start)
 	int	status1;
 	int	status2;
 
-	if (check_minishell(elem->next->cmd) == 1)
-	{
-		g_sig.sig_int = -1;
-		g_sig.sig_quit = -1;
-		p->env = shlvl(1, p->env);
-	}
+	// if (check_minishell(elem->next->cmd) == 1)
+	// {
+	// 	g_sig.sig_int = -1;
+	// 	g_sig.sig_quit = -1;
+	// 	p->env = shlvl(1, p->env);
+	// }
 	elem->next->pid = fork();
 	if (elem->next->pid < 0)
 		return (-1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 12:12:28 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 14:50:51 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,12 +192,12 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 
 	// if (g_sig.sig_int == 0 && g_sig.sig_quit == 0 && ft_strcmp(elem->cmd[0], "cd") == 0)
 	// 	return(ft_cd(p->env, elem->cmd));
-	if (check_minishell(elem->cmd) == 1)
-	{
-		g_sig.sig_int = -1;
-		g_sig.sig_quit = -1;
-		p->env = shlvl(1, p->env);
-	}
+	// if (check_minishell(elem->cmd) == 1)
+	// {
+	// 	g_sig.sig_int = -1;
+	// 	g_sig.sig_quit = -1;
+	// 	p->env = shlvl(1, p->env);
+	// }
 	if (path_comp_builtins(elem->cmd) < 0)
 		return (exec_builtin(path_comp_builtins(elem->cmd), elem->cmd, p, start));
 	elem->pid = fork();
@@ -264,12 +264,13 @@ int	executor(t_tree *start, t_all *p, char *line)
 	if (start == NULL || !start)
 		return (-1);
 	g_sig.cmd_stat = pipex(start->first_elem, p, start);
-	if (check_minishell(start->first_elem->cmd) == 1 && g_sig.sig_int < 0 && g_sig.sig_quit < 0)
-	{
-		g_sig.sig_int = 0;
-		g_sig.sig_quit = 0;
-		p->env = shlvl(-1, p->env);
-	}
+	//printf("%d\n", g_sig.cmd_stat);
+	// if (check_minishell(start->first_elem->cmd) == 1 && g_sig.sig_int < 0 && g_sig.sig_quit < 0)
+	// {
+	// 	g_sig.sig_int = 0;
+	// 	g_sig.sig_quit = 0;
+	// 	p->env = shlvl(-1, p->env);
+	// }
 	if (g_sig.cmd_stat == 134)
 		kill_process(start, p, line);
 	free(start->cmd);

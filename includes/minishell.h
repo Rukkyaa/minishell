@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 11:59:30 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 14:27:28 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ extern t_sig g_sig;
 t_env	*env_to_struct(char **env);
 char	*wildcard(char *extension);
 int	check_minishell(char **tabl);
+int	count_words2(char *str, char c);
 
 //signal/signal.c
 int		event(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 12:09:28 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 14:37:17 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,14 @@ int	invalid_quote(char *line)
 	return (0);
 }
 
+// int	first_check(char *line)
+// {
+// 	// char *line_bis;
+
+// 	// line_bis =
+// 	return (0);
+// }
+
 t_tree *parsingator(char *line, t_all *p)
 {
 	t_tree	*start;
@@ -92,7 +100,7 @@ t_tree *parsingator(char *line, t_all *p)
 	*line_bis = ft_strdup(line);
 	if (!(*line_bis) || *line_bis == NULL)
 		return (free(line_bis), NULL);
-	if (invalid_quote(*line_bis) == 1)
+	if (invalid_quote(*line_bis) == 1) //|| first_check(*line_bis) == 1)
 		return (free(*line_bis), free(line_bis), NULL);
 	p->here_docs = get_here_docs(line_bis, p);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
@@ -209,9 +217,9 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 				free_start(p->start, 1);
 				p->start = NULL;
 			}
-			print_all(p);
-			if (p->start != NULL && g_sig.sig_int == 0 && executor(p->start, p, g_sig.line) == -1) //distinguer les erreurs de fct des erreurs volontaires dans la gestion
-				printf("ERRRRROOOOOR\n");  //UTILISER -1 UNIQUEMENT POUR LES FAILS DE FONCTIONS
+			//print_all(p);
+			if (p->start != NULL && g_sig.sig_int == 0)
+				executor(p->start, p, g_sig.line);
 			//check_builtins(line, p->env);
 			free_here_docs(p->here_docs);
 		}

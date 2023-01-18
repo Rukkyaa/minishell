@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/18 11:50:08 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 14:18:04 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,13 +170,13 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 		return (p->here_docs[nb] = NULL, 1);
 	p->here_docs[nb] = generate_name(find_lim(*line, &alert));
 	if (alert == -1 || p->here_docs[nb] == NULL)
-		return (alert_case(p->here_docs[nb]), p->here_docs[nb] == NULL, -1);
+		return (alert_case(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
 	fd = open(p->here_docs[nb], O_CREAT | O_RDWR | O_EXCL);
 	if (fd == -1)
-		return (free(p->here_docs[nb]), p->here_docs[nb] == NULL, -1);
+		return (free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
 	newlimiter = gen_new_limiter(find_lim(*line, &alert));
 	if (newlimiter == NULL || alert == -1)
-		return (alert_case(newlimiter), free(p->here_docs[nb]), p->here_docs[nb] == NULL, -1);
+		return (alert_case(newlimiter), free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
 	g_sig.p_status = 2;
 	lect = replace_var(get_next_line(0), p);
 	while (lect != NULL && ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0 && g_sig.sig_quit == 0)
@@ -195,7 +195,7 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 	//	lect = get_next_line(-42);
 	*line = clean_heredoc_line(*line, p->here_docs[nb], find_lim(*line, &alert), &alert);
 	if (*line == NULL)
-		return (free(newlimiter), close (fd), free(p->here_docs[nb]), p->here_docs[nb] == NULL, -1);
+		return (free(newlimiter), close (fd), free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
 	return (free(newlimiter), close (fd), fill_file(p, line, max, ++nb));
 }
 

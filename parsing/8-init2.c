@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/17 17:57:22 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 14:50:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,18 +219,18 @@ char **w_finder(char **tabl) //cas particulier du grep a gerer
 	return (free(str), free_tab(tabl), tabfinal);
 }
 
-int	check_minishell(char **tabl)
-{
-	int	i;
+// int	check_minishell(char **tabl)
+// {
+// 	int	i;
 
-	i = -1;
-	while (tabl[++i] != NULL)
-	{
-		if (ft_strcmp(tabl[i], "./minishell") == 0)
-			return (1);
-	}
-	return (0);
-}
+// 	i = -1;
+// 	while (tabl[++i] != NULL)
+// 	{
+// 		if (ft_strcmp(tabl[i], "./minishell") == 0)
+// 			return (1);
+// 	}
+// 	return (0);
+// }
 
 int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 {
@@ -261,7 +261,7 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	return (recursive_lst(new_elem, cmd, ++nb, p));
 }
 
-int	all_spaces(char **tabl)
+int	all_spaces(char **tabl, char *str)
 {
 	int		i;
 	char	**inter;
@@ -269,7 +269,7 @@ int	all_spaces(char **tabl)
 	i = 0;
 	if (tabl == NULL || tabl[i] == NULL)
 		return (1);
-	while (tabl[i] != NULL)
+	while (i < count_words2(str, '|'))
 	{
 		inter = ft_split_spe(tabl[i], ' ');
 		if (*inter != NULL)
@@ -288,7 +288,7 @@ int	init_cmd(t_tree *start, t_all *p)
 	if (!start || !p || count_pipe(start->cmd) == 0)
 		return (-1);
 	tab_cmd = ft_split_spe(start->cmd, '|');
-	if (all_spaces(tab_cmd) == 1)
+	if (all_spaces(tab_cmd, start->cmd) == 1)
 		return (printf("syntax error near unexpected token `|'\n"),
 			free_tab(tab_cmd), 2);
 	init_mini = malloc(sizeof(t_minishell));

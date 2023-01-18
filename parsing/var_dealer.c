@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 11:53:22 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 14:56:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*get_var(char *line, t_env *envp, int i, int *leng)
 	e = -1;
 	while (env != NULL)
 	{
-		if (ft_strncmp(env->key, var, ft_strlen(var)) == 0 && (env->code == 1 || env->code == 2))
+		if (ft_strncmp(env->key, var, ft_strlen(var)) == 0 && (env->code == 1 || env->code == 2 || env->code == 4))
 			return (free(var), ft_strdup(env->value));
 		env = env->next;
 	}
