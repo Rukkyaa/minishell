@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/17 18:16:19 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 11:59:30 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	sighandler(int code);
 //parsing/1-init.c
 t_all *init_env(char **env);
 t_tree *init_tree(char **line);
-t_tree *init_m_tree(int length);
+t_tree *init_m_tree(char *str);
 t_tree *fill_branch(char *reserve, int i);
 
 int check_redirection(char *cmd, t_minishell *maillon);

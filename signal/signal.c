@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/16 11:02:44 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 11:00:01 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	init_signal(int nb)
 void	sig_eof(int code)
 {
 	(void) code;
-	if (g_sig.p_status == 0)
+	if (g_sig.p_status == 0 && rl_end == 0)
 	{
 		g_sig.sig_quit = 1;
 		rl_on_new_line(); // Regenerate the prompt on a newline

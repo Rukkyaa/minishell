@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/17 18:18:36 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 12:12:28 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,44 +118,6 @@ char **env_to_char(t_env *env)
 	}
 	return (reforged[e] = NULL, reforged);
 }
-
-// int	lengthmegatab(char ***cmd)
-// {
-// 	int i;
-// 	int len;
-
-// 	i = 0;
-// 	len = 0;
-// 	while (cmd[i] != NULL)
-// 		len += length_tab(cmd[i++]);
-// 	return (len);
-// }
-
-// char **mega_to_tab(char ***cmd)
-// {
-// 	char **reforged_cmd;
-// 	int i;
-// 	int e;
-
-// 	i = -1;
-// 	reforged_cmd = malloc((lengthmegatab(cmd) + 1) * sizeof(char *));
-// 	if (!reforged_cmd)
-// 		return (NULL);
-// 	while (cmd[++i] != NULL)
-// 	{
-// 		reforged_cmd[i] = ft_strdup(cmd[i][0]);
-// 		if (reforged_cmd[i] == NULL)
-// 			return (free_tab(reforged_cmd), NULL);
-// 		e = 0;
-// 		while (cmd[i][++e] != NULL)
-// 		{
-// 			reforged_cmd[i] = ft_strjoin_spe(reforged_cmd[i], " ");
-// 			reforged_cmd[i] = ft_strjoin_spe(reforged_cmd[i], cmd[i][e]); // add securite
-// 		}
-// 	}
-// 	reforged_cmd[i] = NULL;
-// 	return (reforged_cmd);
-// }
 
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 {
@@ -295,20 +257,6 @@ void kill_process(t_tree *start, t_all *p, char *line)
 	exit (0);
 }
 
-// int wildcard_treat(t_minishell *first_elem, t_all *p, t_tree *start)
-// {
-// 	int ret;
-// 	// if (start->first_elem->other_w == NULL)
-// 	// 	return (pipex(start->first_elem, p, start));
-// 	ret == pipex(start->first_elem, p, start);
-// 	if (ret != 0)
-// 		return (ret);
-// 	else if (start->first_elem->other_w == NULL)
-// 		return (0);
-// 	else
-// 		return (wildcard_treat())
-// }
-
 int	executor(t_tree *start, t_all *p, char *line)
 {
 	t_tree	*intermed;
@@ -333,7 +281,5 @@ int	executor(t_tree *start, t_all *p, char *line)
 		return (intermed = start->and, free(start), executor(intermed, p, line));
 	else if (start->or != NULL && g_sig.cmd_stat != 0)
 		return (intermed = start->or, free(start), executor(intermed, p, line));
-	//else if (p->last_status != 0)
 	return (free(start), g_sig.cmd_stat); //quid en cas d'erreur
-	//return (free(start), 0);
 }

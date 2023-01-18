@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/17 17:53:58 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 11:50:08 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,19 @@ char	*generate_name(char *limiter)
 	{
 		title = malloc(2);
 		if (!title)
-			return (NULL);
+			return (free(limiter), NULL);
 		title[0] = 'a';
 		title[1] = '\0';
 	}
 	else
 		title = ft_strdup(limiter);
 	if (title == NULL)
-		return (NULL);
+		return (free(limiter), NULL);
 	while (access(title, F_OK) == 0)
 	{
 		title = ft_strjoin_spe(title, "p");
 		if (title == NULL)
-			return (NULL);
+			return (free(limiter), NULL);
 	}
 	return (free(limiter), title);
 }
@@ -94,7 +94,7 @@ char	*find_lim(char *line, int *alert)
 		i++;
 	d = i;
 	*alert = i;
-	while (is_whitespace(line[d++]) == 0) //ft trim
+	while (is_whitespace(line[d++]) == 0)
 		compt++;
 	limiter = malloc((compt + 1) * sizeof(char));
 	if (!limiter)
@@ -105,23 +105,21 @@ char	*find_lim(char *line, int *alert)
 	return (limiter[compt] = '\0', ft_trim_quotes(limiter, alert));
 }
 
+void	alert_case(char *str);
+
 char	*gen_new_limiter(char *limiter)
 {
 	char	*newlimiter;
 
-	// if (!limiter || limiter == NULL)
-	// 	return (NULL);
 	newlimiter = malloc((ft_strlen(limiter) + 2) * sizeof(char));
 	if (!newlimiter)
-		return (NULL);
+		return (alert_case(limiter), NULL);
 	if (ft_strlen(limiter) != 0)
 		newlimiter = ft_strcpy(newlimiter, limiter);
 	newlimiter[ft_strlen(limiter)] = '\n';
 	newlimiter[ft_strlen(limiter) + 1] = '\0';
-	return (free(limiter), newlimiter);
+	return (alert_case(limiter), newlimiter);
 }
-
-//cas d'erreur a traiter si le malloc de find lim echoue
 
 char	*clean_heredoc_line(char *line, char *filename, char *LIM, int *alert)
 {
@@ -133,24 +131,24 @@ char	*clean_heredoc_line(char *line, char *filename, char *LIM, int *alert)
 		return (free(line), NULL);
 	new_line = ft_substr(line, 0, *alert);
 	if (!new_line || new_line == NULL)
-		return (free(LIM), free(line), NULL);
+		return (alert_case(LIM), free(line), NULL);
 	i = ft_strlen(new_line) - 1;
 	while (i >= 0 && is_whitespace(new_line[i]) == 1)
 		i--;
 	new_line[i] = ' ';
 	new_line = ft_strjoin_spe(new_line, filename);
 	if (new_line == NULL || !new_line)
-		return (free(LIM), free(line), NULL);
+		return (alert_case(LIM), free(line), NULL);
 	if (ft_strlen(LIM) == 0)
 		reste = ft_substr(line, *alert + 2, ft_strlen(line)); //verifier si il n'y a pas plus de cas particuliers style <<"''"
 	else
 		reste = ft_substr(line, *alert + ft_strlen(LIM), ft_strlen(line));
-	if (!reste || reste == NULL)
-		return (free(LIM), free(line), free(new_line), NULL);
+	//if (!reste || reste == NULL)
+	//	return (free(LIM), free(line), free(new_line), NULL);
 	new_line = ft_strjoin_spe(new_line, reste);
 	if (!new_line || new_line == NULL)
-		return (free(LIM), free(line), free(reste), NULL);
-	return (free(LIM), free(line), free(reste), new_line);
+		return (alert_case(LIM), free(line), alert_case(reste), NULL);
+	return (alert_case(LIM), free(line), alert_case(reste), new_line);
 }
 
 void	alert_case(char *str)
@@ -160,7 +158,7 @@ void	alert_case(char *str)
 	return ;
 }
 
-int	fill_file(t_all *p, char **line, int max, int nb) //gerer les cas avec quotes
+int	fill_file(t_all *p, char **line, int max, int nb)
 {
 	int		fd;
 	char	*newlimiter;
@@ -172,13 +170,13 @@ int	fill_file(t_all *p, char **line, int max, int nb) //gerer les cas avec quote
 		return (p->here_docs[nb] = NULL, 1);
 	p->here_docs[nb] = generate_name(find_lim(*line, &alert));
 	if (alert == -1 || p->here_docs[nb] == NULL)
-		return (alert_case(p->here_docs[nb]), -1);
+		return (alert_case(p->here_docs[nb]), p->here_docs[nb] == NULL, -1);
 	fd = open(p->here_docs[nb], O_CREAT | O_RDWR | O_EXCL);
 	if (fd == -1)
-		return (free(p->here_docs[nb]), -1);
+		return (free(p->here_docs[nb]), p->here_docs[nb] == NULL, -1);
 	newlimiter = gen_new_limiter(find_lim(*line, &alert));
 	if (newlimiter == NULL || alert == -1)
-		return (alert_case(newlimiter), free(p->here_docs[nb]), -1);
+		return (alert_case(newlimiter), free(p->here_docs[nb]), p->here_docs[nb] == NULL, -1);
 	g_sig.p_status = 2;
 	lect = replace_var(get_next_line(0), p);
 	while (lect != NULL && ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0 && g_sig.sig_quit == 0)
@@ -197,7 +195,7 @@ int	fill_file(t_all *p, char **line, int max, int nb) //gerer les cas avec quote
 	//	lect = get_next_line(-42);
 	*line = clean_heredoc_line(*line, p->here_docs[nb], find_lim(*line, &alert), &alert);
 	if (*line == NULL)
-		return (free(newlimiter), close (fd), free(p->here_docs[nb]), -1);
+		return (free(newlimiter), close (fd), free(p->here_docs[nb]), p->here_docs[nb] == NULL, -1);
 	return (free(newlimiter), close (fd), fill_file(p, line, max, ++nb));
 }
 
@@ -212,6 +210,6 @@ char	**get_here_docs(char **line, t_all *p)
 	if (!p->here_docs)
 		return (NULL);
 	if (fill_file(p, line, heredoc_count(*line, 0), 0) == -1)
-		return (NULL); //clean all
+		return (free_here_docs(p->here_docs), NULL);
 	return (p->here_docs);
 }

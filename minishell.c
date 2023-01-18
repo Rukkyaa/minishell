@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/17 17:56:36 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 12:09:28 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,20 @@ int	countofquotes(char *line, char c, int compt)
 	return (compt);
 }
 
+int	check_whitespace(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (is_whitespace(line[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	invalid_quote(char *line)
 {
 	if (countofquotes(line, '\"', 0) % 2 != 0
@@ -70,12 +84,14 @@ t_tree *parsingator(char *line, t_all *p)
 	t_tree	*start;
 	char	**line_bis;
 
+	if (line == NULL || !line)
+		return (NULL);
 	line_bis = malloc(sizeof(char *));
 	if (!line_bis)
 		return (NULL);
 	*line_bis = ft_strdup(line);
-	if (!line || !p || !(*line_bis))
-		return (NULL);
+	if (!(*line_bis) || *line_bis == NULL)
+		return (free(line_bis), NULL);
 	if (invalid_quote(*line_bis) == 1)
 		return (free(*line_bis), free(line_bis), NULL);
 	p->here_docs = get_here_docs(line_bis, p);
@@ -85,8 +101,8 @@ t_tree *parsingator(char *line, t_all *p)
 	if (*line_bis == NULL)
 		return (free(line_bis), NULL);
 	start = init_tree(line_bis);
-	if (init_shell(start, p) == -1) //verifier la gestion d'erreur au cas ou le replacement var bug, quelles implications sur init tree et le cleaning
-		return (free(start->cmd), free(start), NULL);
+	if (init_shell(start, p) == -1)
+		return (free_start(start, 1), NULL); //check
 	return (start);
 }
 
@@ -107,18 +123,15 @@ void print_all(t_all *p)
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
 
+//valider le fonctionnement de shlvl et des signaux multiples
+// cas de l'exec d'un directory
+
 // trim quote des var a l'exec uniquement et l$test avec test = "s -la"
 //arg pour exit
-//increment le shlvl 
-//gerer les signaux sur des minishell mutiples, revoir ce qui est fait
-// faire le traitement des vars dans le heredoc
-// faire le traitement des vars quand elles sont envoyees direct 
 // valgrind pendant here docs --> LEAKS
-// ligne avec que ds espaces, pas de syntax error et pas d'historique 
-//truc pourri | << here
-//ne pas activer le ctrl d dans readline si la ligne est pas vide 
+//truc pourri | << here SEGFAULT
 
-//segfault apres double export
+//segfault apres double export QUID
 //lancer cd export et unset dans le parent process direct (test avec les pipes)
 
 // cas particulier : ls -l | grep mi > axel | cat < axel
@@ -128,13 +141,6 @@ void print_all(t_all *p)
 //verifier les leaks avec la manipulaiton des signaux
 //Faire les tests sur les operateurs logiques
 
-//integrer les signaux (AXEL)
-//integrer les quotes (a priori good) (GAB) il se passe un truc bizarre si il 'y en a qu'une
-//ajout de l'historique (AXEL) GOOD
-// faire les builtins sous forme de fonctions (AXEL) GOOD
-
-
-//REVOIR LA SORTIE DE STATUT BUG COMPLET
 
 //revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
 //cas du heredoc avec le free a corriger
@@ -181,7 +187,7 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 	(void) **argv;
 	p = init_env(env);
 	if (!p || p == NULL)
-		return (1);
+		return (EXIT_FAILURE);
 	g_sig.line = NULL;
 	while (g_sig.line == NULL)
 	{
@@ -190,6 +196,8 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 		g_sig.line = readline("Minishell> ");
 		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
 			return (free(g_sig.line), free_all(p), rl_clear_history(), EXIT_SUCCESS);
+		if (check_whitespace(g_sig.line) == 1)
+			g_sig.sig_int = 1;
 		if (g_sig.sig_int == 0 && g_sig.sig_quit == 0)
 		{
 			add_history(g_sig.line);

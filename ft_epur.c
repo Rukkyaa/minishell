@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 19:11:54 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/15 00:11:40 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 10:40:06 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_epur(char *str)
 	new_str[j] = '\0';
 	tmp = ft_strtrim(new_str, " ");
 	free(new_str);
-	free(str);
+	//free(str);
 	return (tmp);
 }
 

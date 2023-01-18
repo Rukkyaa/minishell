@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/17 17:28:30 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 11:53:22 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*get_var(char *line, t_env *envp, int i, int *leng)
 	while (env != NULL)
 	{
 		if (ft_strncmp(env->key, var, ft_strlen(var)) == 0 && (env->code == 1 || env->code == 2))
-			return (free(var), env->value);
+			return (free(var), ft_strdup(env->value));
 		env = env->next;
 	}
 	e = 0;
@@ -87,12 +87,11 @@ static char	*change_line(char *line, char *var, int i, int *leng)
 	char	*new_line;
 	char	*reste;
 
-	printf("rasflkjhknakdatata\n");
 	if (!var || var == NULL)
 		return (free(line), NULL);
 	new_line = ft_substr(line, 0, i);
-	if (new_line == NULL || !new_line)
-		return (free(line), free(var), NULL);
+	//if (new_line == NULL || !new_line)
+	//	return (free(line), free(var), NULL);
 	new_line = ft_strjoin_spe(new_line, var);
 	if (new_line == NULL || !new_line)
 		return (free(line), free(var), NULL);
@@ -100,9 +99,11 @@ static char	*change_line(char *line, char *var, int i, int *leng)
 	//if (reste == NULL || !reste)
 	//	return (free(line), free(var), free(new_line), NULL);
 	new_line = ft_strjoin_spe(new_line, reste);
+	if (reste != NULL)
+		free(reste);
 	if (new_line == NULL || !new_line)
-		return (free(reste), free(var), free(line), free(new_line), NULL);
-	return (free(line), free(reste), free(var), new_line);
+		return (free(var), free(line), NULL);
+	return (free(line), free(var), new_line);
 }
 
 int	find_other(char *line, int i)
@@ -145,7 +146,7 @@ char	*replace_var(char *line, t_all *p)
 					leng = 1;
 					line = change_line(line, ft_itoa(g_sig.cmd_stat), i, &leng);
 					if (line == NULL)
-						return (free(line), NULL);
+						return (NULL);
 					e = find_other(line, init);
 					i = init;
 				}
@@ -156,7 +157,7 @@ char	*replace_var(char *line, t_all *p)
 					(line)[i] = ' ';
 					line = change_line(line, get_var(line, p->env, i, &leng), i, &leng);
 					if (line == NULL)
-						return (free(line), NULL);
+						return (NULL);
 					e = find_other(line, init);
 					i = init;
 				}
@@ -177,7 +178,7 @@ char	*replace_var(char *line, t_all *p)
 			(line)[++i] = ' ';
 			line = change_line(line, tilde(p->env), i, &leng);
 			if (line == NULL)
-				return (free(line), NULL);
+				return (NULL);
 			i = 0;
 		}
 		else if ((line)[i] != '\0' && (line)[i] == '$' && (line)[i + 1] != '\0' && (line)[i + 1] == '$')
@@ -187,7 +188,7 @@ char	*replace_var(char *line, t_all *p)
 			leng = 1;
 			line = change_line(line, ft_itoa(g_sig.cmd_stat), i, &leng);
 			if (line == NULL)
-				return (free(line), NULL);
+				return (NULL);
 			i = 0;
 		}
 		else if ((line)[i] == '$' && (line)[i + 1] != '\0' && is_whitespace((line)[i + 1]) == 0)
@@ -198,7 +199,7 @@ char	*replace_var(char *line, t_all *p)
 			printf("ratkfshgdsfata\n");
 			line = change_line(line, get_var(line, p->env, i, &leng), i, &leng);
 			if (line == NULL)
-				return (free(line), NULL);
+				return (NULL);
 			i = 0;
 		}
 		else

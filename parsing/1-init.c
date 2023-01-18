@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/16 19:49:54 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 12:04:56 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,26 +39,29 @@ t_tree	*init_tree(char **line)
 	if (!line || line == NULL)
 		return (NULL);
 	if (countof_spe(line, '(', 0) != countof_spe(line, ')', 0))
-		return (printf("bash: syntax error\n"), NULL);
-	start = init_m_tree(ft_strlen(*line));
-	if (!start)
-		return (NULL);
+		return (printf("Syntax error\n"), free(*line), free(line), NULL);
+	start = init_m_tree(*line);
+	if (!start || start == NULL)
+		return (free(*line), free(line), NULL);
 	start->cmd = ft_strcpy(start->cmd, *line);
 	if (first_segmentation(start, start) == -1)
-		return (free_start(start, 0), NULL);
+		return (free_start(start, 0), free(*line), free(line), NULL);
 	if (scnd_segmentation(start, start) == -1)
-		return (free_start(start, 0), NULL);
+		return (free_start(start, 0), free(*line), free(line), NULL);
 	return (free(*line), free(line), start);
 }
 
-t_tree	*init_m_tree(int length)
+t_tree	*init_m_tree(char *str)
 {
 	t_tree	*start;
 
 	start = malloc(sizeof(t_tree));
 	if (!start)
 		return (NULL);
-	start->cmd = ft_calloc(length + 1, sizeof(char));
+	start->cmd = ft_strdup(str);
+	if (start->cmd == NULL)
+		return (free(start), NULL);
+	start->first_elem = NULL;
 	start->and = NULL;
 	start->or = NULL;
 	return (start);
@@ -74,7 +77,7 @@ t_tree	*fill_branch(char *reserve, int i)
 	new_elem->and = NULL;
 	new_elem->or = NULL;
 	new_elem->cmd = ft_strdup(reserve);
-	if (!new_elem->cmd)
+	if (!new_elem->cmd || new_elem->cmd == NULL)
 		return (free(new_elem), NULL);
 	while (i >= 0)
 		new_elem->cmd[i--] = ' ';
