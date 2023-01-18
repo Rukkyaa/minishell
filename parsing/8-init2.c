@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/18 14:50:46 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:53:13 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,16 +168,22 @@ char *tab_to_str_spe(char **tabl)
 
 char	*concat(char *s1)
 {
-	size_t	i;
+	int	i;
+	int	s;
 
 	if (!s1)
 		return (NULL);
-	while (*s1 && ft_strchr("*", *s1))
-		s1++;
-	i = ft_strlen(--s1);
-	while (i && ft_strchr("*", s1[i]))
-		i --;
-	return (ft_substr(s1, 0, ++i + 1));
+	s = 0;
+	while (s1[s] != '\0' && s1[s] == '*')
+		s++;
+	if (s > 0)
+		s--;
+	i = (int)(ft_strlen(s1) - 1);
+	while (i > 0 && s1[i] == '*')
+		i--;
+	if (i != (int)(ft_strlen(s1) - 1))
+		i++;
+	return (ft_substr(s1, s, i + 1));
 }
 
 char **w_finder(char **tabl) //cas particulier du grep a gerer 
@@ -215,7 +221,6 @@ char **w_finder(char **tabl) //cas particulier du grep a gerer
 	// 	return (free_megatab(megatab), free_tab(tabl), NULL);
 	str = tab_to_str(tabfinal);
 	tabfinal = ft_split_spe(str, ' ');
-	printf("ok\n");
 	return (free(str), free_tab(tabl), tabfinal);
 }
 

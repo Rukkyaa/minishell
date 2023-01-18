@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/18 14:35:53 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 15:14:43 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,8 @@ char	*erase_redirbis(char *cmd)
 	int	end;
 
 	i = 0;
+	if (cmd == NULL)
+		return (NULL);
 	while (cmd[i] != '\0' && cmd[i + 1] != '\0') //il y a sans doute une plus opti a faire
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')

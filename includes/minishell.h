@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 14:27:28 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:02:55 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,10 @@ t_env	*env_to_struct(char **env);
 char	*wildcard(char *extension);
 int	check_minishell(char **tabl);
 int	count_words2(char *str, char c);
+char	*erase_redirbis(char *cmd);
+int	all_spaces(char **tabl, char *str);
+void kill_process(t_tree *start, t_all *p, char *line);
+int	stop_signals(void);
 
 //signal/signal.c
 int		event(void);
@@ -191,7 +195,7 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start);
 int	opening_in(t_infile *file_org, int port);
 int	opening_out(t_outfile *file_org, int port);
 void error_process(t_all *p);
-t_env	*shlvl(int nb, t_env *env);
+//t_env	*shlvl(int nb, t_env *env);
 
 //pipex/exec_builtins.c
 int path_comp_builtins(char **paths);

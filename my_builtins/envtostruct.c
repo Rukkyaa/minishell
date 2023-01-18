@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envtostruct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 13:48:04 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/16 18:16:26 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/18 15:41:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,13 @@ t_env	*ft_envnew(char *key, char *value)
 	if (!list)
 		return (NULL);
 	list->key = key;
-	list->value = value;
+	if (ft_strcmp(list->key, "SHLVL") == 0)
+	{
+		list->value = ft_itoa(ft_atoi(value) + 1); //atoi special ou juste le normal ?
+		free(value);
+	}
+	else
+		list->value = value;
 	list->next = NULL;
 	list->code = 1;
 	return (list);

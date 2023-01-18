@@ -6,25 +6,11 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 14:50:51 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:03:05 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-t_env	*shlvl(int nb, t_env *env)
-{
-	t_env	*envbis;
-
-	envbis = env;
-	while (envbis != NULL)
-	{
-		if (ft_strcmp(envbis->key, "SHLVL") == 0 && (envbis->code == 1 || envbis->code == 2))
-			return (envbis->value += nb, env);
-	}
-	return (env);
-}
-//que se passe t'il si unset du shlvl ??
 
 int	opening_out(t_outfile *file_org, int port)
 {
@@ -186,6 +172,13 @@ void error_process(t_all *p)
 	exit(1);
 }
 
+int	stop_signals(void)
+{
+	if (signal(SIGINT, SIG_IGN) == SIG_ERR || signal(SIGQUIT, SIG_IGN) == SIG_ERR || signal(SIGTSTP, SIG_IGN) == SIG_ERR)
+		return (1);
+	return (0);
+}
+
 int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 {
 	int	status1;
@@ -200,6 +193,8 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 	// }
 	if (path_comp_builtins(elem->cmd) < 0)
 		return (exec_builtin(path_comp_builtins(elem->cmd), elem->cmd, p, start));
+	if (stop_signals() == 1)
+		return (134);
 	elem->pid = fork();
 	if (elem->pid < 0)
 		return (-1);
@@ -207,7 +202,7 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 	{
 		if (signal(SIGINT, &sighandler) == SIG_ERR || signal(SIGQUIT, &sig_eof) == SIG_ERR)
 			error_process(p);
-		init_signal(-1);
+		init_signal(0);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
 			error_process(p);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
@@ -216,9 +211,9 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 			error_process(p);
 		exit(0);
 	}
-	if (waitpid(elem->pid, &status1, 0) < -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))
-		return (WEXITSTATUS(status1));
-	return (0);
+	if (waitpid(elem->pid, &status1, 0) == -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))
+		return (create_signal() , init_signal(0), WEXITSTATUS(status1));
+	return (create_signal() , init_signal(0), 0);
 }
 
 int	find_cat(t_minishell *elem)
@@ -264,13 +259,7 @@ int	executor(t_tree *start, t_all *p, char *line)
 	if (start == NULL || !start)
 		return (-1);
 	g_sig.cmd_stat = pipex(start->first_elem, p, start);
-	//printf("%d\n", g_sig.cmd_stat);
-	// if (check_minishell(start->first_elem->cmd) == 1 && g_sig.sig_int < 0 && g_sig.sig_quit < 0)
-	// {
-	// 	g_sig.sig_int = 0;
-	// 	g_sig.sig_quit = 0;
-	// 	p->env = shlvl(-1, p->env);
-	// }
+	init_signal(0);
 	if (g_sig.cmd_stat == 134)
 		kill_process(start, p, line);
 	free(start->cmd);

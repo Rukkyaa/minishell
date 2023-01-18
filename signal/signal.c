@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 11:00:01 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/18 17:46:06 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	create_signal(void)
 
 void	init_signal(int nb)
 {
-	g_sig.sig_quit = 0;
-	g_sig.sig_int = 0;
+	g_sig.sig_quit = nb;
+	g_sig.sig_int = nb;
 	g_sig.p_status = nb;
 }
 
@@ -61,7 +61,7 @@ void	sig_eof(int code)
 
 void	sighandler(int code)
 {
-	if (code == (int)SIGINT)
+	if (g_sig.sig_int != -1 && code == (int)SIGINT)
 	{
 		g_sig.sig_int = 1;
 		if (g_sig.p_status == 0)
@@ -73,7 +73,7 @@ void	sighandler(int code)
 			rl_done = 1;
 		}
 	}
-	else if (code == (int)SIGTSTP)
+	else if (g_sig.sig_quit != -1 && code == (int)SIGTSTP)
 		sig_eof(code);
 	else if (code == (int)SIGQUIT)
 		return ;

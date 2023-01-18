@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 14:37:17 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:05:59 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,18 @@ int	invalid_quote(char *line)
 	return (0);
 }
 
-// int	first_check(char *line)
-// {
-// 	// char *line_bis;
+int	first_check(char *line)
+{
+	char *line_bis;
+	char **tab_cmd;
 
-// 	// line_bis =
-// 	return (0);
-// }
+	line_bis = erase_redirbis(ft_strdup(line));
+	tab_cmd = ft_split_spe(line_bis, '|');
+	if (all_spaces(tab_cmd, line_bis) == 1)
+		return (printf("syntax error near unexpected token `|'\n"),
+			free_tab(tab_cmd), free(line_bis), g_sig.cmd_stat = 2, 1);
+	return (0);
+}
 
 t_tree *parsingator(char *line, t_all *p)
 {
@@ -100,7 +105,7 @@ t_tree *parsingator(char *line, t_all *p)
 	*line_bis = ft_strdup(line);
 	if (!(*line_bis) || *line_bis == NULL)
 		return (free(line_bis), NULL);
-	if (invalid_quote(*line_bis) == 1) //|| first_check(*line_bis) == 1)
+	if (invalid_quote(*line_bis) == 1 || first_check(*line_bis) == 1)
 		return (free(*line_bis), free(line_bis), NULL);
 	p->here_docs = get_here_docs(line_bis, p);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
@@ -131,15 +136,12 @@ void print_all(t_all *p)
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
 
-//valider le fonctionnement de shlvl et des signaux multiples
 // cas de l'exec d'un directory
 
 // trim quote des var a l'exec uniquement et l$test avec test = "s -la"
 //arg pour exit
 // valgrind pendant here docs --> LEAKS
-//truc pourri | << here SEGFAULT
 
-//segfault apres double export QUID
 //lancer cd export et unset dans le parent process direct (test avec les pipes)
 
 // cas particulier : ls -l | grep mi > axel | cat < axel
@@ -217,7 +219,7 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 				free_start(p->start, 1);
 				p->start = NULL;
 			}
-			//print_all(p);
+			print_all(p);
 			if (p->start != NULL && g_sig.sig_int == 0)
 				executor(p->start, p, g_sig.line);
 			//check_builtins(line, p->env);

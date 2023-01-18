@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 10:20:56 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/17 11:10:13 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:55:25 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,70 +165,50 @@
 // 		return (1);
 // 	return (printf("impossible\n"), 1);
 // }
-int	matching(char *str, char *pattern, int i, int e);
+int	matching(char *str, char *pattern);
 
-int	start_pattern(char *str, char *pattern, int i, int e)
+int	midmatch(char *str, char *pattern, int i)
 {
-	if (i == 0 && str[i] == '*')
-		return (matching(str, pattern, 1, 1));
-	while (str[i] != '\0' && str[i] != pattern[e + 1])
+	int	e;
+
+	e = 1;
+	while (pattern[e] != '\0' && pattern[e + 1] != '\0' && ((pattern[e] != '*' && str[i] == pattern[e]) || pattern[e] == '*'))
+	{
 		i++;
-	if (str[i] == '\0')
+		e++;
+	}
+	if (pattern[e + 1] != '\0')
 		return (0);
-	return (matching(str, pattern, ++i, ++e));
+	if (pattern[e + 1] == '\0' && pattern[e] == '*')
+		return (1);
+	if (pattern[e + 1] == '\0' && pattern[e] != '*' && str[i] == pattern[e] && str[i + 1] == '\0')
+		return (1);
+	return (0);
 }
 
-int	matching(char *str, char *pattern, int i, int e)
+int	matching(char *str, char *pattern)
 {
+	int	i;
+
+	i = 0;
 	if (!str || str == NULL)
 		return (0);
 	else if (ft_strlen(pattern) == 1 && pattern[0] == '*')
 		return (1);
-	else if (str[i] == '\0')
+	else if (pattern[0] != '*' && str[0] != pattern[0])
 		return (0);
-	else if (e == 0 && pattern[0] == '*')
-		return (start_pattern(str, pattern, i, e));
-	else if (e > 0 && e < ft_strlen(pattern) - 1)
+	else if (pattern[0] != '*' && str[0] == pattern[0])
+		return (midmatch(str, pattern, 1));
+	else if (pattern[0] == '*' && str[0] == '*')
+		return (midmatch(str, pattern, 1));
+	else if (pattern[0] == '*')
 	{
-		if (pattern[e] != '*' && str[i] == pattern[e])
-			return (matching(str, pattern, ++i, ++e));
-		else if (pattern[e] == '*')
-			return (matching(str, pattern, ++i, ++e));
-		else
-			return (0);
-	}
-	
-	// if (e == 0 && pattern[e] == '*')
-	// {
-	// 	if (i >= 1 && pattern[e + 1] == str[i])
-	// 		return (matching(str, pattern, ++i, e + 2));
-	// 	else if (str[i] == '*')
-	// 		return (matching(str, pattern, ++i, ++e));
-	// 	else
-	// 		return (matching(str, pattern, ++i, e));
-	// }
-	// else if (e == 0 && pattern[e] != '*')
-	// {
-	// 	if (pattern[e] == str[i])
-	// 		return(matching(str, pattern, ++i, ++e));
-	// 	else
-	// 		return (matching(str, pattern, ++i, e));
-	// }
-	// else if (e != ft_strlen(pattern) - 1)
-	// {
-	// 	if (pattern[e] == '*')
-	// 		return (matching(str, pattern, ++i, ++e));
-	// 	else if (pattern[e] != '*' && str[i] == pattern[e])
-	// 		return (matching(str, pattern, ++i, ++e));
-	// 	else
-	// 		return (0);
-	// }
-	if (e == ft_strlen(pattern) - 1)
-	{
-		if (pattern[e] == '*' && str[i] != '\0')
-			return (1);
-		else if (pattern[e] != '*' && str[i] == pattern[e] && i == ft_strlen(str) -1)
-			return (1);
+		while (str[i] != '\0')
+		{
+			if (str[i] == pattern[1] && midmatch(str, pattern, i) == 1)
+				return (1);
+			i++;
+		}
 		return (0);
 	}
 	return (0);
@@ -242,12 +222,13 @@ char	*wildcard(char *extension)
 
 	dir = opendir(".");
 	str = NULL;
+	printf("%s\n", extension);
 	if (!dir || dir == NULL)
 		return (free(extension), NULL);
 	f = readdir(dir);
 	while (f != NULL)
 	{
-		if (ft_strncmp(f->d_name, ".", 1) != 0 && ft_strncmp(f->d_name, "..", 2) != 0)// && matching(f->d_name, extension, 0, 0) == 1)
+		if (ft_strncmp(f->d_name, ".", 1) != 0 && ft_strncmp(f->d_name, "..", 2) != 0 && matching(f->d_name, extension) == 1)
 		{
 			if (str == NULL)
 				str = ft_strdup(f->d_name);
