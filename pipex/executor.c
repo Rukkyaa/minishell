@@ -3,76 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/20 10:29:42 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/20 11:33:02 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	opening_out(t_outfile *file_org, int port)
-{
-	int fdt;
-	t_outfile *file;
-
-	file = file_org;
-	if (file == NULL || !file)
-		return (-1);
-	while (file->next != NULL)
-	{
-		if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
-			return (perror(file->file_out), -1);
-		else
-		{
-			if (file->append == 1)
-				fdt = open(file->file_out, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
-			else
-				fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
-			if (fdt == -1)
-				return (perror(""), -1);
-			if (close(fdt) == -1)
-				return (perror(""), -1);
-		}
-		file = file->next;
-	}
-	if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
-		return (perror(file->file_out), -1);
-	else if (file->append == 1)
-		fdt = open(file->file_out, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
-	else
-		fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
-	if (fdt == -1)
-		return (perror(""), -1);
-	if (dup2(fdt, port) < 0)
-		return (perror(""), close(fdt), -1);
-	return (close(fdt), 0);
-}
-
-int	opening_in(t_infile *file_org, int port)
-{
-	int fdt;
-	t_infile *file;
-
-	file = file_org;
-	if (file == NULL || !file)
-		return (-1);
-	while(file->next != NULL)
-	{
-		if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
-			return (perror(file->file_in),  -1);
-		file = file->next;
-	}
-	if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
-		return (perror(file->file_in), -1);
-	fdt = open(file->file_in, O_RDONLY);
-	if (fdt == -1)
-		return (perror(""), -1);
-	if (dup2(fdt, port) < 0)
-		return (perror(""), close(fdt), -1);
-	return (close(fdt), 0);
-}
 
 char **env_to_char(t_env *env)
 {
@@ -172,8 +110,6 @@ void end_process(t_all *p, int nb)
 	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);
-	// if (g_sig.line != NULL)
-	// {
 	free(g_sig.line);
 	if (g_sig.sig_quit == 1)
 		exit(134);
@@ -188,7 +124,9 @@ void end_process(t_all *p, int nb)
 
 int	stop_signals(void)
 {
-	if (signal(SIGINT, SIG_IGN) == SIG_ERR || signal(SIGQUIT, SIG_IGN) == SIG_ERR || signal(SIGTSTP, SIG_IGN) == SIG_ERR)
+	if (signal(SIGINT, SIG_IGN) == SIG_ERR
+		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR
+		|| signal(SIGTSTP, SIG_IGN) == SIG_ERR)
 		return (1);
 	return (0);
 }
@@ -222,20 +160,6 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 	return (create_signal() , init_signal(0), 0);
 }
 
-int	find_cat(t_minishell *elem)
-{
-	t_minishell	*p;
-
-	p = elem;
-	while (p != NULL)
-	{
-		if (ft_strcmp(p->cmd[0], "cat") == 0 && p->cmd[1] == NULL && p->file_in == NULL && p->file_out == NULL)
-			return (1);
-		p = p->next;
-	}
-	return (0);
-}
-
 int	pipex(t_minishell *first_elem, t_all *p, t_tree *start)
 {
 	if (first_elem == NULL || !first_elem)
@@ -247,16 +171,15 @@ int	pipex(t_minishell *first_elem, t_all *p, t_tree *start)
 	return (first_pipe(first_elem, p, start));
 }
 
-void kill_process(t_tree *start, t_all *p, char *line)
-{
-	free_start(start, 1);
-	free_here_docs(p->here_docs);
-	free(line); //A ACTIVER AVEC LE MAIN PRINCIPAL
-	//printf("%s\n", line);
-	free_all(p);
-	clear_history();
-	exit (0);
-}
+//void kill_process(t_tree *start, t_all *p, char *line)
+//{
+//	free_start(start, 1);
+//	free_here_docs(p->here_docs);
+//	free(line);
+//	free_all(p);
+//	clear_history();
+//	exit (0);
+//}
 
 int	executor(t_tree *start, t_all *p, char *line)
 {
@@ -266,9 +189,6 @@ int	executor(t_tree *start, t_all *p, char *line)
 		return (-1);
 	g_sig.cmd_stat = pipex(start->first_elem, p, start);
 	init_signal(0);
-	// if (g_sig.cmd_stat == 134)
-	// 	kill_process(start, p, line);
-	//free(start->cmd);
 	if (g_sig.cmd_stat != 0)
 	{
 		if (start->or && start->or != NULL)
@@ -286,19 +206,4 @@ int	executor(t_tree *start, t_all *p, char *line)
 		return (intermed = start->and, free(start), p->start = intermed, executor(p->start, p, line));
 	}
 	return(free_start(start, 0), g_sig.cmd_stat);
-
-	// if (g_sig.cmd_stat != 0 && start->or == NULL) //verifier que c'est bien ce qui est attendu
-	// 	free_start(start, 1); //free_minishell(start->first_elem, 1);
-	// else if (g_sig.cmd_stat == 0)
-	// {
-	// 	free(start->cmd);
-	// 	free_minishell(start->first_elem, 0);
-	// }
-	// if (start->and != NULL && g_sig.cmd_stat == 0)
-	// 	return (intermed = start->and, free(start), executor(intermed, p, line));
-	// else if (start->or != NULL && g_sig.cmd_stat != 0)
-	// 	return (intermed = start->or, free(start), executor(intermed, p, line));
-	// if (start->and == NULL && start->or == NULL)
-	// 	free(start);
-	// return (g_sig.cmd_stat); //quid en cas d'erreur
 }

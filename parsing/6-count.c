@@ -3,20 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   6-count.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:29:25 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/13 23:15:54 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/20 11:19:07 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	countof_spe(char **line, char c, int compt)
+int	countof_spe(char **line, char c, int compt, int i)
 {
-	int	i;
-
-	i = -1;
 	if (!(*line))
 		return (0);
 	while ((*line)[++i] != '\0')

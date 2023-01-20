@@ -3,94 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 10:34:27 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/20 11:20:45 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
 t_sig g_sig;
-
-int	countbis(int i, char d, char *line)
-{
-	while (line[i] != '\0' && line[i] != d)
-		i++;
-	return (++i);
-}
-
-int	countofquotes(char *line, char c, int compt)
-{
-	int i;
-
-	i = -1;
-	if (!(*line))
-		return (0);
-	while (line[++i] != '\0')
-	{
-		if (line[i] != '\0' && line[i] == '\"' && c == '\'')
-			i = countbis(++i, '\"', line);
-		else if (line[i] != '\0' && line[i] == '\'' && c == '\"')
-			i = countbis(++i, '\'', line);
-		else if (line[i] != '\0' && line[i] == c)
-		{
-			compt++;
-			i++;
-			while (line[i] != '\0' && line[i] != c)
-				i++;
-			if (line[i++] == c)
-				compt++;
-		}
-		if (line[i] == '\0')
-			break;
-	}
-	return (compt);
-}
-
-int	check_whitespace(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (is_whitespace(line[i]) == 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	invalid_quote(char *line)
-{
-	if (countofquotes(line, '\"', 0) % 2 != 0
-		|| countofquotes(line, '\'', 0) % 2 != 0)
-		return (printf("Syntax error\n"), 1);
-	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '|'
-		&& line[ft_strlen(line) - 1] == '|')
-		return (printf("Syntax error\n"), 1);
-	else if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '|')
-		return (printf("Syntax error\n"), 1);
-	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '&'
-		&& line[ft_strlen(line) - 1] == '&')
-		return (printf("Syntax error\n"), 1);
-	return (0);
-}
-
-int	first_check(char *line)
-{
-	char *line_bis;
-	char **tab_cmd;
-
-	line_bis = erase_redirbis(ft_strdup(line));
-	tab_cmd = ft_split_spe(line_bis, '|');
-	if (all_spaces(tab_cmd, line_bis) == 1)
-		return (printf("syntax error near unexpected token `|'\n"),
-			free_tab(tab_cmd), free(line_bis), g_sig.cmd_stat = 2, 1);
-	return (free_tab(tab_cmd), free(line_bis), 0);
-}
 
 t_tree *parsingator(char *line, t_all *p)
 {
@@ -115,19 +37,8 @@ t_tree *parsingator(char *line, t_all *p)
 		return (free(line_bis), NULL);
 	start = init_tree(line_bis);
 	if (init_shell(start, p) == -1)
-		return (free_start(start, 1), NULL); //check
+		return (free_start(start, 1), NULL);
 	return (start);
-}
-
-void print_all(t_all *p)
-{
-	if (p->start == NULL)
-		return ;
-	printf("-------AFFICHAGE DES DIFFERENTES BRANCHES-------\n");
-	print_tree(p->start, 1);
-	printf("------------------------------------------------\n");
-	print_cmd(p->start, 1);
-	print_here_doc(p->here_docs);
 }
 
 //	important : modifier l'exit dans les finctions des pipes pour qu'il soit traite avant fork (EN FCT de bash)
@@ -135,6 +46,7 @@ void print_all(t_all *p)
 // verifier que les builtins hors forks n'ont pas a utiliser les redirections
 //trier encore les "ca te && ls *" par ex
 //verifier que le command not found s'afiche bien dans le minishell
+//encore qq test sur les signaux
 //4- REVOIR TOUTE LA GESTION D'ERREURS
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
@@ -213,17 +125,15 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 		{
 			add_history(g_sig.line);
 			g_sig.p_status = 1;
-			//g_sig.line = ft_epur(g_sig.line);
 			p->start = parsingator(g_sig.line, p); //leaks
 			if (g_sig.sig_int == 1) // ajouter l'autre var globale ?
 			{
 				free_start(p->start, 1);
 				p->start = NULL;
 			}
-			print_all(p);
+			//print_all(p);
 			if (p->start != NULL && g_sig.sig_int == 0)
 				executor(p->start, p, g_sig.line);
-			//check_builtins(line, p->env);
 			free_here_docs(p->here_docs);
 		}
 		free(g_sig.line);

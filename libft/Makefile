@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+         #
+#    By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 17:19:09 by rukkyaa           #+#    #+#              #
-#    Updated: 2023/01/18 23:41:32 by rukkyaa          ###   ########.fr        #
+#    Updated: 2023/01/20 11:40:16 by gabrielduha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

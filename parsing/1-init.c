@@ -6,7 +6,7 @@
 /*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/18 12:04:56 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/20 11:19:26 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_tree	*init_tree(char **line)
 
 	if (!line || line == NULL)
 		return (NULL);
-	if (countof_spe(line, '(', 0) != countof_spe(line, ')', 0))
+	if (countof_spe(line, '(', 0, -1) != countof_spe(line, ')', 0, -1))
 		return (printf("Syntax error\n"), free(*line), free(line), NULL);
 	start = init_m_tree(*line);
 	if (!start || start == NULL)

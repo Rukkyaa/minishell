@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/19 17:13:14 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/20 11:27:32 by gabrielduha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ int	check_minishell(char **tabl);
 int	count_words2(char *str, char c);
 char	*erase_redirbis(char *cmd);
 int	all_spaces(char **tabl, char *str);
-void kill_process(t_tree *start, t_all *p, char *line);
 int	stop_signals(void);
 
 //signal/signal.c
@@ -153,7 +152,7 @@ int heredoc_count(char *line, int index);
 int	ft_strcmp(char *s1, char *s2);
 
 //parsing/6-count.c
-int	countof_spe(char **line, char c, int compt);
+int	countof_spe(char **line, char c, int compt, int i);
 int avoid_quotes(char *line, int i);
 int last_char_spe(char *line, char c);
 int first_char_spe(char *line, char c, int index);
@@ -164,6 +163,7 @@ void print_tree(t_tree *start, int i);
 void print_pipe(t_minishell *elem, int i);
 void print_cmd(t_tree *start, int i);
 void print_here_doc(char **here_docs);
+void print_all(t_all *p);
 
 //parsing/8-init2.c
 int	init_shell(t_tree *start, t_all *p);
@@ -182,6 +182,13 @@ void clean_rest(t_tree *start, int i, int end);
 t_outfile	*add_file_out(t_outfile *lst, char *file, int opt);
 t_infile	*add_file_in(t_infile *lst, char *file);
 
+//parsing/10-complement.c
+int	countbis(int i, char d, char *line);
+int	countofquotes(char *line, char c, int compt);
+int	check_whitespace(char *line);
+int	invalid_quote(char *line);
+int	first_check(char *line);
+
 //parsing/spe_split.c
 char	**ft_split_spe(char *s, char c);
 
@@ -192,10 +199,12 @@ char	*replace_var(char *line, t_all *p);
 int	executor(t_tree *start, t_all *p, char *line);
 int	opening(char *file, int port, int append, int mode);
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start);
+void end_process(t_all *p, int nb);
+
+//pipex/executor2.c
 int	opening_in(t_infile *file_org, int port);
 int	opening_out(t_outfile *file_org, int port);
-void end_process(t_all *p, int nb);
-//t_env	*shlvl(int nb, t_env *env);
+int	find_cat(t_minishell *elem);
 
 //pipex/exec_builtins.c
 int path_comp_builtins(char **paths);
