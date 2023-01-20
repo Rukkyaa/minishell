@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 23:52:26 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 18:44:30 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/20 14:41:20 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,16 @@ void	ft_destroy(t_env *env, char *unset)
 
 	while (env && env->next)
 	{
+		if (ft_strcmp(env->next->key, "PWD") == 0 && ft_strcmp(env->next->key, unset) == 0)
+		{
+			env->next->code = 4;
+			return ;
+		}
 		if (!ft_strncmp(env->next->key, unset, ft_strlen(unset)))
 		{
 			tmp = env->next;
 			env->next = tmp->next;
 			free(tmp);
-			env->next = NULL;
 		}
 		env = env->next;
 	}

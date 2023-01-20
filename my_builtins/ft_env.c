@@ -6,17 +6,20 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 23:35:36 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 15:17:19 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 14:35:58 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_env(t_env *env)
+int	ft_env(t_env *envbis)
 {
+	t_env *env;
+
+	env = envbis;
 	while (env)
 	{
-		if (env->code != 3)
+		if (env->code != 3 && env->code != 4)
 		{
 			ft_putstr_fd(env->key, 1);
 			ft_putstr_fd("=", 1);

@@ -6,25 +6,13 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:28:50 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/07 17:41:33 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 15:48:50 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-int is_whitespace(char c)
-{
-	if (c == 32 || (c>= 10 && c<=14))
-		return (1);
-	return (0);
-}
 
-int	ft_isprint(int c)
-{
-	if (c > 32 && c <= 126) //j'exclue le espace, pt a revoir dans les cas des quotes
-		return (1);
-	return (0);
-}
 
 char	*ft_strcat(char *s1, char *s2)
 {
@@ -86,4 +74,3 @@ char	*ft_strjoin_spe(char *s1, char *s2)
 	str = ft_strcat(str, s2);
 	return (free(s1), str);
 }
-

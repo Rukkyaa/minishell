@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 11:20:45 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/20 15:54:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_sig g_sig;
 
-t_tree *parsingator(char *line, t_all *p)
+t_tree	*parsingator(char *line, t_all *p)
 {
 	t_tree	*start;
 	char	**line_bis;
@@ -42,17 +42,15 @@ t_tree *parsingator(char *line, t_all *p)
 }
 
 //	important : modifier l'exit dans les finctions des pipes pour qu'il soit traite avant fork (EN FCT de bash)
-// verifier que les  ordis de 42 autorise bien la lecture des fichiers generes par le minishell
 // verifier que les builtins hors forks n'ont pas a utiliser les redirections
-//trier encore les "ca te && ls *" par ex
-//verifier que le command not found s'afiche bien dans le minishell
 //encore qq test sur les signaux
 //4- REVOIR TOUTE LA GESTION D'ERREURS
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
+//voir pour la regeneration du prompt avec les signaux
 
 // trim quote des var a l'exec uniquement et l$test avec test = "s -la"
-//arg pour exit
+
 // valgrind pendant here docs --> LEAKS
 
 //lancer cd export et unset dans le parent process direct (test avec les pipes)
@@ -67,7 +65,7 @@ t_tree *parsingator(char *line, t_all *p)
 
 //revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
 //cas du heredoc avec le free a corriger
-//regarder fct chdir pour les paths a executer, good CHECK LEAKS + PATH ../exec
+
 //reprendre tous les builtins pour leaks (ftstdup)
 //revoir la gestion d'erreur du here docs
 //verifier l'impact de exit si on le met dans une commande avec differents fichiers et redirections
@@ -99,10 +97,9 @@ t_tree *parsingator(char *line, t_all *p)
 // 	//	ft_exit();
 // }
 
-
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=./.readline.supp ./minishell
 
-int	main(int argc, char **argv, char **env) //ajout du clear history
+int	main(int argc, char **argv, char **env)
 {
 	t_all *p;
 
@@ -127,10 +124,7 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 			g_sig.p_status = 1;
 			p->start = parsingator(g_sig.line, p); //leaks
 			if (g_sig.sig_int == 1) // ajouter l'autre var globale ?
-			{
 				free_start(p->start, 1);
-				p->start = NULL;
-			}
 			//print_all(p);
 			if (p->start != NULL && g_sig.sig_int == 0)
 				executor(p->start, p, g_sig.line);
@@ -139,9 +133,7 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 		free(g_sig.line);
 		g_sig.line = NULL;
 	}
-	rl_clear_history();
-	free_all(p);
-	return (EXIT_SUCCESS);
+	return (rl_clear_history(), free_all(p), EXIT_SUCCESS);
 }
 
 //MAIN SANS READLINE POUR CHECK LEAKS
@@ -160,4 +152,3 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 // 	free_all(p);
 // 	return (EXIT_SUCCESS);
 // }
-

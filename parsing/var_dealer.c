@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/20 10:39:34 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/20 15:27:34 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,6 @@ char	*replace_var(char *line, t_all *p)
 		//if ((*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
 			//WHAT THE FUCK
 			(line)[i] = ' ';
-			printf("ratkfshgdsfata\n");
 			line = change_line(line, get_var(line, p->env, i, &leng), i, &leng);
 			if (line == NULL)
 				return (NULL);

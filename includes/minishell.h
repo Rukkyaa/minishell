@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 11:27:32 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/20 15:50:11 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,16 @@ extern t_sig g_sig;
 //# define PATH_MAX 100
 
 t_env	*env_to_struct(char **env);
-char	*wildcard(char *extension);
+
 int	check_minishell(char **tabl);
 int	count_words2(char *str, char c);
 char	*erase_redirbis(char *cmd);
 int	all_spaces(char **tabl, char *str);
 int	stop_signals(void);
+char	**trim_tab(char **tabl);
+
+//wildcard.c
+char	*wildcard(char *extension);
 
 //signal/signal.c
 int		event(void);
@@ -208,7 +212,7 @@ int	find_cat(t_minishell *elem);
 
 //pipex/exec_builtins.c
 int path_comp_builtins(char **paths);
-void exec_builtin(int nb, char **cmd, t_all *p, t_tree *start);
+int exec_builtin(int nb, char **cmd, t_all *p, t_tree *start);
 
 //pipex/pipe.c
 int	first_pipe(t_minishell *elem, t_all *p, t_tree *start);
@@ -231,12 +235,17 @@ char	*error_case(char *buf, char *reserve, int p);
 
 //ft_slit.c
 char	**ft_split(char *s, char c);
-void	free_tab(char **tabl);
-int	count_words(char const *str, char c);
-int	words_length(char const *str, int i, char c);
+
 
 //get_path.c
 char	*get_env_var(t_env *envp, char	*var);
+int is_whitespace(char c);
+int	ft_isprint(int c);
+
+//split_path.c
+void	free_tab(char **tabl);
+int	count_words(char const *str, char c);
+int	words_length(char const *str, int i, char c);
 char	**split_path(char *s, char c);
 
 //libft_utils.c

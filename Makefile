@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+         #
+#    By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2023/01/20 11:40:07 by gabrielduha      ###   ########.fr        #
+#    Updated: 2023/01/20 15:50:35 by gduhau           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT	= all
 
-SRCS	= minishell.c libft_utils.c get_path.c split_path.c gen_command.c ft_epur.c \
+SRCS	= minishell.c libft_utils.c get_path.c split_path.c ft_epur.c \
 			my_builtins/ft_pwd.c my_builtins/ft_echo.c parsing/1-init.c parsing/2-free.c \
 			parsing/3-segmentation.c parsing/4-operations.c parsing/5-heredocs.c \
 			parsing/get_next_line/get_next_line.c parsing/get_next_line/get_next_line_utils.c \

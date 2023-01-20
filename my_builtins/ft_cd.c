@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 23:15:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 15:07:02 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 14:44:21 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ char	*go_option(t_env *env, int flag)
 	}
 	return (NULL);
 }
-
-//actualiser le pwd en cas de cd (nouveau code pour eviter qu'il soit pris dans l'env)
 
 int	ft_cd(t_env *env, char **split)
 {

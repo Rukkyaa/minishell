@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/19 17:08:34 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/20 15:09:03 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ bool	ft_is_in_env(t_env *env, char *str)
 void	change_value(t_env *env, char *key, char *value)
 {
 	t_env	*new;
+	int		alert;
 
+	alert = 0;
 	if (ft_is_in_env(env, key))
 	{
 		while (env)
@@ -34,7 +36,7 @@ void	change_value(t_env *env, char *key, char *value)
 			if (!ft_strncmp(env->key, key, ft_strlen(key)))
 			{
 				free(env->value);
-				env->value = value;
+				env->value = ft_trim_quotes(value, &alert);
 				env->code = 1;
 				return ;
 			}
@@ -113,11 +115,13 @@ int	before(char *str)
 int	change_concat(t_env *env, char *key, char *cmd)
 {
 	char	*value;
+	int		alert;
 	
 	value = NULL;
+	alert = 0;
 	if (ft_is_in_env(env, key))
 		if (get_env_var(env, key))
-			value = ft_strjoin(get_env_var(env, key), cmd + ft_strlen(key) + 2);
+			value = ft_strjoin(get_env_var(env, key), ft_trim_quotes(cmd + ft_strlen(key) + 2, &alert));
 	if (!value)
 		return (free(key), EXIT_FAILURE);
 	change_value(env, key, value);
@@ -127,6 +131,7 @@ int	change_concat(t_env *env, char *key, char *cmd)
 
 //trim les quotes en sortie des value
 //gerer plusieurs export en une cmd 
+//+= n'est pas gere si variable non existante
 
 int	ft_export(t_env *env, char **cmd)
 {
