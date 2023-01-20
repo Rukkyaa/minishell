@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 17:57:53 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/16 16:11:47 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 17:40:03 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static char	*get_join(t_env *env)
 {
 	char	*str;
 
-	printf("Code : %d\n", env->code);
 	if (env->code == 1)
 	{
 		str = ft_strjoin(env->key, "=\"");
@@ -95,6 +94,5 @@ char	**sort_env(char **env)
 	i = -1;
 	while (env[++i] != NULL)
 		printf("declare -x %s\n", env[i]);
-	printf("SORTIE\n");
 	return (free_tab(env), NULL);
 }

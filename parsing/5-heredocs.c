@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/19 18:42:25 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/20 17:48:19 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 	p->here_docs[nb] = generate_name(find_lim(*line, &alert));
 	if (alert == -1 || p->here_docs[nb] == NULL)
 		return (alert_case(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
-	fd = open(p->here_docs[nb], O_CREAT | O_RDWR | O_EXCL);
+	fd = open(p->here_docs[nb], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
 		return (free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
 	newlimiter = gen_new_limiter(find_lim(*line, &alert));

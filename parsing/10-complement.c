@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   10-complement.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:20:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 11:20:58 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/20 17:51:02 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	countofquotes(char *line, char c, int compt)
 			if (line[i++] == c)
 				compt++;
 		}
-		if (line[i] == '\0')
+		if (i <= ft_strlen(line))
 			break;
 	}
 	return (compt);

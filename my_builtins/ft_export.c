@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 15:09:03 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 17:38:02 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	change_value(t_env *env, char *key, char *value)
 	int		alert;
 
 	alert = 0;
+	value = ft_trim_quotes(value, &alert);
 	if (ft_is_in_env(env, key))
 	{
 		while (env)
@@ -36,8 +37,9 @@ void	change_value(t_env *env, char *key, char *value)
 			if (!ft_strncmp(env->key, key, ft_strlen(key)))
 			{
 				free(env->value);
-				env->value = ft_trim_quotes(value, &alert);
+				env->value = value;
 				env->code = 1;
+				free(key);
 				return ;
 			}
 			env = env->next;
@@ -115,24 +117,35 @@ int	before(char *str)
 int	change_concat(t_env *env, char *key, char *cmd)
 {
 	char	*value;
+	char	*key_not_exist;
 	int		alert;
 	
 	value = NULL;
 	alert = 0;
 	if (ft_is_in_env(env, key))
+	{
 		if (get_env_var(env, key))
 			value = ft_strjoin(get_env_var(env, key), ft_trim_quotes(cmd + ft_strlen(key) + 2, &alert));
-	if (!value)
-		return (free(key), EXIT_FAILURE);
-	change_value(env, key, value);
-	free(key);
+		if (!value)
+			return (free(key), EXIT_FAILURE);
+		change_value(env, key, value);
+	}
+	else
+	{
+		key_not_exist = ft_strdup(key);
+		if (!key_not_exist)
+			return (free(key), EXIT_FAILURE);
+		value = ft_trim_quotes(cmd + ft_strlen(key) + 2, &alert);
+		if (!value)
+			return (free(key), free(key_not_exist), EXIT_FAILURE);
+		change_value(env, key_not_exist, value);
+		free(key);
+	}
 	return (EXIT_SUCCESS);
 }
 
 //trim les quotes en sortie des value
 //gerer plusieurs export en une cmd 
-//+= n'est pas gere si variable non existante
-
 int	ft_export(t_env *env, char **cmd)
 {
 	char	*key;

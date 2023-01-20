@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6-count.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:29:25 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 11:19:07 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/20 17:53:03 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	countof_spe(char **line, char c, int compt, int i)
 				i++;
 			i++;
 		}
-		if ((*line)[i] != '\0' && (*line)[i] == c)
+		if (i < ft_strlen(*line) && (*line)[i] == c)
 			compt++;
-		if ((*line)[i] == '\0')
+		if (i >= ft_strlen(*line))
 			break ;
 	}
 	return (compt);

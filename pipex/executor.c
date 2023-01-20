@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/20 15:24:42 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 17:44:32 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void end_process(t_all *p, int nb)
 	free_here_docs(p->here_docs);
 	free(p);
 	free(g_sig.line);
+	rl_clear_history();
 	if (g_sig.sig_quit == 1)
 		exit(134);
 	else if (g_sig.sig_int == 1)

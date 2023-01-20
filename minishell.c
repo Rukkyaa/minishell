@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 15:54:46 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 17:10:32 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_tree	*parsingator(char *line, t_all *p)
 //	important : modifier l'exit dans les finctions des pipes pour qu'il soit traite avant fork (EN FCT de bash)
 // verifier que les builtins hors forks n'ont pas a utiliser les redirections
 //encore qq test sur les signaux
+// double prompt chelou
 //4- REVOIR TOUTE LA GESTION D'ERREURS
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES

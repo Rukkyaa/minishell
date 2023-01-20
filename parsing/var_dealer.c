@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/20 15:27:34 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 17:41:44 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,10 @@ static char	*change_line(char *line, char *var, int i, int *leng)
 	if (!var || var == NULL)
 		return (free(line), NULL);
 	new_line = ft_substr(line, 0, i);
-	//if (new_line == NULL || !new_line)
-	//	return (free(line), free(var), NULL);
 	new_line = ft_strjoin_spe(new_line, var);
 	if (new_line == NULL || !new_line)
 		return (free(line), free(var), NULL);
 	reste = ft_substr(line, i + *leng + 1, ft_strlen(line));
-	//if (reste == NULL || !reste)
-	//	return (free(line), free(var), free(new_line), NULL);
 	new_line = ft_strjoin_spe(new_line, reste);
 	if (reste != NULL)
 		free(reste);
@@ -111,7 +107,7 @@ int	find_other(char *line, int i)
 	int	a;
 
 	a = i + 1;
-	while (line[++a] != '\0')
+	while (line[a] != '\0')
 	{
 		if (line[a] == '\"')
 			return (a);
@@ -120,6 +116,94 @@ int	find_other(char *line, int i)
 	return (0);
 }
 
+// char *parsing_var(char *line, int *i, int *leng)
+// {
+// 	int	init;
+// 	int	e;
+// 				init = i++;
+// 			e = find_other(line, i);
+// 			while (i < e)
+// 			{
+// 				if ((line)[*i] != '\0' && (line)[*i] == '$' && (line)[*i + 1] != '\0' && (line)[*i + 1] == '$')
+// 					i += 2;
+// 				else if ((line)[*i] != '\0' && (line)[*i] == '$' && (line)[*i + 1] != '\0' && (line)[*i + 1] == '?')
+// 				{
+// 					leng = 1;
+// 					line = change_line(line, ft_itoa(g_sig.cmd_stat), i, &leng);
+// 					if (line == NULL)
+// 						return (NULL);
+// 					e = find_other(line, init);
+// 					i = init + 1;
+// 				}
+// 				else if ((line)[i] == '$' && (line)[i + 1] != '\0' && is_whitespace((line)[i + 1]) == 0)
+// 				{
+// 					(line)[i] = ' ';
+// 					line = change_line(line, get_var(line, p->env, i, &leng), i, &leng);
+// 					if (line == NULL)
+// 						return (NULL);
+// 					e = find_other(line, init);
+// 					i = init + 1;
+// 				}
+// 				else
+// 					i++;
+// 						}
+// 			i++;
+// }
+
+// char	*replace_var(char *line, t_all *p)
+// {
+// 	int	i;
+// 	int	leng;
+
+// 	i = 0;
+// 	leng = 0;
+// 	if (line == NULL)
+// 		return (NULL);
+// 	while ((line)[i] != '\0')
+// 	{
+// 		if (line[i] == '\"' && find_other(line, i) > i)
+// 			line = parsing_var(line, &i, &leng);
+// 		else if ((line)[i] == '\'')
+// 		{
+// 			i = avoid_quotes_spe(line, i);
+// 			if (i == ft_strlen(line))
+// 				break ;
+// 			i++;
+// 		}
+// 		//if (i < ft_strlen(*line) - 2 && (*line)[i] == ' ' && (*line)[i + 1] == '~' && (((*line)[i + 2] != '\0' && (*line)[i + 2] == ' ') || i == ft_strlen(*line) -1))
+// 		if ((line)[i] == ' ' && (line)[i + 1] == '~' && (i == ft_strlen(line) - 2 || (line)[i + 2] == ' '))
+// 		{
+// 			(line)[++i] = ' ';
+// 			line = change_line(line, tilde(p->env), i, &leng);
+// 			if (line == NULL)
+// 				return (NULL);
+// 			i = 0;
+// 		}
+// 		else if ((line)[i] != '\0' && (line)[i] == '$' && (line)[i + 1] != '\0' && (line)[i + 1] == '$')
+// 			i += 2;
+// 		else if ((line)[i] != '\0' && (line)[i] == '$' && (line)[i + 1] != '\0' && (line)[i + 1] == '?')
+// 		{
+// 			leng = 1;
+// 			line = change_line(line, ft_itoa(g_sig.cmd_stat), i, &leng);
+// 			if (line == NULL)
+// 				return (NULL);
+// 			i = 0;
+// 		}
+// 		else if ((line)[i] == '$' && (line)[i + 1] != '\0' && is_whitespace((line)[i + 1]) == 0)
+// 		{
+// 			(line)[i] = ' ';
+// 			line = change_line(line, get_var(line, p->env, i, &leng), i, &leng);
+// 			if (line == NULL)
+// 				return (NULL);
+// 			i = 0;
+// 		}
+// 		else
+// 			i++;
+// 	}
+// 	return (line);
+// }
+
+//BACKUP REPLACE VAR
 char	*replace_var(char *line, t_all *p)
 {
 	int	i;
@@ -131,11 +215,11 @@ char	*replace_var(char *line, t_all *p)
 	leng = 0;
 	if (line == NULL)
 		return (NULL);
-	while ((line)[i] != '\0')
+	while (line[i] != '\0')
 	{
-		if ((line)[i] == '\"' && find_other(line, i) > i)
+		if (line[i] == '\"' && find_other(line, i) > i)
 		{
-			init = i;
+			init = i++;
 			e = find_other(line, init);
 			while (i < e)
 			{
@@ -148,7 +232,7 @@ char	*replace_var(char *line, t_all *p)
 					if (line == NULL)
 						return (NULL);
 					e = find_other(line, init);
-					i = init;
+					i = init + 1;
 				}
 				else if ((line)[i] == '$' && (line)[i + 1] != '\0' && is_whitespace((line)[i + 1]) == 0)
 				{
@@ -159,7 +243,7 @@ char	*replace_var(char *line, t_all *p)
 					if (line == NULL)
 						return (NULL);
 					e = find_other(line, init);
-					i = init;
+					i = init + 1;
 				}
 				else
 					i++;
@@ -171,6 +255,7 @@ char	*replace_var(char *line, t_all *p)
 			i = avoid_quotes_spe(line, i);
 			if (i == ft_strlen(line))
 				break ;
+			i++;
 		}
 		//if (i < ft_strlen(*line) - 2 && (*line)[i] == ' ' && (*line)[i + 1] == '~' && (((*line)[i + 2] != '\0' && (*line)[i + 2] == ' ') || i == ft_strlen(*line) -1))
 		if ((line)[i] == ' ' && (line)[i + 1] == '~' && (i == ft_strlen(line) - 2 || (line)[i + 2] == ' '))
@@ -203,97 +288,8 @@ char	*replace_var(char *line, t_all *p)
 		}
 		else
 			i++;
+		if (i >= ft_strlen(line))
+			break;
 	}
 	return (line);
 }
-
-//BACKUP REPLACE VAR
-//char	**replace_var(char **line, t_all *p)
-//{
-//	int	i;
-//	int	leng;
-//	int	e;
-//	int	init;
-
-//	i = 0;
-//	leng = 0;
-//	if (*line == NULL || line == NULL)
-//		return (NULL);
-//	printf("ranbbbta\n");
-//	while ((*line)[i] != '\0')
-//	{
-//		if ((*line)[i] == '\"' && find_other(*line, i) > i)
-//		{
-//			init = i;
-//			e = find_other(*line, init);
-//			while (i < e)
-//			{
-//				if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '$')
-//					i += 2;
-//				else if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
-//				{
-//					leng = 1;
-//					*line = change_line(*line, ft_itoa(g_sig.cmd_stat), i, &leng);
-//					if (*line == NULL)
-//						return (free(line), NULL);
-//					e = find_other(*line, init);
-//					i = init;
-//				}
-//				else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' && is_whitespace((*line)[i + 1]) == 0)
-//				{
-//		//if ((*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
-//			//WHAT THE FUCK
-//					(*line)[i] = ' ';
-//					*line = change_line(*line, get_var(line, p->env, i, &leng), i, &leng);
-//					if (*line == NULL)
-//						return (free(line), NULL);
-//					e = find_other(*line, init);
-//					i = init;
-//				}
-//				else
-//					i++;
-//			}
-//			i++;
-//		}
-//		else if ((*line)[i] == '\'')
-//		{
-//			i = avoid_quotes_spe(*line, i);
-//			if (i == ft_strlen(*line))
-//				break ;
-//		}
-//		//if (i < ft_strlen(*line) - 2 && (*line)[i] == ' ' && (*line)[i + 1] == '~' && (((*line)[i + 2] != '\0' && (*line)[i + 2] == ' ') || i == ft_strlen(*line) -1))
-//		if ((*line)[i] == ' ' && (*line)[i + 1] == '~' && (i == ft_strlen(*line) - 2 || (*line)[i + 2] == ' '))
-//		{
-//			(*line)[++i] = ' ';
-//			*line = change_line(*line, tilde(p->env), i, &leng);
-//			if (*line == NULL)
-//				return (free(line), NULL);
-//			i = 0;
-//		}
-//		else if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '$')
-//			i += 2;
-//		else if ((*line)[i] != '\0' && (*line)[i] == '$' && (*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
-//		{
-//			leng = 1;
-//			*line = change_line(*line, ft_itoa(g_sig.cmd_stat), i, &leng);
-//			if (*line == NULL)
-//				return (free(line), NULL);
-//			i = 0;
-//		}
-//		else if ((*line)[i] == '$' && (*line)[i + 1] != '\0' && is_whitespace((*line)[i + 1]) == 0)
-//		{
-//		//if ((*line)[i + 1] != '\0' && (*line)[i + 1] == '?')
-//			//WHAT THE FUCK
-//			(*line)[i] = ' ';
-//			printf("ratkfshgdsfata\n");
-//			*line = change_line(*line, get_var(line, p->env, i, &leng), i, &leng);
-//			if (*line == NULL)
-//				return (free(line), NULL);
-//			i = 0;
-//		}
-//		else
-//			i++;
-//	}
-//	printf("ratata\n");
-//	return (line);
-//}
