@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 10:20:56 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 19:10:20 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/19 15:07:47 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ char	*wildcard(char *extension)
 			}
 			if (str == NULL)
 				return (closedir(dir), free(extension), NULL);
-			printf("%s\n", str);
 		}
 		f = readdir(dir);
 	}

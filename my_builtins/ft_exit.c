@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:23:26 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 23:43:07 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/19 16:24:01 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	ft_exit(t_all *p, t_tree *start, char **cmd)
 	}
 	else
 		nb = 0;
-	(void)nb;
 	printf("exit\n");
 	free(g_sig.line);
 	free_start(start, 0);
@@ -51,5 +50,7 @@ void	ft_exit(t_all *p, t_tree *start, char **cmd)
 	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);
-	exit(134);
+	rl_clear_history();
+	//get_next_line(-42);
+	exit(nb);
 }

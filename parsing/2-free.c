@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2-free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/17 17:00:33 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/20 10:12:50 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	free_env(t_env *envp)
 	{
 		if (!(!envp->key || envp->key == NULL))
 			free(envp->key);
-		if (!(envp->value || envp->value == NULL))
+		if (!(!envp->value || envp->value == NULL))
 			free(envp->value);
 		temp = envp;
 		envp = envp->next;
@@ -65,19 +65,6 @@ void	free_files_out(t_outfile *lst, int mode)
 	return ;
 }
 
-// void free_megatab(char ***tabl)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!tabl || tabl == NULL)
-// 		return ;
-// 	while (tabl[i])
-// 		free_tab(tabl[i++]);
-// 	if (tabl != (char ***)0)
-// 		free(tabl);
-// }
-
 void	free_minishell(t_minishell *elem, int mode)
 {
 	if (!elem || elem == NULL)
@@ -102,6 +89,7 @@ void	free_start(t_tree *start, int mode)
 	if (start->or != NULL)
 		free_start(start->or, mode);
 	free(start);
+	start = NULL;
 }
 
 void	free_here_docs(char **here_docs)

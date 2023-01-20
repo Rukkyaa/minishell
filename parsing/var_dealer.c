@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/18 14:56:46 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/20 10:39:34 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*tilde(t_env *env)
 	while (env != NULL)
 	{
 		if (ft_strncmp(env->key, tild, ft_strlen(tild)) == 0)
-			return (free(tild), env->value);
+			return (free(tild), ft_strdup(env->value));
 		env = env->next;
 	}
 	subst = malloc(2);

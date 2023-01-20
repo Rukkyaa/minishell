@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 23:43:57 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/19 17:13:14 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,12 +194,12 @@ int	opening(char *file, int port, int append, int mode);
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start);
 int	opening_in(t_infile *file_org, int port);
 int	opening_out(t_outfile *file_org, int port);
-void error_process(t_all *p);
+void end_process(t_all *p, int nb);
 //t_env	*shlvl(int nb, t_env *env);
 
 //pipex/exec_builtins.c
 int path_comp_builtins(char **paths);
-int exec_builtin(int nb, char **cmd, t_all *p, t_tree *start);
+void exec_builtin(int nb, char **cmd, t_all *p, t_tree *start);
 
 //pipex/pipe.c
 int	first_pipe(t_minishell *elem, t_all *p, t_tree *start);

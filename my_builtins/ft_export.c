@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 23:43:26 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/19 17:08:34 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,10 +140,10 @@ int	ft_export(t_env *env, char **cmd)
 	while (cmd[++i])
 	{
 		if (before(cmd[i]) == -1)
-			return (EXIT_FAILURE);
+			return (1);
 		key = ft_strndup(cmd[i], before(cmd[i]));
 		if (!key)
-			return (EXIT_FAILURE);
+			return (1);
 		if (cmd[i][ft_strlen(key)] == '=' && !(cmd[i][ft_strlen(key) + 1]))
 			change_value_equal(env, key);
 		else if (!cmd[i][ft_strlen(key)])
@@ -154,9 +154,9 @@ int	ft_export(t_env *env, char **cmd)
 				return (change_concat(env, key, cmd[i]));
 			value = ft_strdup(cmd[i] + ft_strlen(key) + 1);
 			if (!value)
-				return (free(key), EXIT_FAILURE);
+				return (free(key), 1);
 			change_value(env, key, value);
 		}
 	}
-	return (EXIT_SUCCESS);
+	return (0);
 }

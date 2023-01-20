@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/18 19:52:16 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/19 18:42:25 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,11 @@ char	*find_lim(char *line, int *alert)
 		i++;
 	d = i;
 	*alert = i;
-	while (line[d] != '\0' && is_whitespace(line[d++]) == 0)
+	while (line[d] != '\0' && is_whitespace(line[d]) == 0) // peut aussi etre un pipe ou un op logique ?
+	{
 		compt++;
+		d++;
+	}
 	limiter = malloc((compt + 1) * sizeof(char));
 	if (!limiter)
 		return (NULL);
@@ -184,15 +187,15 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 		write(fd, lect, ft_strlen(lect));
 		if (g_sig.sig_quit == 0 && g_sig.sig_int == 0)
 		{
-			//free(lect); //reactiver pour  limiter les leaks, pb avec par exemple deux cat<<"" a la suite
+			free(lect); //reactiver pour  limiter les leaks, pb avec par exemple deux cat<<"" a la suite
 			lect = replace_var(get_next_line(0), p);
 		}
 	}
 	g_sig.p_status = 1;
-	//if (g_sig.sig_quit == 0 && g_sig.sig_int == 0 && lect != NULL) CHECK LEAKS
-	//	free(lect);
-	//if (nb + 1 == max && g_sig.sig_quit == 0 && g_sig.sig_int == 0) //GROS CHECK DE LEAKS A FAIRE SUITE A INTEGRATION DES SIGNAUX
-	//	lect = get_next_line(-42);
+	if (g_sig.sig_quit == 0 && g_sig.sig_int == 0 && lect != NULL) //CHECK LEAKS
+		free(lect);
+	if (nb + 1 == max) //&& g_sig.sig_quit == 0 && g_sig.sig_int == 0) //GROS CHECK DE LEAKS A FAIRE SUITE A INTEGRATION DES SIGNAUX
+		lect = get_next_line(-42);
 	*line = clean_heredoc_line(*line, p->here_docs[nb], find_lim(*line, &alert), &alert);
 	if (*line == NULL)
 		return (free(newlimiter), close (fd), free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);

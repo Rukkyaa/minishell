@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 23:45:11 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/20 10:34:27 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,11 @@ void print_all(t_all *p)
 	print_here_doc(p->here_docs);
 }
 
-//3- REVOIR TOUTES LES LEAKS
+//	important : modifier l'exit dans les finctions des pipes pour qu'il soit traite avant fork (EN FCT de bash)
+// verifier que les  ordis de 42 autorise bien la lecture des fichiers generes par le minishell
+// verifier que les builtins hors forks n'ont pas a utiliser les redirections
+//trier encore les "ca te && ls *" par ex
+//verifier que le command not found s'afiche bien dans le minishell
 //4- REVOIR TOUTE LA GESTION D'ERREURS
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
 //6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
@@ -209,7 +213,7 @@ int	main(int argc, char **argv, char **env) //ajout du clear history
 		{
 			add_history(g_sig.line);
 			g_sig.p_status = 1;
-			g_sig.line = ft_epur(g_sig.line);
+			//g_sig.line = ft_epur(g_sig.line);
 			p->start = parsingator(g_sig.line, p); //leaks
 			if (g_sig.sig_int == 1) // ajouter l'autre var globale ?
 			{

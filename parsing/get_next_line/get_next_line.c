@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 12:07:10 by gduhau            #+#    #+#             */
-/*   Updated: 2022/12/27 14:52:26 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/19 18:46:40 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	return_exist(char *s)
 	i = 0;
 	if (!s)
 		return (0);
-	while (i < (int)ft_strlen(s))
+	while (s[i] && s[i] != '\0' && i < (int)ft_strlen(s))
 	{
 		if (s[i] == '\n')
 			return (1);
@@ -110,7 +110,12 @@ char	*get_next_line(int fd)
 	char		*answer;
 
 	if (fd == -42)
-		return (free(reserve), NULL);
+	{
+		if (reserve && reserve != NULL)
+			free(reserve);
+		reserve = NULL;
+		return (NULL);
+	}
 	if (!reserve)
 		reserve = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)

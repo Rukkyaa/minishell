@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:37:21 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/14 10:56:56 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/19 17:08:06 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	ft_pwd(void)
 	if (getcwd(buffer, PATH_MAX))
 	{
 		ft_putendl_fd(buffer, 1);
-		return (EXIT_SUCCESS);
+		return (0);
 	}
-	return (EXIT_FAILURE);
+	return (1);
 }

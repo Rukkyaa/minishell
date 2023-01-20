@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_epur.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 19:11:54 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/18 10:40:06 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/19 15:45:08 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_epur(char *str)
 	new_str[j] = '\0';
 	tmp = ft_strtrim(new_str, " ");
 	free(new_str);
-	//free(str);
+	free(str);
 	return (tmp);
 }
 

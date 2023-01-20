@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:53:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/16 17:05:35 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/19 17:07:38 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,5 @@ int	ft_echo(char **cmd)
 	}
 	if (!option)
 		ft_putchar_fd('\n', 1);
-	return (EXIT_SUCCESS);
+	return (0);
 }

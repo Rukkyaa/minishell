@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/18 18:53:13 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/19 15:54:54 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ char	**trim_tab(char **tabl)
 
 	i = -1;
 	alert = 0;
-	printf("ok\n");
 	if (!tabl || tabl == NULL)
 		return (NULL);
 	while (tabl[++i] != NULL)
@@ -80,7 +79,6 @@ char	**trim_tab(char **tabl)
 		if (alert == -1)
 			return (tabl[i] = NULL, free_tab(tabl), NULL); //risque de leak
 	}
-	printf("ok\n");
 	return (tabl);
 }
 
@@ -224,19 +222,6 @@ char **w_finder(char **tabl) //cas particulier du grep a gerer
 	return (free(str), free_tab(tabl), tabfinal);
 }
 
-// int	check_minishell(char **tabl)
-// {
-// 	int	i;
-
-// 	i = -1;
-// 	while (tabl[++i] != NULL)
-// 	{
-// 		if (ft_strcmp(tabl[i], "./minishell") == 0)
-// 			return (1);
-// 	}
-// 	return (0);
-// }
-
 int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 {
 	t_minishell	*new_elem;
@@ -248,7 +233,6 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	if (check_redirection(cmd[nb], init) == -1)
 		return (-1);
 	cmd[nb] = erase_redir(cmd[nb]);
-	//printf("cmd[%d] = %s\n", nb, cmd[nb]);
 	init->cmd = trim_tab(w_finder(ft_split_spe(cmd[nb], ' ')));
 	if (!init->cmd)
 		return (-1); //traiter cas erruer
