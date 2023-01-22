@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 23:52:26 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 14:41:20 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/22 18:48:44 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ void	ft_destroy(t_env *env, char *unset)
 		{
 			tmp = env->next;
 			env->next = tmp->next;
+			if (tmp->key && tmp->key != NULL)
+				free(tmp->key);
+			if (tmp->value && tmp->value != NULL)
+				free(tmp->value);
 			free(tmp);
 		}
 		env = env->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 11:28:46 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/22 17:46:09 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	opening_out(t_outfile *file_org, int port)
 		return (-1);
 	while (file->next != NULL)
 	{
+		if (file->file_out == NULL)
+			return (printf(" : No such file or directory\n"), -1);
 		if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
 			return (perror(file->file_out), -1);
 		else
@@ -37,6 +39,8 @@ int	opening_out(t_outfile *file_org, int port)
 		}
 		file = file->next;
 	}
+	if (file->file_out == NULL)
+		return (printf(" : No such file or directory\n"), -1);
 	if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
 		return (perror(file->file_out), -1);
 	else if (file->append == 1)
@@ -60,10 +64,14 @@ int	opening_in(t_infile *file_org, int port)
 		return (-1);
 	while(file->next != NULL)
 	{
+		if (file->file_in == NULL)
+			return (printf(" : No such file or directory\n"), -1);
 		if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
 			return (perror(file->file_in),  -1);
 		file = file->next;
 	}
+	if (file->file_in == NULL)
+		return (printf(" : No such file or directory\n"), -1);
 	if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
 		return (perror(file->file_in), -1);
 	fdt = open(file->file_in, O_RDONLY);

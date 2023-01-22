@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:29:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/19 18:51:48 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/22 13:21:36 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,8 @@ int	first_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 		return (-1);
 	if (elem->pid == 0)
 	{
-		if (signal(SIGINT, &sighandler) == SIG_ERR || signal(SIGQUIT, &sig_eof) == SIG_ERR)
+		if (create_signal_spe() == -1)
 			end_process(p, 1);
-		init_signal(0);
 		close(elem->fd[0]);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || dup2(elem->fd[1], STDOUT_FILENO) < 0)
 			end_process(p, 1);
@@ -75,9 +74,8 @@ int	mid_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 		return (-1);
 	if (elem->next->pid == 0)
 	{
-		if (signal(SIGINT, &sighandler) == SIG_ERR || signal(SIGQUIT, &sig_eof) == SIG_ERR)
+		if (create_signal_spe() == -1)
 			end_process(p, 1);
-		init_signal(0);
 		close(elem->fd[1]);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (dup2(elem->fd[0], STDIN_FILENO) < 0
 			|| dup2(elem->next->fd[1], STDOUT_FILENO) < 0))
@@ -106,9 +104,8 @@ int	last_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 		return (-1);
 	if (elem->next->pid == 0)
 	{
-		if (signal(SIGINT, &sighandler) == SIG_ERR || signal(SIGQUIT, &sig_eof) == SIG_ERR)
+		if (create_signal_spe() == -1)
 			end_process(p, 1);
-		init_signal(0);
 		close(elem->fd[1]);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || dup2(elem->fd[0], STDIN_FILENO) < 0)
 			end_process(p, 1);

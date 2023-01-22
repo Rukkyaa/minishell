@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 17:10:32 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/22 17:26:02 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_tree	*parsingator(char *line, t_all *p)
 //	important : modifier l'exit dans les finctions des pipes pour qu'il soit traite avant fork (EN FCT de bash)
 // verifier que les builtins hors forks n'ont pas a utiliser les redirections
 //encore qq test sur les signaux
+//generaliser la gestion des signaux dans le exec command one aux autres pipes
 // double prompt chelou
 //4- REVOIR TOUTE LA GESTION D'ERREURS
 //5- VOIR CAS SPECIFIQUES DES BUILTINS
@@ -126,7 +127,7 @@ int	main(int argc, char **argv, char **env)
 			p->start = parsingator(g_sig.line, p); //leaks
 			if (g_sig.sig_int == 1) // ajouter l'autre var globale ?
 				free_start(p->start, 1);
-			//print_all(p);
+			print_all(p);
 			if (p->start != NULL && g_sig.sig_int == 0)
 				executor(p->start, p, g_sig.line);
 			free_here_docs(p->here_docs);

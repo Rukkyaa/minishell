@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 15:50:11 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/22 00:17:06 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ char	*erase_redirbis(char *cmd);
 int	all_spaces(char **tabl, char *str);
 int	stop_signals(void);
 char	**trim_tab(char **tabl);
+int	create_signal_spe(void);
 
 //wildcard.c
 char	*wildcard(char *extension);

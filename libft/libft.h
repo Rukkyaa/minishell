@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:51:47 by rukkyaa           #+#    #+#             */
-/*   Updated: 2022/12/22 15:37:19 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/22 19:00:44 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int		ft_lstsize(t_list *lst);
 int		ft_strlen(const char *s);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
-
 
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);

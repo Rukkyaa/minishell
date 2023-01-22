@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/18 15:14:43 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/22 17:37:04 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,14 +128,14 @@ int	check_redirection(char *cmd, t_minishell *maillon) //fonction bancale (risqu
 		else if ((i == 0 && cmd[i] == '<' && cmd[i + 1] != '<') || (i > 0 && cmd[i - 1] != '<' && cmd[i] == '<' && cmd[i + 2] != '<')) //NB: il peut y avoir plusieurs fois la meme redirection
 		{
 			maillon->file_in = add_file_in(maillon->file_in, ft_trim(get_filename(cmd, i + 1)));
-			if (maillon->file_in == NULL)
-				return (-1);
+			// if (maillon->file_in == NULL)
+			// 	return (-1);
 		}
-		else if (cmd[i] != '>' && cmd[i + 1] == '>' && cmd[i + 2] != '>') //NB: il peut y avoir plusieurs fois la meme redirection
+		else if ((i == 0 && cmd[i] == '>' && cmd[i + 1] != '<') || (cmd[i] != '>' && cmd[i + 1] == '>' && cmd[i + 2] != '>')) //NB: il peut y avoir plusieurs fois la meme redirection
 		{
 			maillon->file_out = add_file_out(maillon->file_out, ft_trim(get_filename(cmd, i + 2)), 0);
-			if (maillon->file_out == NULL)
-				return (-1);
+			// if (maillon->file_out == NULL)
+			// 	return (-1);
 		}
 		i++;
 	}

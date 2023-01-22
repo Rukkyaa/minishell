@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/20 17:44:32 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/22 17:58:18 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 	if (path_comp_builtins(cmd) > 0)
 		return (exec_builtin(path_comp_builtins(cmd), cmd, p, start));
 	else if (path_comp_builtins(cmd) < 0)
-		return (0);
+		end_process(p, 0);
 	reforged_env = env_to_char(p->env);
 	if (reforged_env == NULL && p->env != NULL)
 		return (-1);
@@ -145,9 +145,8 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 		return (-1);
 	if (elem->pid == 0)
 	{
-		if (signal(SIGINT, &sighandler) == SIG_ERR || signal(SIGQUIT, &sig_eof) == SIG_ERR)
+		if (create_signal_spe() == -1)
 			end_process(p, 1);
-		init_signal(0);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
 			end_process(p, 1);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
