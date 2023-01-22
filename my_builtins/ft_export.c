@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/22 18:06:18 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/22 22:27:57 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int	ft_export(t_env *env, char **cmd)
 	char	*key;
 	char	*value;
 	int		i;
-	
+	int		alert;
 	if (!cmd[1])
 		return (sort_env(env_to_char_export(env)), 0);
 	i = 0;
@@ -162,6 +162,9 @@ int	ft_export(t_env *env, char **cmd)
 		key = ft_strndup(cmd[i], before(cmd[i]));
 		if (!key)
 			return (1);
+		key = ft_trim_quotes(key, &alert);
+		if (!key)
+			return (ft_putendl_fd("not a valid identifier", 2), 1);
 		if (cmd[i][ft_strlen(key)] == '=' && !(cmd[i][ft_strlen(key) + 1]))
 			change_value_equal(env, key);
 		else if (!cmd[i][ft_strlen(key)])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:23:26 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/19 16:24:01 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/22 22:31:01 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@ bool	full_digit(char *str)
 	int	i;
 
 	i = -1;
+	if (ft_strlen(str) > 1 && (str[0] == '-' || str[0] == '+'))
+		++i;
 	while (str[++i])
+	{
 		if (!ft_isdigit(str[i]))
 			return (false);
+	}
 	return (true);
 }
 
