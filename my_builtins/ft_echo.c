@@ -6,16 +6,24 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:53:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/22 22:05:18 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/22 22:55:39 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+** Function to check if the string is a valid echo option
+** to allow for multiple n's in the option
+**
+** @param str: string to check
+**
+** @return: true if valid, false if not
+*/
 bool	check_echo(char *str)
 {
-	unsigned	i;
-	
+	unsigned int	i;
+
 	if (ft_strlen(str) < 2)
 		return (false);
 	else if (str[0] != '-')
@@ -27,6 +35,16 @@ bool	check_echo(char *str)
 	return (true);
 }
 
+/*
+** Our own echo function
+** Usage : echo [option] [string]
+** Options : -n
+** -n : do not output the trailing newline
+**
+** @param cmd: array of strings containing the command and its arguments
+**
+** @return: EXIT_SUCCESS (0)
+*/
 int	ft_echo(char **cmd)
 {
 	int		i;
@@ -48,5 +66,5 @@ int	ft_echo(char **cmd)
 	}
 	if (!option)
 		ft_putchar_fd('\n', 1);
-	return (0);
+	return (EXIT_SUCCESS);
 }

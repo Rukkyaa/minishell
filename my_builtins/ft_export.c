@@ -6,12 +6,20 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/22 22:27:57 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/22 23:01:05 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+** Function to check if the env struct contains the key
+**
+** @param env: env struct
+** @param str: key to check
+**
+** @return: true if found, false if not
+*/
 bool	ft_is_in_env(t_env *env, char *str)
 {
 	while (env)
@@ -23,6 +31,16 @@ bool	ft_is_in_env(t_env *env, char *str)
 	return (false);
 }
 
+/*
+** Function to change the give key-value if the input is of the form key=value
+** or to add the key-value to the env struct if it doesn't exist
+**
+** @param env: env struct
+** @param key: key to change or add
+** @param value: value to change or add
+**
+** @return: nothing	
+*/
 void	change_value(t_env *env, char *key, char *value)
 {
 	t_env	*new;
@@ -30,6 +48,8 @@ void	change_value(t_env *env, char *key, char *value)
 
 	alert = 0;
 	value = ft_trim_quotes(value, &alert);
+	if (!value)
+		return (free(key));
 	if (ft_is_in_env(env, key))
 	{
 		while (env)
@@ -39,8 +59,7 @@ void	change_value(t_env *env, char *key, char *value)
 				free(env->value);
 				env->value = value;
 				env->code = 1;
-				free(key);
-				return ;
+				return (free(key));
 			}
 			env = env->next;
 		}
@@ -152,6 +171,7 @@ int	ft_export(t_env *env, char **cmd)
 	char	*value;
 	int		i;
 	int		alert;
+	
 	if (!cmd[1])
 		return (sort_env(env_to_char_export(env)), 0);
 	i = 0;
