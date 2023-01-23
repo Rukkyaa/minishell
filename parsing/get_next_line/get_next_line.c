@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 12:07:10 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/23 13:35:10 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/23 23:21:39 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	return_exist(char *s)
 	int	i;
 
 	i = 0;
-	if (!s)
+	if (!s || s == 0 || s == NULL || ft_strlen(s) == 0)
 		return (0);
-	while (s[i] && s[i] != '\0' && i < (int)ft_strlen(s))
+	while (i < (int)ft_strlen(s) && s[i] && s[i] != '\0')
 	{
 		if (s[i] == '\n')
 			return (1);
@@ -86,14 +86,14 @@ char	*clean_reserve(int i, char *reserve)
 	{
 		if (reserve)
 			free(reserve);
-		return (NULL);
+		return (reserve = NULL, reserve);
 	}
 	reserve_cleaned = malloc((ft_strlen(reserve) - i) * sizeof(char));
 	if (!reserve_cleaned)
 	{
 		if (reserve)
 			free(reserve);
-		return (NULL);
+		return (reserve = NULL, reserve);
 	}
 	while (reserve[++i] != '\0')
 		reserve_cleaned[a++] = reserve[i];
@@ -109,7 +109,6 @@ char	*get_next_line(int fd)
 	char		*new_reserve;
 	char		*answer;
 
-	printf("toto\n");
 	if (fd == -42)
 	{
 		if (reserve && reserve != NULL)

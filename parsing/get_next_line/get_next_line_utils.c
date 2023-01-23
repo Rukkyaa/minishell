@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 12:30:48 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/23 12:06:03 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/23 23:28:55 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,9 @@ char	*error_case(char *buf, char *reserve, int p)
 		free(buf);
 	if (p == 0)
 		return (reserve);
-	if (reserve && reserve != NULL)
-	{
-		free(reserve);
-		reserve = NULL;
-	}
+	// if (reserve != NULL)
+	// 	free(reserve);
+	// reserve = NULL;
+	//ft_bzero(reserve)
 	return (NULL);
 }

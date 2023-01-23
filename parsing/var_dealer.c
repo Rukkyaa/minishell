@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/20 17:41:44 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/23 23:43:15 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,93 +115,6 @@ int	find_other(char *line, int i)
 	}
 	return (0);
 }
-
-// char *parsing_var(char *line, int *i, int *leng)
-// {
-// 	int	init;
-// 	int	e;
-// 				init = i++;
-// 			e = find_other(line, i);
-// 			while (i < e)
-// 			{
-// 				if ((line)[*i] != '\0' && (line)[*i] == '$' && (line)[*i + 1] != '\0' && (line)[*i + 1] == '$')
-// 					i += 2;
-// 				else if ((line)[*i] != '\0' && (line)[*i] == '$' && (line)[*i + 1] != '\0' && (line)[*i + 1] == '?')
-// 				{
-// 					leng = 1;
-// 					line = change_line(line, ft_itoa(g_sig.cmd_stat), i, &leng);
-// 					if (line == NULL)
-// 						return (NULL);
-// 					e = find_other(line, init);
-// 					i = init + 1;
-// 				}
-// 				else if ((line)[i] == '$' && (line)[i + 1] != '\0' && is_whitespace((line)[i + 1]) == 0)
-// 				{
-// 					(line)[i] = ' ';
-// 					line = change_line(line, get_var(line, p->env, i, &leng), i, &leng);
-// 					if (line == NULL)
-// 						return (NULL);
-// 					e = find_other(line, init);
-// 					i = init + 1;
-// 				}
-// 				else
-// 					i++;
-// 						}
-// 			i++;
-// }
-
-// char	*replace_var(char *line, t_all *p)
-// {
-// 	int	i;
-// 	int	leng;
-
-// 	i = 0;
-// 	leng = 0;
-// 	if (line == NULL)
-// 		return (NULL);
-// 	while ((line)[i] != '\0')
-// 	{
-// 		if (line[i] == '\"' && find_other(line, i) > i)
-// 			line = parsing_var(line, &i, &leng);
-// 		else if ((line)[i] == '\'')
-// 		{
-// 			i = avoid_quotes_spe(line, i);
-// 			if (i == ft_strlen(line))
-// 				break ;
-// 			i++;
-// 		}
-// 		//if (i < ft_strlen(*line) - 2 && (*line)[i] == ' ' && (*line)[i + 1] == '~' && (((*line)[i + 2] != '\0' && (*line)[i + 2] == ' ') || i == ft_strlen(*line) -1))
-// 		if ((line)[i] == ' ' && (line)[i + 1] == '~' && (i == ft_strlen(line) - 2 || (line)[i + 2] == ' '))
-// 		{
-// 			(line)[++i] = ' ';
-// 			line = change_line(line, tilde(p->env), i, &leng);
-// 			if (line == NULL)
-// 				return (NULL);
-// 			i = 0;
-// 		}
-// 		else if ((line)[i] != '\0' && (line)[i] == '$' && (line)[i + 1] != '\0' && (line)[i + 1] == '$')
-// 			i += 2;
-// 		else if ((line)[i] != '\0' && (line)[i] == '$' && (line)[i + 1] != '\0' && (line)[i + 1] == '?')
-// 		{
-// 			leng = 1;
-// 			line = change_line(line, ft_itoa(g_sig.cmd_stat), i, &leng);
-// 			if (line == NULL)
-// 				return (NULL);
-// 			i = 0;
-// 		}
-// 		else if ((line)[i] == '$' && (line)[i + 1] != '\0' && is_whitespace((line)[i + 1]) == 0)
-// 		{
-// 			(line)[i] = ' ';
-// 			line = change_line(line, get_var(line, p->env, i, &leng), i, &leng);
-// 			if (line == NULL)
-// 				return (NULL);
-// 			i = 0;
-// 		}
-// 		else
-// 			i++;
-// 	}
-// 	return (line);
-// }
 
 //BACKUP REPLACE VAR
 char	*replace_var(char *line, t_all *p)

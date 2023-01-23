@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/23 14:58:26 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/24 00:46:12 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,40 +82,43 @@ char	*ft_trim_quotes(char *s1, int *alert)
 
 // char	*ft_trim(char *s1)
 // {
-// 	int		i;
-// 	char	*s1_bis;
-// 	char **tabinter;
-// 	int length;
-
-// 	i = 0;
-// 	if (!s1)
-// 		return (NULL);
-// 	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
-// 			|| (s1[0] == '\'' && s1[1] == '\'')))
-// 		return (free(s1), NULL);
-// 	if (s1[0] == '\'' || s1[ft_strlen(s1) - 1] == '\'')
-// 	{
-// 		length = count_words2(s1, '\'');
-// 		tabinter = ft_split(s1, '\'');
-// 		// if (tabinter == NULL)
-// 		// 	return ()
-// 		s1_bis = tab_to_str_spe(tabinter, length);
-// 		free(s1);
-// 		// s1_bis = malloc((ft_strlen(s1) - 1) * sizeof(char));
-// 		// if (!s1_bis)
-// 		// 	return (free(s1), NULL);
-// 		// while (s1[++i + 1] != '\0')
-// 		// 	s1_bis[i - 1] = s1[i];
-// 		// s1_bis[i - 2] = '\0';
-// 		// free(s1);
-// 		return (s1_bis);
-// 	}
-// 	else if (s1[0] == '\"' || s1[ft_strlen(s1) - 1] == '\"')
-// 	{
-		
-// 	}
-// 	return (s1);
+// 	int alert;
+// 	return (ft_trim_quotes(s1, &alert));
 // }
+
+char *treat_str(char *s1, int *i, char c)
+{
+	s1[*i] = ' ';
+	while (s1[*i] != '\0' && s1[*i] != c)
+		(*i)++;
+	if (s1[*i] == c)
+		s1[*i] = ' ';
+	return (s1);
+}
+
+char	*ft_trim(char *s1)
+{
+	int		i;
+	char	*s1_bis;
+	char **tabinter;
+
+	i = -1;
+	if (!s1)
+		return (NULL);
+	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
+			|| (s1[0] == '\'' && s1[1] == '\'')))
+		return (free(s1), NULL);
+	while (s1[++i] != '\0')
+	{
+		if (s1[i] == '\"')
+			s1 = treat_str(s1, &i, '\"');
+		else if (s1[i] == '\'')
+			s1 = treat_str(s1, &i, '\'');
+	}
+	tabinter = ft_split(s1, ' ');
+	s1_bis = tab_to_str_spe(tabinter, count_words(s1, ' '));
+	return (free(s1), s1_bis);
+}
 
 char	**trim_tab(char **tabl)
 {

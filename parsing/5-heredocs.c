@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/23 13:39:22 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/24 00:50:27 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 	char	*newlimiter;
 	char	*lect;
 	int		alert;
+	int		prev;
 
 	alert = 0;
 	if (nb == max)
@@ -180,24 +181,39 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 	newlimiter = gen_new_limiter(find_lim(*line, &alert));
 	if (newlimiter == NULL || alert == -1)
 		return (alert_case(newlimiter), free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
-	// stop_signals();
-	// create_signal_here();
+	stop_signals();
+	create_signal_here();
 	g_sig.p_status = 2;
 	lect = replace_var(get_next_line(0), p);
-	while (lect != NULL && ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0 && g_sig.sig_quit == 0)
+	if (lect != NULL && ft_strlen(lect) >= 1 && lect[ft_strlen(lect) - 1] == '\n')
+		prev = 1;
+	else 
+		prev = 0;
+	while (ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0) // cas ou limiter == NULL
 	{
-		write(fd, lect, ft_strlen(lect));
-		if (g_sig.sig_quit == 0 && g_sig.sig_int == 0)
+		if (lect != NULL)
+			write(fd, lect, ft_strlen(lect));
+		if (g_sig.sig_int == 0)
 		{
-			free(lect); //reactiver pour  limiter les leaks, pb avec par exemple deux cat<<"" a la suite
+			if (lect != NULL)
+				free(lect); //reactiver pour  limiter les leaks, pb avec par exemple deux cat<<"" a la suite
 			lect = replace_var(get_next_line(0), p);
 		}
+		if (prev == 1 && lect == NULL)
+		{
+			printf("warning: here-document at line delimited by end-of-file (wanted `%s')\n", newlimiter); //reduce the last char
+			break;
+		}
+		if (lect != NULL && ft_strlen(lect) >= 1 && lect[ft_strlen(lect) - 1] == '\n')
+			prev = 1;
+		else 
+			prev = 0;
 	}
 	g_sig.p_status = 1;
-	// stop_signals();
-	// create_signal();
-	// init_signal(0);
-	if (g_sig.sig_quit == 0 && g_sig.sig_int == 0 && lect != NULL) //CHECK LEAKS
+	stop_signals();
+	create_signal();
+	init_signal(0);
+	if (lect != NULL) //CHECK LEAKS
 		free(lect);
 	if (nb + 1 == max) //&& g_sig.sig_quit == 0 && g_sig.sig_int == 0) //GROS CHECK DE LEAKS A FAIRE SUITE A INTEGRATION DES SIGNAUX
 		lect = get_next_line(-42);

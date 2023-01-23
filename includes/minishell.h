@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/23 12:56:37 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/23 23:00:51 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,12 @@
 # include <termios.h>
 # include <dirent.h>
 # include <sys/ioctl.h>
+# include <limits.h>
 //# include <stropts.h>
+# include <errno.h>
+# include <poll.h>
+# include <sys/msg.h>
+
 
 # include "../libft/libft.h"
 
