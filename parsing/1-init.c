@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 11:19:26 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/23 11:36:36 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,82 @@ t_all	*init_env(char **env)
 	return ( p);
 }
 
+int	check_interligne(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == '(')
+		{
+			while (line[i] != '\0' && line[i + 1] != '\0' && ((line[i] == '&' && line[i + 1] == '&') || (line[i] == '|' && line[i + 1] == '|')))
+			{
+				if (line[i++] == ')')
+					return (0);
+			}
+			while (line[i] != '\0' && line[i] != ')')
+				i++;
+			if (line[i] == '\0')
+				return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	check_extraligne(char *line)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		count = 0;
+		if (line[i] == ')')
+		{
+			while (line[i] != '\0' && line[i + 1] != '\0' && line[i + 1] != '(')
+			{
+				if (line[i] != '\0' && line[i + 1] != '\0' && ((line[i] == '&' && line[i + 1] == '&') || (line[i] == '|' && line[i + 1] == '|')))
+					count++;
+				i++;
+			}
+			if ((line[i] != '\0' && line[i + 1] != '\0') && count == 0)
+				return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+char *clean_first(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0' && is_whitespace(line[i]) == 1)
+		i++;
+	if (line[i] != '\0' && line[i] == '(')
+	{
+		line[i] = ' ';
+		while (line[i] != '\0' && line[i] != ')')
+			i++;
+		if (line[i] != '\0' && line[i] == ')')
+			line[i] = ' ';
+	}
+	return (line);
+}
+
 t_tree	*init_tree(char **line)
 {
 	t_tree	*start;
 
 	if (!line || line == NULL)
 		return (NULL);
-	if (countof_spe(line, '(', 0, -1) != countof_spe(line, ')', 0, -1))
+	if (countof_spe(line, '(', 0, -1) != countof_spe(line, ')', 0, -1) || check_interligne(*line) != 1 || check_extraligne(*line) != 1)
 		return (printf("Syntax error\n"), free(*line), free(line), NULL);
+	*line = clean_first(*line);
 	start = init_m_tree(*line);
 	if (!start || start == NULL)
 		return (free(*line), free(line), NULL);
