@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 12:07:10 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/19 18:46:40 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/23 13:35:10 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ char	*get_next_line(int fd)
 	char		*new_reserve;
 	char		*answer;
 
+	printf("toto\n");
 	if (fd == -42)
 	{
 		if (reserve && reserve != NULL)

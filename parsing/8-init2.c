@@ -3,14 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/22 17:40:31 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/23 14:58:26 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+char *tab_to_str(char **tabl)
+{
+	char *str;
+	int	i;
+
+	i = 0;
+	if (!tabl || tabl == NULL)
+		return (NULL);
+	str = ft_strdup(tabl[0]);
+	if (str == NULL && tabl[0] != NULL)
+		return (free_tab(tabl), NULL);
+	while (tabl[++i] != NULL)
+	{
+		str = ft_strjoin_spe(str, " ");
+		str = ft_strjoin_spe(str, tabl[i]);
+		if (str == NULL)
+			return (free_tab(tabl), NULL);
+	}
+	return (free_tab(tabl), str);
+}
+
+char *tab_to_str_spe(char **tabl, int length)
+{
+	char *str;
+	int	i;
+
+	i = 0;
+	if (!tabl || tabl == NULL)
+		return (NULL);
+	str = ft_strdup(tabl[0]);
+	if (str == NULL && tabl[0] != NULL)
+		return (free_tab(tabl), NULL);
+	while (++i < length)
+	{
+		//str = ft_strjoin_spe(str, " ");
+		str = ft_strjoin_spe(str, tabl[i]);
+		if (str == NULL)
+			return (free_tab(tabl), NULL);
+	}
+	return (free_tab(tabl), str);
+}
 
 char	*ft_trim_quotes(char *s1, int *alert)
 {
@@ -38,46 +80,57 @@ char	*ft_trim_quotes(char *s1, int *alert)
 	return (s1);
 }
 
-char	*ft_trim(char *s1)
-{
-	int		i;
-	char	*s1_bis;
+// char	*ft_trim(char *s1)
+// {
+// 	int		i;
+// 	char	*s1_bis;
+// 	char **tabinter;
+// 	int length;
 
-	i = 0;
-	if (!s1)
-		return (NULL);
-	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
-			|| (s1[0] == '\'' && s1[1] == '\'')))
-		return (free(s1), NULL);
-	if ((s1[0] == '\'' || s1[ft_strlen(s1) - 1] == '\'')
-		|| (s1[0] == '\"' || s1[ft_strlen(s1) - 1] == '\"'))
-	{
-		s1_bis = malloc((ft_strlen(s1) - 1) * sizeof(char));
-		if (!s1_bis)
-			return (free(s1), NULL);
-		while (s1[++i + 1] != '\0')
-			s1_bis[i - 1] = s1[i];
-		s1_bis[i - 2] = '\0';
-		free(s1);
-		return (s1_bis);
-	}
-	return (s1);
-}
+// 	i = 0;
+// 	if (!s1)
+// 		return (NULL);
+// 	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
+// 			|| (s1[0] == '\'' && s1[1] == '\'')))
+// 		return (free(s1), NULL);
+// 	if (s1[0] == '\'' || s1[ft_strlen(s1) - 1] == '\'')
+// 	{
+// 		length = count_words2(s1, '\'');
+// 		tabinter = ft_split(s1, '\'');
+// 		// if (tabinter == NULL)
+// 		// 	return ()
+// 		s1_bis = tab_to_str_spe(tabinter, length);
+// 		free(s1);
+// 		// s1_bis = malloc((ft_strlen(s1) - 1) * sizeof(char));
+// 		// if (!s1_bis)
+// 		// 	return (free(s1), NULL);
+// 		// while (s1[++i + 1] != '\0')
+// 		// 	s1_bis[i - 1] = s1[i];
+// 		// s1_bis[i - 2] = '\0';
+// 		// free(s1);
+// 		return (s1_bis);
+// 	}
+// 	else if (s1[0] == '\"' || s1[ft_strlen(s1) - 1] == '\"')
+// 	{
+		
+// 	}
+// 	return (s1);
+// }
 
 char	**trim_tab(char **tabl)
 {
 	int	i;
-	int	alert;
+	//int	alert;
 
 	i = -1;
-	alert = 0;
+	//alert = 0;
 	if (!tabl || tabl == NULL)
 		return (NULL);
 	while (tabl[++i] != NULL)
 	{
-		tabl[i] = ft_trim_quotes(tabl[i], &alert);
-		if (alert == -1)
-			return (tabl[i] = NULL, free_tab(tabl), NULL); //risque de leak
+		tabl[i] = ft_trim(tabl[i]);
+		// if (alert == -1)
+		// 	return (tabl[i] = NULL, free_tab(tabl), NULL); //risque de leak
 	}
 	return (tabl);
 }
@@ -122,47 +175,28 @@ int	w_found(char *str)
 	return (0);
 }
 
-char *tab_to_str(char **tabl)
-{
-	char *str;
-	int	i;
 
-	i = 0;
-	if (!tabl || tabl == NULL)
-		return (NULL);
-	str = ft_strdup(tabl[0]);
-	if (str == NULL && tabl[0] != NULL)
-		return (free_tab(tabl), NULL);
-	while (tabl[++i] != NULL)
-	{
-		str = ft_strjoin_spe(str, " ");
-		str = ft_strjoin_spe(str, tabl[i]);
-		if (str == NULL)
-			return (free_tab(tabl), NULL);
-	}
-	return (free_tab(tabl), str);
-}
 
-char *tab_to_str_spe(char **tabl)
-{
-	char *str;
-	int	i;
+// char *tab_to_str_spe(char **tabl)
+// {
+// 	char *str;
+// 	int	i;
 
-	i = 0;
-	if (!tabl || tabl == NULL)
-		return (NULL);
-	str = ft_strdup(tabl[0]);
-	if (str == NULL && tabl[0] != NULL)
-		return (free_tab(tabl), NULL);
-	while (tabl[++i] != NULL)
-	{
-		str = ft_strjoin_spe(str, " ");
-		str = ft_strjoin_spe(str, tabl[i]);
-		if (str == NULL)
-			return (free_tab(tabl), NULL);
-	}
-	return (free(tabl), str);
-}
+// 	i = 0;
+// 	if (!tabl || tabl == NULL)
+// 		return (NULL);
+// 	str = ft_strdup(tabl[0]);
+// 	if (str == NULL && tabl[0] != NULL)
+// 		return (free_tab(tabl), NULL);
+// 	while (tabl[++i] != NULL)
+// 	{
+// 		str = ft_strjoin_spe(str, " ");
+// 		str = ft_strjoin_spe(str, tabl[i]);
+// 		if (str == NULL)
+// 			return (free_tab(tabl), NULL);
+// 	}
+// 	return (free(tabl), str);
+// }
 
 char	*concat(char *s1)
 {
@@ -215,8 +249,6 @@ char **w_finder(char **tabl) //cas particulier du grep a gerer
 			return (free_tab(tabfinal), free_tab(tabl), NULL);
 	}
 	tabfinal[i] = NULL;
-	// if (length_tab(tabl) > 0 && megatab[0][1] != NULL) //securite a add
-	// 	return (free_megatab(megatab), free_tab(tabl), NULL);
 	str = tab_to_str(tabfinal);
 	tabfinal = ft_split_spe(str, ' ');
 	return (free(str), free_tab(tabl), tabfinal);
@@ -300,7 +332,6 @@ int	init_shell(t_tree *start, t_all *p)
 
 	if (!start || start == NULL)
 		return (-1);
-	//
 	ret = init_cmd(start, p);
 	if (ret != 1)
 		return (-1);

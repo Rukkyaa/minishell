@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/22 00:17:06 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/23 12:56:37 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # include <term.h>
 # include <termios.h>
 # include <dirent.h>
+# include <sys/ioctl.h>
+//# include <stropts.h>
 
 # include "../libft/libft.h"
 
@@ -108,6 +110,7 @@ int	all_spaces(char **tabl, char *str);
 int	stop_signals(void);
 char	**trim_tab(char **tabl);
 int	create_signal_spe(void);
+int	create_signal_here(void);
 
 //wildcard.c
 char	*wildcard(char *extension);

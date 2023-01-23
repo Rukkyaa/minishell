@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 17:48:19 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/23 13:39:22 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,8 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 	newlimiter = gen_new_limiter(find_lim(*line, &alert));
 	if (newlimiter == NULL || alert == -1)
 		return (alert_case(newlimiter), free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
+	// stop_signals();
+	// create_signal_here();
 	g_sig.p_status = 2;
 	lect = replace_var(get_next_line(0), p);
 	while (lect != NULL && ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0 && g_sig.sig_quit == 0)
@@ -192,6 +194,9 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 		}
 	}
 	g_sig.p_status = 1;
+	// stop_signals();
+	// create_signal();
+	// init_signal(0);
 	if (g_sig.sig_quit == 0 && g_sig.sig_int == 0 && lect != NULL) //CHECK LEAKS
 		free(lect);
 	if (nb + 1 == max) //&& g_sig.sig_quit == 0 && g_sig.sig_int == 0) //GROS CHECK DE LEAKS A FAIRE SUITE A INTEGRATION DES SIGNAUX
