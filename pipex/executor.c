@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/22 17:58:18 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 18:47:33 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 	}
 	if (check_directory(cmd[0]) != 0)
 		return (free_tab(reforged_env), -1);
-	if (access(cmd[0], F_OK) == 0)
+	if (access(cmd[0], F_OK) == 0 && (ft_strncmp(cmd[0], "./", 2) == 0 || ft_strncmp(cmd[0], "../", 3) == 0))
 	{
 		if (access(cmd[0], X_OK) != 0)
 			return (perror(""), free_tab(reforged_env), g_sig.cmd_stat = 126, 126);

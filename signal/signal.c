@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/24 01:21:25 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 19:22:47 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,28 +92,17 @@ void	init_signal(int nb)
 
 void	sig_eof(int code)
 {
-	//int n;
-
 	(void) code;
 	if (g_sig.p_status == 0 && rl_end == 0)
 	{
 		g_sig.sig_quit = 1;
-		rl_on_new_line(); // Regenerate the prompt on a newline
+		rl_on_new_line(); 
 		rl_replace_line("end", 0);
+		printf("\nexit\n");
 		rl_done = 1;
 	}
 	else if (g_sig.p_status == 2)
-	{
-		// if (ioctl(0, FIONREAD, &n) == -1)
-		// 	printf("error\n");
-		// printf("%d\n", n);
-		// if (n > 0)
-		// 	printf("gagne\n");
-		// else
-		// 	printf("perdu");
 		g_sig.sig_quit = 1;
-		//write(0, "\0", 1);
-	}
 }
 
 void	sighandler(int code)
