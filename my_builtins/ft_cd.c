@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 23:15:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 14:44:21 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/23 10:47:58 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ static void	update_env(t_env *env, char *old, char *new)
 		free(env->value);
 		env->value = new;
 	}
+	else
+		free(new);
 }
 
-static void	update_pwd(t_env *env)
+static void	update_pwd(t_env *env, char *oldpwd)
 {
 	char	buffer[PATH_MAX];
 	char	*pwd;
@@ -41,9 +43,13 @@ static void	update_pwd(t_env *env)
 	{
 		pwd = ft_strdup(buffer);
 		if (!pwd)
+		{
+			free(oldpwd);
 			return ;
+		}
 		update_env(env, "PWD", pwd);
 	}
+	update_env(env, "OLDPWD", oldpwd);
 }
 
 char	*go_option(t_env *env, int flag)
@@ -76,6 +82,8 @@ int	ft_cd(t_env *env, char **split)
 		oldpwd = ft_strdup(get_in_env(env, "PWD"));
 	else
 		oldpwd = ft_strdup("error");
+	if (!oldpwd)
+		return (1);
 	if (split[1] == NULL)
 		pwd = ft_strdup(go_option(env, 1));
 	else if (!ft_strcmp(split[1], "-"))
@@ -83,13 +91,11 @@ int	ft_cd(t_env *env, char **split)
 	else
 		pwd = ft_strdup(split[1]);
 	if (!pwd)
-		return (1);
+		return (free(oldpwd), 1);
 	if (!chdir(pwd))
-	{
-		update_pwd(env);
-		update_env(env, "OLDPWD", oldpwd);
-	}
+		update_pwd(env, oldpwd);
 	else
-		return (ft_putendl_fd("cd : No such file or directory", 2), 1);
+		return (free(oldpwd),
+			ft_putendl_fd("cd : No such file or directory", 2), 1);
 	return (free(pwd), 0);
 }

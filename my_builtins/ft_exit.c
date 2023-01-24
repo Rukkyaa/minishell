@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:23:26 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/22 22:31:01 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/23 10:50:32 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,22 @@ bool	full_digit(char *str)
 	return (true);
 }
 
+void	free_exit(t_all *p, t_tree *start)
+{
+	printf("exit\n");
+	free(g_sig.line);
+	free_start(start, 0);
+	free_tab(p->paths);
+	free_env(p->env);
+	free_here_docs(p->here_docs);
+	free(p);
+	rl_clear_history();
+}
+
 void	ft_exit(t_all *p, t_tree *start, char **cmd)
 {
 	int	nb;
-	
+
 	if (length_tab(cmd) > 1 && full_digit(cmd[1]) && cmd[2])
 		return (ft_putendl_fd("exit: too many arguments", 2));
 	if (cmd[1])
@@ -47,14 +59,6 @@ void	ft_exit(t_all *p, t_tree *start, char **cmd)
 	}
 	else
 		nb = 0;
-	printf("exit\n");
-	free(g_sig.line);
-	free_start(start, 0);
-	free_tab(p->paths);
-	free_env(p->env);
-	free_here_docs(p->here_docs);
-	free(p);
-	rl_clear_history();
-	//get_next_line(-42);
+	free_exit(p, start);
 	exit(nb);
 }

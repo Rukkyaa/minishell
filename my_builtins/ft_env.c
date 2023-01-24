@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 23:35:36 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/20 14:35:58 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/23 10:48:28 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_env(t_env *envbis)
 {
-	t_env *env;
+	t_env	*env;
 
 	env = envbis;
 	while (env)
