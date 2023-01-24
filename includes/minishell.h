@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/24 01:35:58 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 14:46:09 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,9 @@ int	stop_signals(void);
 char	**trim_tab(char **tabl);
 int	create_signal_spe(void);
 int	create_signal_here(void);
+int check_redirection(char *cmd, t_minishell *maillon);
+char	*ft_strcpy(char *dst, const char *src);
+void clean_rest(t_tree *start, int i, int end);
 
 //wildcard.c
 char	*wildcard(char *extension);
@@ -137,36 +140,36 @@ int	check_interligne(char *line);
 int	check_extraligne(char *line);
 char *clean_first(char *line);
 
-int check_redirection(char *cmd, t_minishell *maillon);
-char	*ft_strcpy(char *dst, const char *src);
-void clean_rest(t_tree *start, int i, int end);
-
 //parsing/2-free.c
-void free_all(t_all *p);
 void	free_start(t_tree *start, int mode);
-void free_cmd(t_all *p);
 void free_files_in(t_infile *lst);
 void free_files_out(t_outfile *lst, int mode);
 void	free_minishell(t_minishell *elem, int mode);
-void	free_here_docs(char **here_docs);
 void free_env(t_env *envp);
-void free_megatab(char ***tabl);
+//void free_megatab(char ***tabl);
+
+//parsing/2-freebis.c
+void	free_here_docs(char **here_docs);
+void free_all(t_all *p);
 
 //parsing/3-segmentation.c
-int op_segmentation(t_tree *start, int i, int end, char *reserve);
 int first_segmentation(t_tree *start, t_tree *init);
 int scnd_segmentation(t_tree *start, t_tree *init);
+
+//parsing/3-segmentationbis.c
+int op_segmentation(t_tree *start, int i, int end, char *reserve);
 int op_scd(t_tree *start, int i, char *reserve);
 
 //parsing/4-operations.c
 int	op_found(char *line);
 char *clean_rest_op(t_tree *start, int index);
 void clean_res(char *reserve, int index);
+int	ft_strcmp(char *s1, char *s2);
+int	avoid_quotes_spe(char *line, int i);
 
 //parsing/5-heredocs.c
 char	**get_here_docs(char **line, t_all *p);
 int heredoc_count(char *line, int index);
-int	ft_strcmp(char *s1, char *s2);
 
 //parsing/6-count.c
 int	countof_spe(char **line, char c, int compt, int i);
@@ -186,9 +189,9 @@ void print_all(t_all *p);
 int	init_shell(t_tree *start, t_all *p);
 int	init_cmd(t_tree *start, t_all *p);
 int recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p);
-char	*ft_trim_quotes(char *s1, int *alert);
-char	*ft_trim(char *s1);
+//char	*ft_trim_quotes(char *s1, int *alert);
 int	length_tab(char **tabl);
+char *treat_str(char *s1, int *i, char c);
 
 //parsing/9-redir.c
 char *erase_redir(char *cmd);
@@ -205,11 +208,27 @@ int	check_whitespace(char *line);
 int	invalid_quote(char *line);
 int	first_check(char *line);
 
+//parsing/11-wildparsing.c
+char **w_finder(char **tabl);
+
+//parsing/12-taboperations.c
+char *tab_to_str(char **tabl, int opt);
+char	*ft_trim(char *s1);
+char	**trim_tab(char **tabl);
+int	length_tab(char **tabl);
+char	*ft_trimhard(char *s1);
+
 //parsing/spe_split.c
 char	**ft_split_spe(char *s, char c);
 
 //parsing/var_dealer.c
 char	*replace_var(char *line, t_all *p);
+
+//parsing//var_dealer2.c
+int	find_other(char *line, int init, int *i, int opt);
+char	*tilde(t_env *env);
+char	*change_line(char *line, char *var, int i, int *leng);
+char	*get_var(char *line, t_env *envp, int i, int *leng);
 
 //pipex/executor.c
 int	executor(t_tree *start, t_all *p, char *line);

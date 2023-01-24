@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4-operations.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:47:45 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/16 19:50:36 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/24 14:46:01 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	op_found(char *line)
 		}
 		if (line[i] == '&' && line[i + 1] == '&')
 			return (i);
-		if (line[i] == '|' && line[i + 1] == '|') //possible invalid read
+		if (line[i] == '|' && line[i + 1] == '|')
 			return (i);
 		i++;
 	}
@@ -53,9 +53,32 @@ void	clean_res(char *reserve, int index)
 		reserve[i++] = ' ';
 }
 
-void	free_all(t_all *p)
+int	ft_strcmp(char *s1, char *s2)
 {
-	free_tab(p->paths);
-	free_env(p->env);
-	free(p);
+	if (!s1 && !s2)
+		return (0);
+	else if ((!s1 && s2) || (s1 && !s2))
+		return (-1);
+	while (*s1 == *s2 && *s1 != '\0' && *s2 != '\0')
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
+int	avoid_quotes_spe(char *line, int i)
+{
+	int	ibis;
+
+	ibis = i;
+	if (line[i] == '\'')
+	{
+		i++;
+		while (line[i] != '\0' && line[i] != '\'')
+			i++;
+	}
+	if (line[i] == '\0')
+		return (++ibis);
+	return (++i);
 }
