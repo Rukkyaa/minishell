@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/23 20:48:38 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 01:21:25 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	create_signal_here(void)
 	new_termios = old_termios;
 	new_termios.c_cc[VEOF]  = 4;
 	new_termios.c_cc[VSUSP]  = 26;
-	//new_termios.c_iflag = IXOFF;
 	if (tcsetattr(0,TCSANOW,&new_termios))
 		return (-1);
 	a.sa_handler = sighandler;

@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 12:30:48 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/23 23:28:55 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 01:02:29 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,5 @@ char	*error_case(char *buf, char *reserve, int p)
 		free(buf);
 	if (p == 0)
 		return (reserve);
-	// if (reserve != NULL)
-	// 	free(reserve);
-	// reserve = NULL;
-	//ft_bzero(reserve)
 	return (NULL);
 }

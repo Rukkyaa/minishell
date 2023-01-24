@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 00:46:12 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 01:35:52 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char *tab_to_str_spe(char **tabl, int length)
 		return (free_tab(tabl), NULL);
 	while (++i < length)
 	{
-		//str = ft_strjoin_spe(str, " ");
 		str = ft_strjoin_spe(str, tabl[i]);
 		if (str == NULL)
 			return (free_tab(tabl), NULL);
@@ -54,36 +53,30 @@ char *tab_to_str_spe(char **tabl, int length)
 	return (free_tab(tabl), str);
 }
 
-char	*ft_trim_quotes(char *s1, int *alert)
-{
-	int		i;
-	char	*s1_bis;
-
-	i = 0;
-	if (!s1)
-		return (NULL);
-	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
-			|| (s1[0] == '\'' && s1[1] == '\'')))
-		return (free(s1), NULL);
-	if (ft_strlen(s1) > 2 && ((s1[0] == '\'' && s1[ft_strlen(s1) - 1] == '\'')
-		|| (s1[0] == '\"' && s1[ft_strlen(s1) - 1] == '\"')))
-	{
-		s1_bis = malloc((ft_strlen(s1) - 1) * sizeof(char));
-		if (!s1_bis)
-			return ((*alert) = -1, free(s1), NULL);
-		while (s1[++i + 1] != '\0')
-			s1_bis[i - 1] = s1[i];
-		s1_bis[i - 1] = '\0';
-		free(s1);
-		return (s1_bis);
-	}
-	return (s1);
-}
-
-// char	*ft_trim(char *s1)
+// char	*ft_trim_quotes(char *s1, int *alert)
 // {
-// 	int alert;
-// 	return (ft_trim_quotes(s1, &alert));
+// 	int		i;
+// 	char	*s1_bis;
+
+// 	i = 0;
+// 	if (!s1)
+// 		return (NULL);
+// 	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
+// 			|| (s1[0] == '\'' && s1[1] == '\'')))
+// 		return (free(s1), NULL);
+// 	if (ft_strlen(s1) > 2 && ((s1[0] == '\'' && s1[ft_strlen(s1) - 1] == '\'')
+// 		|| (s1[0] == '\"' && s1[ft_strlen(s1) - 1] == '\"')))
+// 	{
+// 		s1_bis = malloc((ft_strlen(s1) - 1) * sizeof(char));
+// 		if (!s1_bis)
+// 			return ((*alert) = -1, free(s1), NULL);
+// 		while (s1[++i + 1] != '\0')
+// 			s1_bis[i - 1] = s1[i];
+// 		s1_bis[i - 1] = '\0';
+// 		free(s1);
+// 		return (s1_bis);
+// 	}
+// 	return (s1);
 // }
 
 char *treat_str(char *s1, int *i, char c)
@@ -103,7 +96,7 @@ char	*ft_trim(char *s1)
 	char **tabinter;
 
 	i = -1;
-	if (!s1)
+	if (!s1 || s1 == NULL)
 		return (NULL);
 	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
 			|| (s1[0] == '\'' && s1[1] == '\'')))
@@ -138,17 +131,17 @@ char	**trim_tab(char **tabl)
 	return (tabl);
 }
 
-char **tab_generator(char *str)
-{
-	char **minitab;
+// char **tab_generator(char *str)
+// {
+// 	char **minitab;
 
-	minitab = malloc(2 * sizeof(char *));
-	if (!minitab)
-		return (NULL);
-	minitab[0] = str;
-	minitab[1] = NULL;
-	return (minitab);
-}
+// 	minitab = malloc(2 * sizeof(char *));
+// 	if (!minitab)
+// 		return (NULL);
+// 	minitab[0] = str;
+// 	minitab[1] = NULL;
+// 	return (minitab);
+// }
 
 int	length_tab(char **tabl)
 {
@@ -177,8 +170,6 @@ int	w_found(char *str)
 	}
 	return (0);
 }
-
-
 
 // char *tab_to_str_spe(char **tabl)
 // {
@@ -237,7 +228,7 @@ char **w_finder(char **tabl) //cas particulier du grep a gerer
 		{
 			str = wildcard(concat(tabl[i]));
 			if (str == NULL)
-				tabfinal[i] = ft_strdup(tabl[i]);//tab_generator(tabl[i]); //= fct qui genere un tab;
+				tabfinal[i] = ft_strdup(tabl[i]);
 			else
 			{
 				tabfinal[i] = ft_strdup(str);

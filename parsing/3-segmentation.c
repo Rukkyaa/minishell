@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:43:39 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/22 19:28:54 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 01:09:32 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,6 @@ int	op_segmentation(t_tree *start, int i, int end, char *reserve)
 	}
 	return (op_segmentation(start, ++i, end, reserve));
 }
-
-// int	first_segmentation(t_tree *start, t_tree *init, int i)
-// {
-// 	if (start->cmd[i] == '\0' || start->cmd[i + 1] == '\0')
-// 		return (1);
-// 	if (start->cmd[i] == '&' && start->cmd[i + 1] == '&')
-// }//REPRENDRE ICI
 
 int	first_segmentation(t_tree *start, t_tree *init)
 {

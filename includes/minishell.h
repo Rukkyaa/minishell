@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/23 23:00:51 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 01:35:58 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # include <dirent.h>
 # include <sys/ioctl.h>
 # include <limits.h>
-//# include <stropts.h>
 # include <errno.h>
 # include <poll.h>
 # include <sys/msg.h>
@@ -133,6 +132,11 @@ t_tree *init_tree(char **line);
 t_tree *init_m_tree(char *str);
 t_tree *fill_branch(char *reserve, int i);
 
+//parsing/1-initbis.c
+int	check_interligne(char *line);
+int	check_extraligne(char *line);
+char *clean_first(char *line);
+
 int check_redirection(char *cmd, t_minishell *maillon);
 char	*ft_strcpy(char *dst, const char *src);
 void clean_rest(t_tree *start, int i, int end);
@@ -184,7 +188,6 @@ int	init_cmd(t_tree *start, t_all *p);
 int recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p);
 char	*ft_trim_quotes(char *s1, int *alert);
 char	*ft_trim(char *s1);
-char	*ft_trim_quotes(char *s1, int *alert);
 int	length_tab(char **tabl);
 
 //parsing/9-redir.c
