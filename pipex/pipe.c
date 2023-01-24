@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 16:07:10 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/22 17:24:50 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 12:44:58 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,14 +116,10 @@ int	mid_pipe(t_minishell *elem, t_all *p, t_tree *start)
 		close(elem->next->fd[1]);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_in != NULL && opening_in(elem->next->file_in, STDIN_FILENO) == -1))
 		{
-			//close(elem->fd[0]);
-			//close(elem->next->fd[1]);
 			end_process(p, 1);
 		}
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_out != NULL && opening_out(elem->next->file_out, STDOUT_FILENO) == -1))
 		{
-			//close(elem->fd[0]);
-			//close(elem->next->fd[1]);
 			end_process(p, 1);
 		}
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(p->paths, elem->next->cmd, p, start) != 0)
@@ -132,7 +128,7 @@ int	mid_pipe(t_minishell *elem, t_all *p, t_tree *start)
 	}
 	if ((close_all(elem->fd[0], elem->fd[1], &status1, elem->pid) == -1)
 		|| (WIFEXITED(status1) && WEXITSTATUS(status1) != 0))
-		return (kill1(elem, WEXITSTATUS(status1), 2));
+		return (create_signal(), init_signal(0), kill1(elem, WEXITSTATUS(status1), 2));
 	elem = elem->next;
 	if (elem->next->next == NULL)
 		return (create_signal(), init_signal(0), last_pipe(elem, p, start));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabrielduhau <gabrielduhau@student.42.f    +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 11:19:26 by gabrielduha      ###   ########.fr       */
+/*   Updated: 2023/01/24 10:22:15 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ t_tree	*init_tree(char **line)
 
 	if (!line || line == NULL)
 		return (NULL);
-	if (countof_spe(line, '(', 0, -1) != countof_spe(line, ')', 0, -1))
+	if (countof_spe(line, '(', 0, -1) != countof_spe(line, ')', 0, -1)
+		|| check_interligne(*line) != 1 || check_extraligne(*line) != 1)
 		return (printf("Syntax error\n"), free(*line), free(line), NULL);
+	*line = clean_first(*line);
 	start = init_m_tree(*line);
 	if (!start || start == NULL)
 		return (free(*line), free(line), NULL);

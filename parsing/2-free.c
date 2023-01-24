@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/22 17:42:14 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 10:28:01 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,20 +92,4 @@ void	free_start(t_tree *start, int mode)
 		free_start(start->or, mode);
 	free(start);
 	start = NULL;
-}
-
-void	free_here_docs(char **here_docs)
-{
-	int	i;
-
-	i = 0;
-	if (here_docs == NULL)
-		return ;
-	while (here_docs[i] != NULL)
-	{
-		unlink(here_docs[i]); //check si il y a pas une secu a mettre
-		free(here_docs[i]);
-		i++;
-	}
-	free(here_docs);
 }

@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:20:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/22 18:14:24 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 14:47:04 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	countbis(int i, char d, char *line)
 {
 	while (line[i] != '\0' && line[i] != d)
 		i++;
-	return (++i);
+	return (i);
 }
 
 int	countofquotes(char *line, char c, int compt)
@@ -26,7 +26,7 @@ int	countofquotes(char *line, char c, int compt)
 	i = -1;
 	if (!(*line))
 		return (0);
-	while (line[++i] != '\0')
+	while (++i < ft_strlen(line))
 	{
 		if (line[i] != '\0' && line[i] == '\"' && c == '\'')
 			i = countbis(++i, '\"', line);
@@ -38,11 +38,9 @@ int	countofquotes(char *line, char c, int compt)
 			i++;
 			while (line[i] != '\0' && line[i] != c)
 				i++;
-			if (line[i++] == c)
+			if (line[i] == c)
 				compt++;
 		}
-		if (i >= ft_strlen(line))
-			break;
 	}
 	return (compt);
 }

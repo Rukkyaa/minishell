@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/22 17:26:02 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 11:57:33 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,12 @@ t_tree	*parsingator(char *line, t_all *p)
 
 //	important : modifier l'exit dans les finctions des pipes pour qu'il soit traite avant fork (EN FCT de bash)
 // verifier que les builtins hors forks n'ont pas a utiliser les redirections
-//encore qq test sur les signaux
 //generaliser la gestion des signaux dans le exec command one aux autres pipes
 // double prompt chelou
-//4- REVOIR TOUTE LA GESTION D'ERREURS
-//5- VOIR CAS SPECIFIQUES DES BUILTINS
-//6- VOIR CAS SPECIFIQUES DES OP LOGIQUES
-//voir pour la regeneration du prompt avec les signaux
+// ctrl c dans here doc clean tout
+
+//revoir les operations de merge de tab en fonction de leur lengh prealablement traitee plutot que le caract null
+
 
 // trim quote des var a l'exec uniquement et l$test avec test = "s -la"
 
@@ -80,26 +79,7 @@ t_tree	*parsingator(char *line, t_all *p)
 //cas special avec le cd ou on peut creer deux dossier puis rm le parent
 
 
-// void	check_builtins(char *str, t_env *env)
-// {
-// 	// printf("Builtins !\n");
-// 	if (!strncmp(str, "pwd", 3))
-// 		ft_pwd();
-// 	else if (!strncmp(str, "echo", 4))
-// 		ft_echo(str + 4);
-// 	else if (!strncmp(str, "cd", 2))
-// 		ft_cd(env, str);
-// 	else if (!strncmp(str, "env", 3))
-// 		ft_env(env);
-// 	else if (!strncmp(str, "export", 6))
-// 		ft_export(env, str + 7);
-// 	else if (!strncmp(str, "unset", 5))
-// 		ft_unset(env, str + 6);
-// 	//else if (!strncmp(str, "exit", 4))
-// 	//	ft_exit();
-// }
-
-//valgrind --leak-check=full --show-leak-kinds=all --suppressions=./.readline.supp ./minishell
+//valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=./.readline.supp ./minishell
 
 int	main(int argc, char **argv, char **env)
 {
@@ -124,10 +104,10 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(g_sig.line);
 			g_sig.p_status = 1;
-			p->start = parsingator(g_sig.line, p); //leaks
+			p->start = parsingator(g_sig.line, p);
 			if (g_sig.sig_int == 1) // ajouter l'autre var globale ?
 				free_start(p->start, 1);
-			print_all(p);
+			//print_all(p);
 			if (p->start != NULL && g_sig.sig_int == 0)
 				executor(p->start, p, g_sig.line);
 			free_here_docs(p->here_docs);
