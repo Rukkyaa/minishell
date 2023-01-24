@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/24 01:35:39 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 16:46:09 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,7 @@ bool	ft_is_in_env(t_env *env, char *str)
 void	change_value(t_env *env, char *key, char *value)
 {
 	t_env	*new;
-	//int		alert;
 
-	//alert = 0;
-	//value = ft_trim_quotes(value, &alert);
-	value = ft_trim(value);
-	if (!value)
-		return (free(key));
 	if (ft_is_in_env(env, key))
 	{
 		while (env)
@@ -124,9 +118,10 @@ int	before(char *str)
 	while (str[i])
 	{
 		if (str[i] == '+' && str[i + 1] == '=')
-			break ;			
+			break ;
 		else if (str[i] == '+' && str[i + 1] != '=')
-			return (ft_putstr_fd(str, 2), ft_putendl_fd(": not a valid identifier", 2), -1);
+			return (ft_putstr_fd(str, 2),
+				ft_putendl_fd(": not a valid identifier", 2), -1);
 		else if (str[i] == '=')
 			break ;
 		++i;
@@ -138,14 +133,12 @@ int	change_concat(t_env *env, char *key, char *cmd)
 {
 	char	*value;
 	char	*key_not_exist;
-	//int		alert;
-	
+
 	value = NULL;
-	//alert = 0;
 	if (ft_is_in_env(env, key))
 	{
 		if (get_env_var(env, key))
-			value = ft_strjoin(get_env_var(env, key), ft_trim(cmd + ft_strlen(key) + 2));
+			value = ft_strjoin(get_env_var(env, key), cmd + ft_strlen(key) + 2);
 		if (!value)
 			return (free(key), EXIT_FAILURE);
 		change_value(env, key, value);
@@ -155,8 +148,7 @@ int	change_concat(t_env *env, char *key, char *cmd)
 		key_not_exist = ft_strdup(key);
 		if (!key_not_exist)
 			return (free(key), EXIT_FAILURE);
-		//value = ft_trim_quotes(cmd + ft_strlen(key) + 2, &alert);
-		value = ft_trim(cmd + ft_strlen(key) + 2);
+		value = ft_strdup(cmd + ft_strlen(key) + 2);
 		if (!value)
 			return (free(key), free(key_not_exist), EXIT_FAILURE);
 		change_value(env, key_not_exist, value);
@@ -170,8 +162,7 @@ int	ft_export(t_env *env, char **cmd)
 	char	*key;
 	char	*value;
 	int		i;
-	//int		alert;
-	
+
 	if (!cmd[1])
 		return (sort_env(env_to_char_export(env)), 0);
 	i = 0;
@@ -182,17 +173,14 @@ int	ft_export(t_env *env, char **cmd)
 		key = ft_strndup(cmd[i], before(cmd[i]));
 		if (!key)
 			return (1);
-		//key = ft_trim_quotes(key, &alert);
-		key = ft_trim(key);
-		if (!key)
-			return (ft_putendl_fd("not a valid identifier", 2), 1);
 		if (cmd[i][ft_strlen(key)] == '=' && !(cmd[i][ft_strlen(key) + 1]))
 			change_value_equal(env, key);
 		else if (!cmd[i][ft_strlen(key)])
 			change_value_empty(env, key);
 		else
 		{
-			if (cmd[i][ft_strlen(key)] == '+' && cmd[i][ft_strlen(key) + 1] == '=')
+			if (cmd[i][ft_strlen(key)] == '+'
+				&& cmd[i][ft_strlen(key) + 1] == '=')
 				return (change_concat(env, key, cmd[i]));
 			value = ft_strdup(cmd[i] + ft_strlen(key) + 1);
 			if (!value)
