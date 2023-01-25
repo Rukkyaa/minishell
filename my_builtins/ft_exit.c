@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:23:26 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/23 10:50:32 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/25 12:17:45 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	free_exit(t_all *p, t_tree *start)
 	printf("exit\n");
 	free(g_sig.line);
 	free_start(start, 0);
-	free_tab(p->paths);
+	//free_tab(p->paths);
 	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);

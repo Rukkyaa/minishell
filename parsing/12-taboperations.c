@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:52:25 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/24 13:20:28 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 10:41:06 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*ft_trim(char *s1)
 		else if (s1[i] == '\'')
 			s1 = treat_str(s1, &i, '\'');
 	}
-	tabinter = ft_split(s1, ' ');
+	tabinter = ft_split(s1, '\v');
 	if (tabinter == NULL)
 		return (free(s1), NULL);
 	s1_bis = tab_to_str(tabinter, 0);

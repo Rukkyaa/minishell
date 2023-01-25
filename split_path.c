@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 12:13:55 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 15:44:49 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/25 13:11:37 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,12 @@ char	**split_path(char *s, char c)
 		a++;
 	}
 	return (tabl[a] = 0, tabl);
+}
+
+char **maj_path(t_env *env)
+{
+	char **tabl;
+
+	tabl = split_path(get_env_var(env, "PATH"), ':');
+	return (tabl);
 }

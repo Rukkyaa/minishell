@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 10:22:15 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 13:07:57 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ t_all	*init_env(char **env)
 	p->env = env_to_struct(env);
 	if (!p->env)
 		return (free(p), NULL);
-	p->paths = split_path(get_env_var(p->env, "PATH"), ':');
-	if (!p->paths)
-		p->paths = NULL;
+	//p->paths = split_path(get_env_var(p->env, "PATH"), ':');
+	//if (!p->paths)
+		//p->paths = NULL;
 	p->here_docs = NULL;
 	if (create_signal() == -1)
 		return (free_all(p), NULL);

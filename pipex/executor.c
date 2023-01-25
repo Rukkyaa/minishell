@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/25 01:06:53 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 12:32:45 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 		if (create_signal_spe() == -1 || cond_redir(elem) == -1)
 			end_process(p, 1);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0
-			|| exec_command(p->paths, elem->cmd, p, start) != 0)
+			|| exec_command(maj_path(p->env), elem->cmd, p, start) != 0)
 			end_process(p, 1);
 		exit(0);
 	}

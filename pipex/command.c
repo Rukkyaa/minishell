@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 00:16:01 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/25 00:52:21 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 12:53:13 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,28 +70,38 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 	if (!cmd || !*cmd || ft_strlen(cmd[0]) == 0)
 		return (ft_putstr_fd("'' : command not found\n", 2), -1);
 	if (path_comp_builtins(cmd) > 0)
+	{
+		if (paths != NULL)
+			free_tab(paths);
 		return (exec_builtin(path_comp_builtins(cmd), cmd, p, start));
+	}
 	else if (path_comp_builtins(cmd) < 0)
+	{
+		if (paths != NULL)
+			free_tab(paths);
 		end_process(p, 0);
+	}
 	reforged_env = env_to_char(p->env);
 	if (reforged_env == NULL && p->env != NULL)
 		return (-1);
-	while (paths[++i] != NULL)
+	while (paths != NULL && paths[++i] != NULL)
 	{
 		path = ft_strjoin(paths[i], cmd[0]);
         if (path == NULL)
-		    return (free_tab(reforged_env), -1);
+		    return (free_tab(reforged_env), free_tab(paths), -1);
 	    if (access(path, F_OK) == 0)
-            return (exec_now(path, cmd, reforged_env, 1));
+            return (free_tab(paths), exec_now(path, cmd, reforged_env, 1));
         free(path);
     }
+	if (paths != NULL)
+		free_tab(paths);
 	return (final_opt(cmd, reforged_env));
 }
 
 void end_process(t_all *p, int nb)
 {
 	free_start(p->start, 0);
-	free_tab(p->paths);
+	//free_tab(p->paths);
 	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);

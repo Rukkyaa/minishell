@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:47:45 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 14:46:01 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 11:43:05 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,24 @@ char	*clean_rest_op(t_tree *start, int index)
 	return (start->cmd);
 }
 
-void	clean_res(char *reserve, int index)
+char	*clean_res(char *reserve, int index)
 {
 	int	i;
 
 	i = 0;
 	while (i < index)
 		reserve[i++] = ' ';
+	return (reserve);
 }
+
+// void	clean_res(char *reserve, int index)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < index)
+// 		reserve[i++] = ' ';
+// }
 
 int	ft_strcmp(char *s1, char *s2)
 {

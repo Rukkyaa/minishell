@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 12:58:17 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 12:17:56 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@
 
 char *treat_str(char *s1, int *i, char c)
 {
-	s1[*i] = ' ';
+	s1[*i] = '\v';
 	while (s1[*i] != '\0' && s1[*i] != c)
 		(*i)++;
 	if (s1[*i] == c)
-		s1[*i] = ' ';
+		s1[*i] = '\v';
 	return (s1);
 }
 
@@ -54,7 +54,7 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 
 	if (!init)
 		return (-1);
-	init->paths = p->paths;
+	//init->paths = p->paths;
 	init->env = p->env;
 	if (check_redirection(cmd[nb], init) == -1)
 		return (-1);

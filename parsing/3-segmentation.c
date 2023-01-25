@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:43:39 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 10:55:47 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 11:12:21 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,6 @@ int	scnd_segmentation(t_tree *start, t_tree *init)
 	if (!reserve)
 		return (-1);
 	if (op_scd(start, 0, reserve) == -1)
-		return (-1);
+		return (free(reserve), -1);
 	return (free(reserve), scnd_segmentation(start, init));
 }

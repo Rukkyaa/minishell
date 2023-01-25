@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 16:07:10 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 19:14:53 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 12:36:17 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	close_all(int fd1, int fd2, int *status1, pid_t pid)
 
 int	first_pipe(t_minishell *elem, t_all *p, t_tree *start)
 {
-	if (!elem || elem == NULL || !p->paths || !p->env || pipe(elem->fd) == -1)
+	if (!elem || elem == NULL || !p->env || pipe(elem->fd) == -1)
 		return (-1);
 	if (stop_signals() == 1)
 		return (134);
@@ -69,7 +69,7 @@ int	first_pipe(t_minishell *elem, t_all *p, t_tree *start)
 			//close(elem->fd[1]);
 			end_process(p, 1);
 		}
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(p->paths, elem->cmd, p, start) != 0)
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(maj_path(p->env), elem->cmd, p, start) != 0)
 		{
 			//close (elem->fd[1]);
 			end_process(p, 1);
@@ -120,7 +120,7 @@ int	mid_pipe(t_minishell *elem, t_all *p, t_tree *start)
 		{
 			end_process(p, 1);
 		}
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(p->paths, elem->next->cmd, p, start) != 0)
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(maj_path(p->env), elem->next->cmd, p, start) != 0)
 			end_process(p, 1);
 		exit(0);
 	}
@@ -165,7 +165,7 @@ int	last_pipe(t_minishell *elem, t_all *p, t_tree *start)
 			end_process(p, 1);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_out != NULL && opening_out(elem->next->file_out, STDOUT_FILENO) == -1))
 			end_process(p, 1);
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(p->paths, elem->next->cmd, p, start) != 0)
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(maj_path(p->env), elem->next->cmd, p, start) != 0)
 			end_process(p, 1);
 		exit(0);
 	}

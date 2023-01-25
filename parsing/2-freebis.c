@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 10:25:01 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/24 10:25:47 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 12:17:48 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	free_here_docs(char **here_docs)
 
 void	free_all(t_all *p)
 {
-	free_tab(p->paths);
+	//free_tab(p->paths);
 	free_env(p->env);
 	free(p);
 }

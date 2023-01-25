@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 01:03:16 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/24 01:09:07 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 11:29:47 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_interligne(char *line)
 		if (line[i] == '(')
 		{
 			while (line[i] != '\0' && line[i + 1] != '\0' && ((line[i] == '&'
-				&& line[i + 1] == '&') || (line[i] == '|' && line[i + 1] == '|')))
+				&& line[i + 1] == '&') || (line[i] == '|')))  //&& line[i + 1] == '|'
 			{
 				if (line[i++] == ')')
 					return (0);
@@ -50,7 +50,7 @@ int	check_extraligne(char *line)
 		{
 			while (line[i] != '\0' && line[i + 1] != '\0' && line[i + 1] != '(')
 			{
-				if (line[i] != '\0' && line[i + 1] != '\0' && ((line[i] == '&' && line[i + 1] == '&') || (line[i] == '|' && line[i + 1] == '|')))
+				if (line[i] != '\0' && line[i + 1] != '\0' && ((line[i] == '&' && line[i + 1] == '&') || (line[i] == '|')))  //&& line[i + 1] == '|'
 					count++;
 				i++;
 			}

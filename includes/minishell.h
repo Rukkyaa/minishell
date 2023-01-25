@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 10:15:17 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/25 12:32:21 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_minishell
 	t_outfile			*file_out;
 	int					append;
 	t_env				*env;
-	char				**paths;
+	//char				**paths;
 	struct s_minishell	*next;
 }	t_minishell;
 
@@ -83,7 +83,7 @@ typedef struct s_tree
 
 typedef struct s_all
 {
-	char	**paths;
+	//char	**paths;
 	t_env	*env;
 	char	**here_docs;
 	t_tree	*start;
@@ -116,6 +116,7 @@ int			create_signal_here(void);
 int			check_redirection(char *cmd, t_minishell *maillon);
 char		*ft_strcpy(char *dst, const char *src);
 void		clean_rest(t_tree *start, int i, int end);
+char **maj_path(t_env *env);
 
 //wildcard.c
 char		*wildcard(char *extension);
@@ -160,7 +161,7 @@ int			op_scd(t_tree *start, int i, char *reserve);
 //parsing/4-operations.c
 int			op_found(char *line);
 char		*clean_rest_op(t_tree *start, int index);
-void		clean_res(char *reserve, int index);
+char		*clean_res(char *reserve, int index);
 int			ft_strcmp(char *s1, char *s2);
 int			avoid_quotes_spe(char *line, int i);
 

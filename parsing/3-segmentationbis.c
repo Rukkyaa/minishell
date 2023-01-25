@@ -6,25 +6,40 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 10:44:47 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/24 10:45:45 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 11:58:51 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	op_scd_treat(t_tree *start, int i, char *reserve, t_tree *next)
+static int	op_scd_treat_and(t_tree *start, int i, char *reserve)
 {
 	t_tree	*new;
 
 	start->cmd = clean_rest_op(start, i);
 	new = fill_branch(reserve, i + 1);
-	clean_res(reserve, i);
-	if (!new)
+	reserve = clean_res(reserve, i);
+	if (!new || new == NULL)
 		return (-1);
-	if (next != NULL)
-		new->and = next;
-	next = new;
-	return (op_scd(next, i + 1, reserve));
+	if (start->and != NULL)
+		new->and = start->and;
+	start->and = new;
+	return (op_scd(start->and, i + 1, reserve));
+}
+
+static int	op_scd_treat_or(t_tree *start, int i, char *reserve)
+{
+	t_tree	*new;
+
+	start->cmd = clean_rest_op(start, i);
+	new = fill_branch(reserve, i + 1);
+	reserve = clean_res(reserve, i);
+	if (!new || new == NULL)
+		return (-1);
+	if (start->or != NULL)
+		new->or = start->or;
+	start->or = new;
+	return (op_scd(start->or, i + 1, reserve));
 }
 
 int	op_scd(t_tree *start, int i, char *reserve)
@@ -34,9 +49,9 @@ int	op_scd(t_tree *start, int i, char *reserve)
 	if (reserve[i] == '\"' || reserve[i] == '\'')
 		return (op_scd(start, avoid_quotes(reserve, i), reserve));
 	if (reserve[i] == '&' && reserve[i + 1] == '&')
-		return (op_scd_treat(start, i, reserve, start->and));
+		return (op_scd_treat_and(start, i, reserve));
 	else if (reserve[i] == '|' && reserve[i + 1] == '|')
-		return (op_scd_treat(start, i, reserve, start->or));
+		return (op_scd_treat_or(start, i, reserve));
 	return (op_scd(start, ++i, reserve));
 }
 
@@ -73,7 +88,7 @@ static int	op_seg_or(t_tree *start, int i, int end, char *reserve)
 int	op_segmentation(t_tree *start, int i, int end, char *reserve)
 {
 	if (i == end || i + 1 == end)
-		return (start->cmd[last_char_spe(start->cmd, '(')] = ' ', start->cmd[end] = ' ', 1);
+		return (start->cmd[end] = ' ', 1);  //start->cmd[last_char_spe(start->cmd, '(')] = ' '
 	if (reserve[i] == '&' && reserve[i + 1] == '&')
 		return (op_seg_and(start, i, end, reserve));
 	else if (reserve[i] == '|' && reserve[i + 1] == '|')

@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 10:28:01 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 12:43:28 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	free_minishell(t_minishell *elem, int mode)
 	if (elem->file_out != NULL)
 		free_files_out(elem->file_out, mode);
 	free_tab(elem->cmd);
-	free_minishell(elem->next, mode);
+	if (elem->next && elem->next != NULL)
+		free_minishell(elem->next, mode);
 	free(elem);
 }
 
