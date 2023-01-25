@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 13:16:03 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 16:03:53 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,12 +146,12 @@ void	alert_case(char *str)
 	return ;
 }
 
-void	warning(char *str)
+void	warning(char *str, int nb)
 {
 	int	i;
 
 	i = 0;
-	printf("warning: here-document at line delimited by end-of-file (wanted `");
+	printf("warning: here-document at line %d delimited by end-of-file (wanted `", nb);
 	if (ft_strlen(str) == 0 || (ft_strlen(str) == 1 && str[0] == '\n'))
 		printf("')\n");
 	else
@@ -189,13 +189,25 @@ int	prev_valo(char *lect)
 	return (0);
 }
 
+static char *cleanlect(char *lect)
+{
+	if (lect != NULL)
+	{
+		free(lect);
+		lect = NULL;
+	}
+	return (lect);
+}
+
 static char *hdoc_process(t_all *p, int fd, char *newlimiter)
 {
 	char *lect;
 	int prev;
+	int nb;
 
 	lect = replace_var(get_next_line(0), p);
 	prev = prev_valo(lect);
+	nb = 1;
 	while (ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0) // cas ou limiter == NULL
 	{
 		if (lect != NULL)
@@ -203,19 +215,15 @@ static char *hdoc_process(t_all *p, int fd, char *newlimiter)
 		if (lect != NULL)
 			free(lect);
 		lect = replace_var(get_next_line(0), p);
+		nb++;
 		if (prev == 1 && lect == NULL && g_sig.sig_int != 1)
 		{
-			warning(newlimiter);
+			warning(newlimiter, nb);
 			break;
 		}
 		prev = prev_valo(lect);
 	}
-	if (lect != NULL)
-	{
-		free(lect);
-		lect = NULL;
-	}
-	return (lect);
+	return (cleanlect(lect));
 }
 
 int	fill_file(t_all *p, char **line, int max, int nb)

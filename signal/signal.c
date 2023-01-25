@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/24 19:22:47 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 15:47:38 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	create_signal(void)
 		return (-1);
 	new_termios = old_termios;
 	new_termios.c_cc[VSUSP]  = 4;
-	//new_termios.c_iflag = IXOFF;
 	if (tcsetattr(0,TCSANOW,&new_termios))
 		return (-1);
 	a.sa_handler = sighandler;
@@ -35,7 +34,6 @@ int	create_signal(void)
 	sigemptyset( &a.sa_mask );
 	signal(SIGQUIT, SIG_IGN);
 	if (sigaction( SIGINT, &a, NULL) != 0 || sigaction(SIGTSTP, &a, NULL) != 0)
-		//|| sigaction(SIGQUIT, &a, NULL) != 0)
 		return (-1);
 	return (0);
 }

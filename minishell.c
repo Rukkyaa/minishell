@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 12:26:30 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 15:58:49 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	main(int argc, char **argv, char **env)
 	while (g_sig.line == NULL)
 	{
 		init_signal(0);
+		//print_env(p->env);
 		rl_event_hook = event;
 		g_sig.line = readline("\033[1;033mMinishell> \033[m");
 		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
