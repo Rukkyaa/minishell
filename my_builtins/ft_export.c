@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/24 16:46:09 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/25 09:10:32 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ int	ft_export(t_env *env, char **cmd)
 	i = 0;
 	while (cmd[++i])
 	{
+		printf("Line : %s\n", cmd[i]);
 		if (before(cmd[i]) == -1)
 			return (1);
 		key = ft_strndup(cmd[i], before(cmd[i]));
