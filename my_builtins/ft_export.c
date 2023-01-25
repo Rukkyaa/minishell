@@ -6,95 +6,11 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 09:10:32 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/25 10:01:25 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-/*
-** Function to check if the env struct contains the key
-**
-** @param env: env struct
-** @param str: key to check
-**
-** @return: true if found, false if not
-*/
-bool	ft_is_in_env(t_env *env, char *str)
-{
-	while (env)
-	{
-		if (!ft_strcmp(env->key, str))
-			return (true);
-		env = env->next;
-	}
-	return (false);
-}
-
-/*
-** Function to change the give key-value if the input is of the form key=value
-** or to add the key-value to the env struct if it doesn't exist
-**
-** @param env: env struct
-** @param key: key to change or add
-** @param value: value to change or add
-**
-** @return: nothing	
-*/
-void	change_value(t_env *env, char *key, char *value)
-{
-	t_env	*new;
-
-	if (ft_is_in_env(env, key))
-	{
-		while (env)
-		{
-			if (!ft_strncmp(env->key, key, ft_strlen(key)))
-			{
-				free(env->value);
-				env->value = value;
-				env->code = 1;
-				return (free(key));
-			}
-			env = env->next;
-		}
-	}
-	else
-	{
-		new = ft_envnew(key, value);
-		if (!new)
-			return ;
-		new->code = 1;
-		ft_env_add_back(&env, new);
-	}
-}
-
-void	change_value_equal(t_env *env, char *key)
-{
-	t_env	*new;
-
-	if (ft_is_in_env(env, key))
-	{
-		while (env)
-		{
-			if (!ft_strncmp(env->key, key, ft_strlen(key)))
-			{
-				free(env->value);
-				env->code = 2;
-				return ;
-			}
-			env = env->next;
-		}
-	}
-	else
-	{
-		new = ft_envnew(key, NULL);
-		if (!new)
-			return ;
-		new->code = 2;
-		ft_env_add_back(&env, new);
-	}
-}
 
 void	change_value_empty(t_env *env, char *key)
 {
@@ -157,10 +73,23 @@ int	change_concat(t_env *env, char *key, char *cmd)
 	return (EXIT_SUCCESS);
 }
 
+int	do_export(t_env *env, char *key, char *cmd)
+{
+	char	*value;
+
+	if (cmd[ft_strlen(key)] == '+'
+		&& cmd[ft_strlen(key) + 1] == '=')
+		return (change_concat(env, key, cmd));
+	value = ft_strdup(cmd + ft_strlen(key) + 1);
+	if (!value)
+		return (free(key), 1);
+	change_value(env, key, value);
+	return (0);
+}
+
 int	ft_export(t_env *env, char **cmd)
 {
 	char	*key;
-	char	*value;
 	int		i;
 
 	if (!cmd[1])
@@ -179,15 +108,7 @@ int	ft_export(t_env *env, char **cmd)
 		else if (!cmd[i][ft_strlen(key)])
 			change_value_empty(env, key);
 		else
-		{
-			if (cmd[i][ft_strlen(key)] == '+'
-				&& cmd[i][ft_strlen(key) + 1] == '=')
-				return (change_concat(env, key, cmd[i]));
-			value = ft_strdup(cmd[i] + ft_strlen(key) + 1);
-			if (!value)
-				return (free(key), 1);
-			change_value(env, key, value);
-		}
+			return (do_export(env, key, cmd[i]));
 	}
 	return (0);
 }
