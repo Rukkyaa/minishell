@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 12:17:56 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 18:54:28 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,54 @@ char *treat_str(char *s1, int *i, char c)
 	return (s1);
 }
 
+// int	check_comma(char *cmd)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
+// 		i++;
+// 	if (cmd[i] == '\"')
+// 	{
+// 		while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
+// 			i++;
+// 		if (cmd[i] == '\"')
+// 		{
+// 			while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
+// 				i++;
+// 			if (i == ft_strlen(cmd))
+// 				return (1);
+// 		}
+// 	}
+// 	else if (cmd[i] == '\'')
+// 	{
+// 		while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
+// 			i++;
+// 		if (cmd[i] == '\'')
+// 		{
+// 			while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
+// 				i++;
+// 			if (i == ft_strlen(cmd))
+// 				return (1);
+// 		}
+// 	}
+// 	return (0);
+// }
+
+// char **gen_minitab(char *s)
+// {
+// 	char **mini;
+
+// 	mini = malloc(2 * sizeof(char *));
+// 	if (!mini)
+// 		return (NULL);
+// 	mini[0] = ft_strdup(s);
+// 	if (mini[0] == NULL)
+// 		return (free(mini), mini);
+// 	mini[1] = NULL;
+// 	return (mini);
+// }
+
 int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 {
 	t_minishell	*new_elem;
@@ -59,9 +107,14 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	if (check_redirection(cmd[nb], init) == -1)
 		return (-1);
 	cmd[nb] = erase_redir(cmd[nb]);
+	// if (check_comma(cmd[nb]) == 1)
+	// 	init->cmd = gen_minitab(cmd[nb]);
+	// else
 	init->cmd = trim_tab(w_finder(ft_split_spe(cmd[nb], ' ')));
-	if (!init->cmd || init->cmd == NULL)
-		return (printf("Treatment fail\n"), free(init), init = NULL, -1); //traiter cas erruer
+	// if (init->cmd == NULL && check_comma(cmd[nb]) == 1)
+	// 	init->alert = 1;
+	// if (!init->cmd || init->cmd == NULL)
+	// 	return (printf("Treatment fail\n"), free(init), init = NULL, -1); //traiter cas erruer
 	if (cmd[nb + 1] == NULL)
 		return (free_tab(cmd), 1);
 	new_elem = malloc(sizeof(t_minishell));
@@ -82,9 +135,10 @@ int	all_spaces(char **tabl, char *str)
 	char	**inter;
 
 	i = 0;
+	printf("str : %s\n", str);
 	if (tabl == NULL || tabl[i] == NULL)
 		return (1);
-	while (i < count_words2(str, '|'))
+	while (tabl[i] != NULL)// (i < count_words2(str, '|'))
 	{
 		inter = ft_split_spe(tabl[i], ' ');
 		if (*inter == NULL)

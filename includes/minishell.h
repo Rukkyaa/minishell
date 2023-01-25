@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 15:58:44 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/25 18:28:50 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,11 +234,11 @@ void		end_process(t_all *p, int nb);
 int			executor(t_tree *start, t_all *p, char *line);
 int			opening(char *file, int port, int append, int mode);
 char		**env_to_char(t_env *env);
-int			cond_redir(t_minishell *elem);
+int	cond_redir(t_minishell *elem, t_all *p);
 
 //pipex/executor2.c
-int			opening_in(t_infile *file_org, int port);
-int			opening_out(t_outfile *file_org, int port);
+int	opening_in(t_infile *file_org, int port, char **cmd, t_all *p);
+int	opening_out(t_outfile *file_org, int port, char **cmd, t_all *p);
 int			find_cat(t_minishell *elem);
 
 //pipex/exec_builtins.c

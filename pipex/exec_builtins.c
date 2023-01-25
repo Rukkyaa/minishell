@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:42:24 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/24 21:36:12 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 16:47:02 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int path_comp_builtins(char **cmd)
 {
-	if (ft_strcmp(cmd[0], "echo") == 0)
+	if (cmd ==  NULL || cmd[0] == NULL)
+		return (0);
+	else if (ft_strcmp(cmd[0], "echo") == 0)
 		return (1);
 	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (-2);

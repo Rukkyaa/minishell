@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/25 12:32:45 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 17:45:18 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,24 @@ int	stop_signals(void)
 	return (0);
 }
 
-int	cond_redir(t_minishell *elem)
+int	cond_redir(t_minishell *elem, t_all *p)
 {
 	if (g_sig.sig_int > 0 || g_sig.sig_quit > 0
 		|| (elem->file_in != NULL
-			&& opening_in(elem->file_in, STDIN_FILENO) == -1)
+			&& opening_in(elem->file_in, STDIN_FILENO, elem->cmd, p) == -1)
 		|| (elem->file_out != NULL
-			&& opening_out(elem->file_out, STDOUT_FILENO) == -1))
+			&& opening_out(elem->file_out, STDOUT_FILENO, elem->cmd, p) == -1))
 		return (-1);
 	return (0);
 }
+
 
 int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 {
 	int	status1;
 
+	// if (elem->cmd == NULL || elem->cmd[0] == NULL)
+	// 	return (0);
 	if (path_comp_builtins(elem->cmd) < 0)
 		return (exec_builtin(path_comp_builtins(elem->cmd), elem->cmd, p, start));
 	if (stop_signals() == 1)
@@ -76,11 +79,14 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 		return (-1);
 	if (elem->pid == 0)
 	{
-		if (create_signal_spe() == -1 || cond_redir(elem) == -1)
+		if (create_signal_spe() == -1 || cond_redir(elem, p) == -1)
 			end_process(p, 1);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0
 			|| exec_command(maj_path(p->env), elem->cmd, p, start) != 0)
+		{
+			//close_ports(elem);
 			end_process(p, 1);
+		}
 		exit(0);
 	}
 	if (waitpid(elem->pid, &status1, 0) == -1 || ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))

@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 15:58:49 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/25 18:33:29 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,39 +46,22 @@ t_tree	*parsingator(char *line, t_all *p)
 //generaliser la gestion des signaux dans le exec command one aux autres pipes
 // double prompt chelou
 // ctrl c dans here doc clean tout
+//"          '   '   " > polo
 
-// ajout d'un comteur de l'historique pour le msg eof du cat here doc
+
+
+//<<a&&<<b
+//"" > wer   ++++ autre cmd  "          "  AJOUTER UN ATTRIBUT ALERTE DANS LE STRUCT MINISHELL QUI PREVIENT DE PRINT AVANT DE CLOSE
+//<<a && << b
 
 //revoir les operations de merge de tab en fonction de leur lengh prealablement traitee plutot que le caract null
-
-
-// trim quote des var a l'exec uniquement et l$test avec test = "s -la"
-
-// valgrind pendant here docs --> LEAKS
-
-//lancer cd export et unset dans le parent process direct (test avec les pipes)
 
 // cas particulier : ls -l | grep mi > axel | cat < axel
 //TESTS FINAUX
 //test de la var $? (0 - 1 - 134 - 127)
-//Refaire des test sur le traitement des variables
-//verifier les leaks avec la manipulaiton des signaux
-//Faire les tests sur les operateurs logiques
 
-
-//revoir la gestion d'erreur au sein des builtins pour qu'elle s'accorde au reste
-//cas du heredoc avec le free a corriger
-
-//reprendre tous les builtins pour leaks (ftstdup)
-//revoir la gestion d'erreur du here docs
 //verifier l'impact de exit si on le met dans une commande avec differents fichiers et redirections
 //pb dans l'organisation des operations de pipe en cas de exit /// Quel est le bon fonctionnement ??
-
-//PB DE BUILTINS
-//cas des mutiples exit et lancement de minishell dans le minishell
-//TRAITER LE CAS DES ./ ET ../ AVEC LA FCT CD AXEL
-//cas de l'executeur du shel (reinterpreter ./minishelle en /minishell par ex), pareil les ../ et faire un accesss + pouvoir lire les chemins de fichier qui ramene en arriere (../../...)
-//cas special avec le cd ou on peut creer deux dossier puis rm le parent
 
 
 //valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=./.readline.supp ./minishell
@@ -96,7 +79,6 @@ int	main(int argc, char **argv, char **env)
 	while (g_sig.line == NULL)
 	{
 		init_signal(0);
-		//print_env(p->env);
 		rl_event_hook = event;
 		g_sig.line = readline("\033[1;033mMinishell> \033[m");
 		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
@@ -113,6 +95,7 @@ int	main(int argc, char **argv, char **env)
 			//print_all(p);
 			if (p->start != NULL && g_sig.sig_int == 0)
 				executor(p->start, p, g_sig.line);
+			printf("clean\n");
 			free_here_docs(p->here_docs);
 		}
 		free(g_sig.line);

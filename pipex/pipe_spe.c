@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_spe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:29:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 12:35:26 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 17:47:13 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	first_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 		close(elem->fd[0]);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || dup2(elem->fd[1], STDOUT_FILENO) < 0)
 			end_process(p, 1);
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO) == -1))
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_in != NULL && opening_in(elem->file_in, STDIN_FILENO, elem->cmd, p) == -1))
 			end_process(p, 1);
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO) == -1))
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->file_out != NULL && opening_out(elem->file_out, STDOUT_FILENO, elem->cmd, p) == -1))
 			end_process(p, 1);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(maj_path(p->env), elem->cmd, p, start) == -1)
 			end_process(p, 1);
@@ -81,9 +81,9 @@ int	mid_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 			|| dup2(elem->next->fd[1], STDOUT_FILENO) < 0))
 			end_process(p, 1);
 		close(elem->next->fd[0]);
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_in != NULL && opening_in(elem->next->file_in, STDIN_FILENO) == -1))
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_in != NULL && opening_in(elem->next->file_in, STDIN_FILENO, elem->cmd, p) == -1))
 			end_process(p, 1);
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_out != NULL && opening_out(elem->next->file_out, STDOUT_FILENO) == -1))
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_out != NULL && opening_out(elem->next->file_out, STDOUT_FILENO, elem->cmd, p) == -1))
 			end_process(p, 1);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(maj_path(p->env), elem->next->cmd, p, start) == -1)
 			end_process(p, 1);
@@ -109,9 +109,9 @@ int	last_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 		close(elem->fd[1]);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || dup2(elem->fd[0], STDIN_FILENO) < 0)
 			end_process(p, 1);
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_in != NULL && opening_in(elem->next->file_in, STDIN_FILENO) == -1))
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_in != NULL && opening_in(elem->next->file_in, STDIN_FILENO, elem->cmd, p) == -1))
 			end_process(p, 1);
-		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_out != NULL && opening_out(elem->next->file_out, STDOUT_FILENO) == -1))
+		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || (elem->next->file_out != NULL && opening_out(elem->next->file_out, STDOUT_FILENO, elem->cmd, p) == -1))
 			end_process(p, 1);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0 || exec_command(maj_path(p->env), elem->next->cmd, p, start) == -1)
 			end_process(p, 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 00:16:01 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/25 12:53:13 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 17:58:12 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int final_opt(char **cmd, char **reforged_env)
 		return (free_tab(reforged_env), -1);
 	if (access(cmd[0], F_OK) == 0
         && (ft_strncmp(cmd[0], "./", 2) == 0
-            || ft_strncmp(cmd[0], "../", 3) == 0))
+            || ft_strncmp(cmd[0], "../", 3) == 0 || ft_strncmp(cmd[0], "/", 1) == 0))
 		return (exec_now(cmd[0], cmd, reforged_env, 0));
     ft_putstr_fd(cmd[0], 2);
     ft_putstr_fd(": command not found\n", 2);
@@ -68,7 +68,12 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 
 	i = -1;
 	if (!cmd || !*cmd || ft_strlen(cmd[0]) == 0)
-		return (ft_putstr_fd("'' : command not found\n", 2), -1);
+	{
+		if (paths != NULL)
+			free_tab(paths);
+		ft_putstr_fd("'' : command not found\n", 2);
+		end_process(p, 0);
+	}
 	if (path_comp_builtins(cmd) > 0)
 	{
 		if (paths != NULL)
@@ -101,7 +106,6 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 void end_process(t_all *p, int nb)
 {
 	free_start(p->start, 0);
-	//free_tab(p->paths);
 	free_env(p->env);
 	free_here_docs(p->here_docs);
 	free(p);

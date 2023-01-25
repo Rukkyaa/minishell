@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   11-wildparsing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:45:19 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/24 13:19:03 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 17:09:40 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ char **w_finder(char **tabl)
 	char *str;
 
 	i = 0;
+	if (!tabl)
+		return (NULL);
 	tabfinal = malloc((length_tab(tabl) + 1) * sizeof(char *));
 	if (!tabfinal)
 		return (free_tab(tabl), NULL);
@@ -82,6 +84,8 @@ char **w_finder(char **tabl)
 	}
 	tabfinal[i] = NULL;
 	str = tab_to_str(tabfinal, 1);
+	if (str == NULL)
+		return (free_tab(tabfinal), free_tab(tabl), NULL);
 	tabfinal = ft_split_spe(str, ' ');
 	return (free(str), free_tab(tabl), tabfinal);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   12-taboperations.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:52:25 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/25 10:41:06 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 17:03:34 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char *tab_to_str(char **tabl, int opt)
 	str = ft_strdup(tabl[0]);
 	if (str == NULL && tabl[0] != NULL)
 		return (free_tab(tabl), NULL);
+	if (tabl[0] == NULL && str == NULL)
+		return (str);
 	while (tabl[++i] != NULL)
 	{
 		if (opt == 1)
