@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/24 19:04:22 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 01:10:20 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ t_tree	*parsingator(char *line, t_all *p)
 //generaliser la gestion des signaux dans le exec command one aux autres pipes
 // double prompt chelou
 // ctrl c dans here doc clean tout
+
+// ajout d'un comteur de l'historique pour le msg eof du cat here doc
 
 //revoir les operations de merge de tab en fonction de leur lengh prealablement traitee plutot que le caract null
 
