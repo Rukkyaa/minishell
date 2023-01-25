@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:27:26 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 15:49:35 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/24 21:35:32 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int is_whitespace(char c)
 
 int	ft_isprint(int c)
 {
-	if (c > 32 && c <= 126) //j'exclue le espace, pt a revoir dans les cas des quotes
+	if (c > 32 && c <= 126)
 		return (1);
 	return (0);
 }

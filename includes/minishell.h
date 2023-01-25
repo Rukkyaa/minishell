@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/24 14:46:09 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/25 01:03:17 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,11 +230,15 @@ char	*tilde(t_env *env);
 char	*change_line(char *line, char *var, int i, int *leng);
 char	*get_var(char *line, t_env *envp, int i, int *leng);
 
+//pipex/command.c
+int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start);
+void end_process(t_all *p, int nb);
+
 //pipex/executor.c
 int	executor(t_tree *start, t_all *p, char *line);
 int	opening(char *file, int port, int append, int mode);
-int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start);
-void end_process(t_all *p, int nb);
+char **env_to_char(t_env *env);
+int	cond_redir(t_minishell *elem);
 
 //pipex/executor2.c
 int	opening_in(t_infile *file_org, int port);
@@ -296,7 +300,6 @@ char *extrac_cmd(char *line, char **redir);
 char	*clean_up(char *line, int dep, int length);
 t_minishell	*gen_maillon(char *line);
 
-char	*ft_epur(char *str);
 void	remove_sub(char **str, int start, int end);
 int	get_redirection(char *str, t_minishell *minishell);
 

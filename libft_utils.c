@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:28:50 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 15:48:50 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/24 21:35:40 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-
-
 
 char	*ft_strcat(char *s1, char *s2)
 {

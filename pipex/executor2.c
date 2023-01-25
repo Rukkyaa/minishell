@@ -6,11 +6,42 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/22 17:46:09 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/24 21:53:55 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static int	check_file_in(char *file)
+{
+	if (file == NULL)
+		return (printf(" : No such file or directory\n"), -1);
+	if (access(file, F_OK) != 0 || access(file, R_OK) != 0)
+		return (perror(file), -1);
+	return (0);
+}
+
+static int check_file_out(t_outfile *file)
+{
+	int	fdt;
+
+	if (file->file_out == NULL)
+		return (printf(" : No such file or directory\n"), -1);
+	if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
+		return (perror(file->file_out), -1);
+	else
+	{
+		if (file->append == 1)
+			fdt = open(file->file_out, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
+		else
+			fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
+		if (fdt == -1)
+			return (perror(""), -1);
+		if (close(fdt) == -1)
+			return (perror(""), -1);
+	}
+	return (fdt);
+}
 
 int	opening_out(t_outfile *file_org, int port)
 {
@@ -22,21 +53,8 @@ int	opening_out(t_outfile *file_org, int port)
 		return (-1);
 	while (file->next != NULL)
 	{
-		if (file->file_out == NULL)
-			return (printf(" : No such file or directory\n"), -1);
-		if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
-			return (perror(file->file_out), -1);
-		else
-		{
-			if (file->append == 1)
-				fdt = open(file->file_out, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
-			else
-				fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
-			if (fdt == -1)
-				return (perror(""), -1);
-			if (close(fdt) == -1)
-				return (perror(""), -1);
-		}
+		if (check_file_out(file) == -1)
+			return (-1);
 		file = file->next;
 	}
 	if (file->file_out == NULL)
@@ -64,16 +82,12 @@ int	opening_in(t_infile *file_org, int port)
 		return (-1);
 	while(file->next != NULL)
 	{
-		if (file->file_in == NULL)
-			return (printf(" : No such file or directory\n"), -1);
-		if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
-			return (perror(file->file_in),  -1);
+		if (check_file_in(file->file_in) == -1)
+			return (-1);
 		file = file->next;
 	}
-	if (file->file_in == NULL)
-		return (printf(" : No such file or directory\n"), -1);
-	if (access(file->file_in, F_OK) != 0 || access(file->file_in, R_OK) != 0)
-		return (perror(file->file_in), -1);
+	if (check_file_in(file->file_in) == -1)
+		return (-1);
 	fdt = open(file->file_in, O_RDONLY);
 	if (fdt == -1)
 		return (perror(""), -1);

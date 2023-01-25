@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:42:24 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/20 14:52:24 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/24 21:36:12 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int path_comp_builtins(char **cmd) //check si il n'y a pas de leak avec le second membre des strcmp
+int path_comp_builtins(char **cmd)
 {
 	if (ft_strcmp(cmd[0], "echo") == 0)
 		return (1);
-	else if (ft_strcmp(cmd[0], "cd") == 0) // a reprendre
+	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (-2);
 	else if (ft_strcmp(cmd[0], "pwd") == 0)
 		return (3);
-	else if (ft_strcmp(cmd[0], "export") == 0) //a reprendre
+	else if (ft_strcmp(cmd[0], "export") == 0)
 		return (-4);
 	else if (ft_strcmp(cmd[0], "unset") == 0)
 		return (-5);
