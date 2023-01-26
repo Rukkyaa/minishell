@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 14:48:34 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 18:30:23 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,35 @@ t_tree	*parsingator(char *line, t_all *p)
 	return (start);
 }
 
+//valgrind --leak-check=full --show-leak-kinds=all
+//--suppressions=./.readline.supp ./minishell
+
+char	*do_minishell(t_all *p)
+{
+	init_signal(0);
+	rl_event_hook = event;
+	g_sig.line = readline("\033[1;033mMinishell> \033[m");
+	if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
+		return (free(g_sig.line), free_all(p),
+			rl_clear_history(), exit(0), NULL);
+	if (check_whitespace(g_sig.line) == 1)
+		g_sig.sig_int = 1;
+	if (g_sig.sig_int == 0 && g_sig.sig_quit == 0)
+	{
+		add_history(g_sig.line);
+		g_sig.p_status = 1;
+		p->start = parsingator(g_sig.line, p);
+		if (g_sig.sig_int == 1)
+			free_start(p->start, 1);
+		if (p->start != NULL && g_sig.sig_int == 0)
+			executor(p->start, p, g_sig.line);
+		free_here_docs(p->here_docs);
+	}
+	free(g_sig.line);
+	g_sig.line = NULL;
+	return (g_sig.line);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_all	*p;
@@ -53,27 +82,7 @@ int	main(int argc, char **argv, char **env)
 	g_sig.line = NULL;
 	while (g_sig.line == NULL)
 	{
-		init_signal(0);
-		rl_event_hook = event;
-		g_sig.line = readline("\033[1;033mMinishell> \033[m");
-		if (ft_strcmp(g_sig.line, "end") == 0 && g_sig.sig_quit == 1)
-			return (free(g_sig.line), free_all(p),
-				rl_clear_history(), EXIT_SUCCESS);
-		if (check_whitespace(g_sig.line) == 1)
-			g_sig.sig_int = 1;
-		if (g_sig.sig_int == 0 && g_sig.sig_quit == 0)
-		{
-			add_history(g_sig.line);
-			g_sig.p_status = 1;
-			p->start = parsingator(g_sig.line, p);
-			if (g_sig.sig_int == 1)
-				free_start(p->start, 1);
-			if (p->start != NULL && g_sig.sig_int == 0)
-				executor(p->start, p, g_sig.line);
-			free_here_docs(p->here_docs);
-		}
-		free(g_sig.line);
-		g_sig.line = NULL;
+		do_minishell(p);
 	}
 	return (rl_clear_history(), free_all(p), EXIT_SUCCESS);
 }

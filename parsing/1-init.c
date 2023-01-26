@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 12:17:31 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 17:12:26 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ t_tree	*init_tree(char **line)
 	start = init_m_tree(*line);
 	if (!start || start == NULL)
 		return (free(*line), free(line), NULL);
-	start->cmd = ft_strcpy(start->cmd, *line);
 	if (first_segmentation(start, start) == -1)
 		return (free_start(start, 0), free(*line), free(line), NULL);
 	if (scnd_segmentation(start, start) == -1)

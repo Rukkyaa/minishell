@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6-count.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:29:25 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/20 17:53:03 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 18:08:35 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	first_char_spe(char *line, char c, int index)
 	int	i;
 
 	i = index;
-	while (line[i] != '\0')
+	while (i < ft_strlen(line) && line[i] != '\0')
 	{
 		if (line[i] == '\"' || line[i] == '\'')
 			i = avoid_quotes(line, i);

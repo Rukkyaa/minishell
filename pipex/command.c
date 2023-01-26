@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 00:16:01 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/26 14:33:15 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 18:12:07 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,17 @@ static int	final_opt(char **cmd, char **reforged_env)
 	return (127);
 }
 
+void	clean_p(char **paths, int flag, t_all *p)
+{
+	if (paths != NULL)
+		free_tab(paths);
+	if (flag == 1)
+	{
+		ft_putstr_fd("'' : command not found\n", 2);
+		end_process(p, 0);
+	}
+}
+
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 {
 	int		i;
@@ -69,24 +80,12 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 
 	i = -1;
 	if (!cmd || !*cmd || ft_strlen(cmd[0]) == 0)
-	{
-		if (paths != NULL)
-			free_tab(paths);
-		ft_putstr_fd("'' : command not found\n", 2);
-		end_process(p, 0);
-	}
+		clean_p(paths, 1, p);
 	if (path_comp_builtins(cmd) > 0)
-	{
-		if (paths != NULL)
-			free_tab(paths);
-		return (exec_builtin(path_comp_builtins(cmd), cmd, p, start));
-	}
+		return (clean_p(paths, 0, p),
+			exec_builtin(path_comp_builtins(cmd), cmd, p, start));
 	else if (path_comp_builtins(cmd) < 0)
-	{
-		if (paths != NULL)
-			free_tab(paths);
-		end_process(p, 0);
-	}
+		return (clean_p(paths, 0, p), end_process(p, 0), 0);
 	reforged_env = env_to_char(p->env);
 	if (reforged_env == NULL && p->env != NULL)
 		return (-1);
@@ -99,9 +98,7 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 			return (free_tab(paths), exec_now(path, cmd, reforged_env, 1));
 		free(path);
 	}
-	if (paths != NULL)
-		free_tab(paths);
-	return (final_opt(cmd, reforged_env));
+	return (clean_p(paths, 0, p), final_opt(cmd, reforged_env));
 }
 
 void	end_process(t_all *p, int nb)

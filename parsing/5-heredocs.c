@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 14:51:56 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 16:31:41 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,23 +59,37 @@ char	*generate_name(char *limiter)
 	return (free(limiter), title);
 }
 
+static char	*find_lim2(char *line, int i, int compt, int d)
+{
+	char	*limiter;
+
+	limiter = malloc((compt + 1) * sizeof(char));
+	if (!limiter)
+		return (NULL);
+	compt = 0;
+	while (line[i] != '\0' && i < d)
+		limiter[compt++] = line[i++];
+	return (limiter[compt] = '\0', ft_trimhard(limiter));
+}
+
+static int	increment_i(char *line, int i)
+{
+	if (line[i] == '\"' || line[i] == '\'')
+		return (avoid_quotes(line, i));
+	return (++i);
+}
+
 char	*find_lim(char *line, int *alert)
 {
 	int		i;
 	int		compt;
 	int		d;
-	char	*limiter;
 
 	i = 0;
 	compt = 0;
 	while (line[i] != '\0' && line[i + 1] != '\0'
 		&& !(line[i] == '<' && line[i + 1] == '<'))
-	{
-		if (line[i] == '\"' || line[i] == '\'')
-			i = avoid_quotes(line, i);
-		else
-			i++;
-	}
+		i = increment_i(line, i);
 	i += 2;
 	while (line[i] != '\0' && is_whitespace(line[i]) == 1)
 		i++;
@@ -87,13 +101,7 @@ char	*find_lim(char *line, int *alert)
 		compt++;
 		d++;
 	}
-	limiter = malloc((compt + 1) * sizeof(char));
-	if (!limiter)
-		return (NULL);
-	compt = 0;
-	while (line[i] != '\0' && i < d)
-		limiter[compt++] = line[i++];
-	return (limiter[compt] = '\0', ft_trimhard(limiter));
+	return (find_lim2(line, i, compt, d));
 }
 
 void	alert_case(char *str);
@@ -230,6 +238,24 @@ static char	*hdoc_process(t_all *p, int fd, char *newlimiter)
 	return (cleanlect(lect));
 }
 
+int	ret_norm(int opt, t_all *p, char *newlimiter, int nb)
+{
+	if (opt == 0)
+	{
+		alert_case(newlimiter);
+		free(p->here_docs[nb]);
+		p->here_docs[nb] = NULL;
+	}
+	else if (opt == 1)
+	{
+		free(newlimiter);
+		unlink (p->here_docs[nb]);
+		free(p->here_docs[nb]);
+		p->here_docs[nb] = NULL;
+	}
+	return (-1);
+}
+
 int	fill_file(t_all *p, char **line, int max, int nb)
 {
 	int		fd;
@@ -248,16 +274,14 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 		return (free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
 	newlimiter = gen_new_limiter(find_lim(*line, &alert));
 	if (newlimiter == NULL || alert == -1 || signals_hdoc(0) == -1)
-		return (alert_case(newlimiter), free(p->here_docs[nb]),
-			p->here_docs[nb] = NULL, -1);
+		return (ret_norm(0, p, newlimiter, nb));
 	lect = hdoc_process(p, fd, newlimiter);
 	if (nb + 1 == max && (lect || !lect))
 		lect = get_next_line(-42);
 	*line = clean_heredoc_line(*line, p->here_docs[nb],
 			find_lim(*line, &alert), &alert);
 	if (signals_hdoc(1) == -1 || *line == NULL || g_sig.sig_int == 1)
-		return (free(newlimiter), close (fd), unlink (p->here_docs[nb]),
-			free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
+		return (close (fd), ret_norm(1, p, newlimiter, nb));
 	return (free(newlimiter), close (fd), fill_file(p, line, max, ++nb));
 }
 

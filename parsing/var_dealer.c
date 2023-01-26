@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 14:29:11 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 17:27:49 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,20 @@ static char	*quote_modifier(char *line, int *i, char *var, int *leng)
 	return (line);
 }
 
+bool	check_line(char *line, int *i, int flag)
+{
+	if (flag == 1)
+	{
+		return (line[*i] != '\0' && line[*i] == '$'
+			&& line[*i + 1] != '\0' && line[*i + 1] == '$');
+	}
+	else
+	{
+		return (line[*i] != '\0' && line[*i] == '$'
+			&& line[*i + 1] != '\0' && line[*i + 1] == '?');
+	}
+}
+
 static char	*quote_treat(char *line, int *i, int *leng, t_all *p)
 {
 	int	init;
@@ -52,11 +66,9 @@ static char	*quote_treat(char *line, int *i, int *leng, t_all *p)
 	e = find_other(line, init, 0, 0);
 	while (line != NULL && *i < e)
 	{
-		if (line[*i] != '\0' && line[*i] == '$'
-			&& line[*i + 1] != '\0' && line[*i + 1] == '$')
+		if (check_line(line, i, 1))
 			*i += 2;
-		else if (line[*i] != '\0' && line[*i] == '$'
-			&& line[*i + 1] != '\0' && line[*i + 1] == '?')
+		else if (check_line(line, i, 932587))
 		{
 			line = quote_modifier(line, i, ft_itoa(g_sig.cmd_stat), leng);
 			e = find_other(line, init, i, 1);

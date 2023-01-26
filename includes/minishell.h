@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 14:30:48 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 15:47:04 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,7 @@ int			init_cmd(t_tree *start, t_all *p);
 int			recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p);
 int			length_tab(char **tabl);
 char		*treat_str(char *s1, int *i, char c);
+char		**tabone(char *s);
 
 //parsing/9-redir.c
 char		*erase_redir(char *cmd);
@@ -203,6 +204,8 @@ char		*get_filename(char *line, int i);
 void		clean_rest(t_tree *start, int i, int end);
 t_outfile	*add_file_out(t_outfile *lst, char *file, int opt);
 t_infile	*add_file_in(t_infile *lst, char *file);
+t_outfile	*null_case(char *file, int opt);
+int			append_treat(char *cmd, t_minishell *maillon);
 
 //parsing/10-complement.c
 int			countbis(int i, char d, char *line);
@@ -256,6 +259,9 @@ int			exec_builtin(int nb, char **cmd, t_all *p, t_tree *start);
 int			first_pipe(t_minishell *elem, t_all *p, t_tree *start);
 int			mid_pipe(t_minishell *elem, t_all *p, t_tree *start);
 int			last_pipe(t_minishell *elem, t_all *p, t_tree *start);
+int			close_all(int fd1, int fd2, int *status1, pid_t pid);
+int			end_pipe2(t_minishell *elem, t_all *p, t_tree *start);
+int			end_pipe3(t_minishell *elem);
 
 //pipex/pipe_spe.c
 int			first_pipe_cat(t_minishell *elem, t_all *p, t_tree *start);

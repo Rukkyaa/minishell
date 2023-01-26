@@ -6,26 +6,36 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 14:38:10 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 18:25:56 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_size_env(t_env *env)
+{
+	int	i;
+
+	i = -1;
+	while (env)
+	{
+		env = env->next;
+		++i;
+	}
+	return (i);
+}
 
 char	**env_to_char(t_env *env)
 {
 	char	**reforged;
 	int		i;
 	int		e;
-	t_env	*temp;
 
 	i = 0;
 	e = 0;
 	if (!env || env == NULL)
 		return (NULL);
-	temp = env;
-	while (temp != NULL && i++ > -1)
-		temp = temp->next;
+	i = ft_size_env(env);
 	reforged = malloc((i + 1) * sizeof(char *));
 	if (!reforged)
 		return (NULL);

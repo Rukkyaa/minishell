@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 14:38:47 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 17:52:42 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,27 @@ static int	check_file_out(t_outfile *file)
 		if (file->append == 1)
 			fdt = open(file->file_out, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 		else
-			fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
+			fdt = open(file->file_out, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
 		if (fdt == -1)
 			return (perror(""), -1);
 		if (close(fdt) == -1)
 			return (perror(""), -1);
 	}
 	return (fdt);
+}
+
+int	fin_opening(t_all *p, int fdt, int port, char **cmd)
+{
+	if (fdt == -1)
+		return (perror(""), -1);
+	if (cmd == NULL || cmd[0] == NULL)
+	{
+		close(fdt);
+		end_process(p, 0);
+	}
+	if (dup2(fdt, port) < 0)
+		return (perror(""), close(fdt), -1);
+	return (close(fdt), 0);
 }
 
 int	opening_out(t_outfile *file_org, int port, char **cmd, t_all *p)
@@ -64,17 +78,8 @@ int	opening_out(t_outfile *file_org, int port, char **cmd, t_all *p)
 	else if (file->append == 1)
 		fdt = open(file->file_out, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 	else
-		fdt = open(file->file_out, O_WRONLY | O_CREAT, S_IRWXU);
-	if (fdt == -1)
-		return (perror(""), -1);
-	if (cmd == NULL || cmd[0] == NULL)
-	{
-		close(fdt);
-		end_process(p, 0);
-	}
-	if (dup2(fdt, port) < 0)
-		return (perror(""), close(fdt), -1);
-	return (close(fdt), 0);
+		fdt = open(file->file_out, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
+	return (fin_opening(p, fdt, port, cmd));
 }
 
 int	opening_in(t_infile *file_org, int port, char **cmd, t_all *p)

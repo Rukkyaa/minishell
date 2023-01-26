@@ -6,59 +6,11 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 14:44:44 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 15:48:32 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	event(void)
-{
-	return (42);
-}
-
-int	create_signal(void)
-{
-	struct termios		old_termios;
-	struct termios		new_termios;
-	struct sigaction	a;
-
-	if (tcgetattr(0, &old_termios) != 0)
-		return (-1);
-	new_termios = old_termios;
-	new_termios.c_cc[VSUSP] = 4;
-	if (tcsetattr(0, TCSANOW, &new_termios))
-		return (-1);
-	a.sa_handler = sighandler;
-	a.sa_flags = 0;
-	sigemptyset(&a.sa_mask);
-	signal(SIGQUIT, SIG_IGN);
-	if (sigaction(SIGINT, &a, NULL) != 0 || sigaction(SIGTSTP, &a, NULL) != 0)
-		return (-1);
-	return (0);
-}
-
-int	create_signal_spe(void)
-{
-	struct termios		old_termios;
-	struct termios		new_termios;
-	struct sigaction	a;
-
-	if (tcgetattr(0, &old_termios) != 0)
-		return (-1);
-	new_termios = old_termios;
-	new_termios.c_cc[VEOF] = 4;
-	new_termios.c_cc[VSUSP] = 26;
-	if (tcsetattr(0, TCSANOW, &new_termios))
-		return (-1);
-	a.sa_handler = sighandler;
-	a.sa_flags = 0;
-	sigemptyset(&a.sa_mask);
-	if (sigaction(SIGINT, &a, NULL) != 0
-		|| sigaction(SIGQUIT, &a, NULL) != 0)
-		return (-1);
-	return (init_signal(-1), 0);
-}
 
 int	create_signal_here(void)
 {

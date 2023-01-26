@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 12:13:55 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 14:49:22 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 18:17:32 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ void	free_tab(char **tabl)
 		free(tabl);
 }
 
+char	*on_lappelle_comment_celle_la(char *str, int d)
+{
+	str[d++] = '/';
+	str[d] = '\0';
+	return (str);
+}
+
 char	**split_path(char *s, char c)
 {
 	char	**tabl;
@@ -64,13 +71,13 @@ char	**split_path(char *s, char c)
 	int		d;
 
 	i = 0;
-	a = 0;
+	a = -1;
 	if (!s || s == NULL)
 		return (NULL);
 	tabl = malloc((count_words(s, c) + 1) * sizeof(char *));
 	if (!(tabl))
 		return (0);
-	while (a < count_words(s, c) && s[i] != '\0')
+	while (++a < count_words(s, c) && s[i] != '\0')
 	{
 		tabl[a] = malloc((words_length(s, i, c) + 2) * sizeof(char));
 		if (!(tabl[a]))
@@ -80,9 +87,7 @@ char	**split_path(char *s, char c)
 			i++;
 		while (s[i] != c && s[i] != '\0')
 			tabl[a][d++] = s[i++];
-		tabl[a][d++] = '/';
-		tabl[a][d] = '\0';
-		a++;
+		tabl[a] = on_lappelle_comment_celle_la(tabl[a], d);
 	}
 	return (tabl[a] = 0, tabl);
 }

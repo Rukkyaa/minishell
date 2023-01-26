@@ -3,133 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 12:16:49 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 17:17:27 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// char	*ft_trim_quotes(char *s1, int *alert)
-// {
-// 	int		i;
-// 	char	*s1_bis;
-
-// 	i = 0;
-// 	if (!s1)
-// 		return (NULL);
-// 	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
-// 			|| (s1[0] == '\'' && s1[1] == '\'')))
-// 		return (free(s1), NULL);
-// 	if (ft_strlen(s1) > 2 && ((s1[0] == '\'' && s1[ft_strlen(s1) - 1] == '\'')
-// 		|| (s1[0] == '\"' && s1[ft_strlen(s1) - 1] == '\"')))
-// 	{
-// 		s1_bis = malloc((ft_strlen(s1) - 1) * sizeof(char));
-// 		if (!s1_bis)
-// 			return ((*alert) = -1, free(s1), NULL);
-// 		while (s1[++i + 1] != '\0')
-// 			s1_bis[i - 1] = s1[i];
-// 		s1_bis[i - 1] = '\0';
-// 		free(s1);
-// 		return (s1_bis);
-// 	}
-// 	return (s1);
-// }
-
-char	*treat_str(char *s1, int *i, char c)
-{
-	s1[*i] = '\v';
-	while (s1[*i] != '\0' && s1[*i] != c)
-		(*i)++;
-	if (s1[*i] == c)
-		s1[*i] = '\v';
-	return (s1);
-}
-
-// int	check_comma(char *cmd)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
-// 		i++;
-// 	if (cmd[i] == '\"')
-// 	{
-// 		while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
-// 			i++;
-// 		if (cmd[i] == '\"')
-// 		{
-// 			while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
-// 				i++;
-// 			if (i == ft_strlen(cmd))
-// 				return (1);
-// 		}
-// 	}
-// 	else if (cmd[i] == '\'')
-// 	{
-// 		while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
-// 			i++;
-// 		if (cmd[i] == '\'')
-// 		{
-// 			while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
-// 				i++;
-// 			if (i == ft_strlen(cmd))
-// 				return (1);
-// 		}
-// 	}
-// 	return (0);
-// }
-
-// char **gen_minitab(char *s)
-// {
-// 	char **mini;
-
-// 	mini = malloc(2 * sizeof(char *));
-// 	if (!mini)
-// 		return (NULL);
-// 	mini[0] = ft_strdup(s);
-// 	if (mini[0] == NULL)
-// 		return (free(mini), mini);
-// 	mini[1] = NULL;
-// 	return (mini);
-// }
-
-char	**tabone(char *s)
-{
-	char	**tabl;
-
-	tabl = malloc(2 * sizeof(char *));
-	if (!tabl)
-	{
-		if (s != NULL)
-			free(s);
-		return (NULL);
-	}
-	if (s == NULL)
-		tabl[0] = NULL;
-	else
-		tabl[0] = ft_strdup(s);
-	if (s != NULL && tabl[0] == NULL)
-		return (free(tabl), free(s), NULL);
-	tabl[1] = NULL;
-	return (free(s), tabl);
-}
-
-int	que_space(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] != ' ')
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 static t_minishell	*parameting(t_minishell *new_elem)
 {
