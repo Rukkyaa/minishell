@@ -6,7 +6,7 @@
 /*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:02:21 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 22:03:46 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/26 22:56:52 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	pipex(t_minishell *first_elem, t_all *p, t_tree *start)
 	else if (first_elem->next != NULL && first_elem->next->next != NULL
 		&& find_cat(first_elem) == 1)
 		return (first_pipe_cat(first_elem, p, start));
-	return (first_pipe(first_elem, p, start));
+	return (first_pipe_cat(first_elem, p, start));
 }
 
 int	find_cat(t_minishell *elem)
