@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spe_split.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 12:28:52 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/25 18:49:02 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 10:31:36 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,49 @@ static char	**free_tab2(char **tabl, int a)
 	return (0);
 }
 
-// char **tabone(char *s)
-// {
-// 	char **tabl;
-	
-// 	tabl = malloc(2 * sizeof(char *));
-// 	if (!tabl)
-// 		return (NULL);
-// 	tabl[0] = ft_strdup(s);
-// 	if (tabl[0] == NULL)
-// 		return (NULL);
-// 	tabl[1] = NULL;
-// 	return (tabl);
-// }
+
+
+int	check_spaces(char *s, char c)
+{
+	int	i;
+	int	compt;
+
+	i = 0;
+	compt = 0;
+	while (s[i] != '\0')
+	{
+		if (s[i] == '\'' || s[i] == '\"')
+			compt++;
+		if (s[i] != '\'' && s[i] != '\"' && s[i] != c)
+			return (0);
+		i++;
+	}
+	if (compt > 0)
+		return (1);
+	return (0);
+}
+
+int	check_spaces_spe(char *str, char c)
+{
+	int	i;
+	char *s;
+	int	compt;
+
+	i = 0;
+	compt = 0;
+	s = erase_redir(ft_strdup(str));
+	while (s[i] != '\0')
+	{
+		if (s[i] == '\'' || s[i] == '\"')
+			compt++;
+		if (s[i] != '\'' && s[i] != '\"' && s[i] != c)
+			return (free(s), 0);
+		i++;
+	}
+	if (compt > 0)
+		return (free(s), 1);
+	return (free(s), 0);
+}
 
 char	**ft_split_spe(char *s, char c)
 {
@@ -92,12 +122,14 @@ char	**ft_split_spe(char *s, char c)
 	int		a;
 	int		i;
 	int		d;
-	int		end;
+	//int		end;
 
 	i = 0;
 	a = 0;
 	if (!s)
 		return (NULL);
+	// if (check_spaces(s, c) == 1)
+	// 	return (tabone(s));
 	tabl = malloc((count_words2(s, c) + 1) * sizeof(char *));
 	if (!(tabl))
 		return (NULL);
@@ -113,11 +145,11 @@ char	**ft_split_spe(char *s, char c)
 		{
 			if (s[i] == '\"' || s[i] == '\'')
 			{
-				end = avoid_quotes(s, i);
-				while (i < ft_strlen(s) && s[i] != '\0' && i <= end)
-					tabl[a][d++] = s[i++];
+				i = avoid_quotes(s, i);
+				// while (i < ft_strlen(s) && s[i] != '\0' && i <= end)
+				// 	tabl[a][d++] = s[i++];
 			}
-			else 
+			else
 				tabl[a][d++] = s[i++];
 		}
 		tabl[a][d] = '\0';

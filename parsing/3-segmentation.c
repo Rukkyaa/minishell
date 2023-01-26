@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 11:43:39 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 11:12:21 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 11:05:48 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	first_segmentation(t_tree *start, t_tree *init)
 	int		end;
 	char	*reserve;
 
-	if (last_char_spe(start->cmd, '(') == -1 && start->and == NULL && start->or == NULL)
+	if (last_char_spe(start->cmd, '(') == -1
+		&& start->and == NULL && start->or == NULL)
 		return (1);
 	if (last_char_spe(start->cmd, '(') == -1)
 	{
@@ -32,7 +33,8 @@ int	first_segmentation(t_tree *start, t_tree *init)
 	end = first_char_spe(reserve, ')', last_char_spe(reserve, '('));
 	if (end == -1)
 		return (free(reserve), -1);
-	if (op_segmentation(start, last_char_spe(reserve, '(') + 1, end, reserve) == -1)
+	if (op_segmentation(start,
+			last_char_spe(reserve, '(') + 1, end, reserve) == -1)
 		return (free(reserve), -1);
 	return (free(reserve), first_segmentation(start, init));
 }
@@ -91,4 +93,19 @@ int	scnd_segmentation(t_tree *start, t_tree *init)
 	if (op_scd(start, 0, reserve) == -1)
 		return (free(reserve), -1);
 	return (free(reserve), scnd_segmentation(start, init));
+}
+
+int	op_scd_treat_and(t_tree *start, int i, char *reserve)
+{
+	t_tree	*new;
+
+	start->cmd = clean_rest_op(start, i);
+	new = fill_branch(reserve, i + 1);
+	reserve = clean_res(reserve, i);
+	if (!new || new == NULL)
+		return (-1);
+	if (start->and != NULL)
+		new->and = start->and;
+	start->and = new;
+	return (op_scd(start->and, i + 1, reserve));
 }

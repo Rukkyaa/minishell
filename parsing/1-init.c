@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 15:58:56 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 12:17:31 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,11 @@ t_all	*init_env(char **env)
 	p->env = env_to_struct(env);
 	if (!p->env)
 		return (free(p), NULL);
-	//p->paths = split_path(get_env_var(p->env, "PATH"), ':');
-	//if (!p->paths)
-		//p->paths = NULL;
 	p->here_docs = NULL;
 	if (create_signal() == -1)
 		return (free_all(p), NULL);
 	g_sig.cmd_stat = 0;
-	return ( p);
+	return (p);
 }
 
 t_tree	*init_tree(char **line)

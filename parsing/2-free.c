@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 00:02:09 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 12:43:28 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 11:06:12 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	free_files_out(t_outfile *lst, int mode)
 		return ;
 	while (lst != NULL)
 	{
-		if (mode == 1 && lst->created == 1 && lst->file_out && lst->file_out != NULL)
+		if (mode == 1 && lst->created == 1 && lst->file_out
+			&& lst->file_out != NULL)
 			unlink(lst->file_out);
 		if (lst->file_out && lst->file_out != NULL)
 			free(lst->file_out);

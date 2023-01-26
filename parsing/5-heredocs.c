@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 16:03:53 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 13:12:15 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*find_lim(char *line, int *alert)
 		i++;
 	d = i;
 	*alert = i;
-	while (line[d] != '\0' && is_whitespace(line[d]) == 0) // peut aussi etre un pipe ou un op logique ?
+	while (line[d] != '\0' && is_whitespace(line[d]) == 0 && line[d] != '|' && line[d] != '&')
 	{
 		compt++;
 		d++;
@@ -91,7 +91,6 @@ char	*find_lim(char *line, int *alert)
 	compt = 0;
 	while (line[i] != '\0' && i < d)
 		limiter[compt++] = line[i++];
-	//return (limiter[compt] = '\0', ft_trim_quotes(limiter, alert));
 	return (limiter[compt] = '\0', ft_trimhard(limiter));
 }
 
@@ -130,7 +129,7 @@ char	*clean_heredoc_line(char *line, char *filename, char *LIM, int *alert)
 	if (new_line == NULL || !new_line)
 		return (alert_case(LIM), free(line), NULL);
 	if (ft_strlen(LIM) == 0)
-		reste = ft_substr(line, *alert + 2, ft_strlen(line)); //verifier si il n'y a pas plus de cas particuliers style <<"''"
+		reste = ft_substr(line, *alert + 2, ft_strlen(line));
 	else
 		reste = ft_substr(line, *alert + ft_strlen(LIM), ft_strlen(line));
 	new_line = ft_strjoin_spe(new_line, reste);

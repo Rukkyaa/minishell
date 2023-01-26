@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 18:33:29 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 09:53:54 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_tree	*parsingator(char *line, t_all *p)
 	if (*line_bis == NULL)
 		return (free(line_bis), NULL);
 	start = init_tree(line_bis);
+	printf("on a peu :%s.\n", start->cmd);
 	if (init_shell(start, p) == -1)
 		return (free_start(start, 1), NULL);
 	return (start);

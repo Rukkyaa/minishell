@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   11-wildparsing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:45:19 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/25 17:09:40 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 11:46:22 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	w_found(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if ((str[0] == '\'' || str[ft_strlen(str) - 1] == '\'')
@@ -50,11 +50,36 @@ static char	*concat(char *s1)
 	return (ft_substr(s1, s, i + 1));
 }
 
-char **w_finder(char **tabl)
+static char	**end_wild(char **tabfinal, char **tabl)
 {
-	int i;
-	char **tabfinal;
-	char *str;
+	char	*str;
+
+	str = tab_to_str(tabfinal, 1);
+	if (str == NULL)
+		return (free_tab(tabfinal), free_tab(tabl), NULL);
+	tabfinal = ft_split_spe(str, ' ');
+	return (free(str), free_tab(tabl), tabfinal);
+}
+
+static char	*w_treat(char *tabli)
+{
+	char	*str;
+
+	if (w_found(tabli) == 1)
+	{
+		str = wildcard(concat(tabli));
+		if (str == NULL)
+			return (ft_strdup(tabli));
+		else
+			return (str);
+	}
+	return (ft_strdup(tabli));
+}
+
+char	**w_finder(char **tabl)
+{
+	int		i;
+	char	**tabfinal;
 
 	i = 0;
 	if (!tabl)
@@ -64,28 +89,9 @@ char **w_finder(char **tabl)
 		return (free_tab(tabl), NULL);
 	while (tabl[i] != NULL)
 	{
-		if (w_found(tabl[i]) == 1)
-		{
-			str = wildcard(concat(tabl[i]));
-			if (str == NULL)
-				tabfinal[i] = ft_strdup(tabl[i]);
-			else
-			{
-				tabfinal[i] = ft_strdup(str);
-				free(str);
-			}
-			if (tabfinal[i] == NULL)
-				return (free_tab(tabfinal), free_tab(tabl), NULL);
-		}
-		else
-			tabfinal[i] = ft_strdup(tabl[i]);
+		tabfinal[i] = w_treat(tabl[i]);
 		if (tabfinal[i++] == NULL)
 			return (free_tab(tabfinal), free_tab(tabl), NULL);
 	}
-	tabfinal[i] = NULL;
-	str = tab_to_str(tabfinal, 1);
-	if (str == NULL)
-		return (free_tab(tabfinal), free_tab(tabl), NULL);
-	tabfinal = ft_split_spe(str, ' ');
-	return (free(str), free_tab(tabl), tabfinal);
+	return (tabfinal[i] = NULL, end_wild(tabfinal, tabl));
 }

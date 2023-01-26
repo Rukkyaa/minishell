@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 14:40:48 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/24 14:42:50 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 12:11:59 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*change_line(char *line, char *var, int i, int *leng)
 	return (free(line), free(var), new_line);
 }
 
-static char *empty_var(char *var)
+static char	*empty_var(char *var)
 {
 	int	e;
 
@@ -93,7 +93,7 @@ char	*get_var(char *line, t_env *envp, int i, int *leng)
 	if (line == NULL || env == NULL)
 		return (NULL);
 	while (line[e] != '\0' && is_whitespace(line[e]) == 0
-			&& line[e] != '\"' && line[e] != '\'' && line[e] != '$')
+		&& line[e] != '\"' && line[e] != '\'' && line[e] != '$')
 		e++;
 	var = ft_substr(line, i + 1, e - i - 1);
 	if (!var)
@@ -102,7 +102,8 @@ char	*get_var(char *line, t_env *envp, int i, int *leng)
 	e = -1;
 	while (env != NULL)
 	{
-		if (ft_strncmp(env->key, var, ft_strlen(var)) == 0 && (env->code == 1 || env->code == 2 || env->code == 4))
+		if (ft_strncmp(env->key, var, ft_strlen(var)) == 0
+			&& (env->code == 1 || env->code == 2 || env->code == 4))
 			return (free(var), ft_strdup(env->value));
 		env = env->next;
 	}

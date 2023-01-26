@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   10-complement.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:20:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 16:36:43 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 11:09:14 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	countbis(int i, char d, char *line)
 
 int	countofquotes(char *line, char c, int compt)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (!(*line))
@@ -77,12 +77,14 @@ int	invalid_quote(char *line)
 
 int	first_check(char *line)
 {
-	char *line_bis;
-	char **tab_cmd;
+	char	*line_bis;
+	char	**tab_cmd;
 
-	line_bis = ft_strdup(line);
+	line_bis = erase_redir(ft_strdup(line));
+	if (check_spaces(line_bis, ' ') == 1 || que_space(line_bis) == 1)
+		return (free(line_bis), printf("ok\n"), 0);
 	tab_cmd = ft_split_spe(line_bis, '|');
-	if (all_spaces(tab_cmd, line_bis) == 1)
+	if (all_spaces(tab_cmd) == 1)
 		return (printf("syntax error near unexpected token `|'\n"),
 			free_tab(tab_cmd), free(line_bis), g_sig.cmd_stat = 2, 1);
 	return (free_tab(tab_cmd), free(line_bis), 0);

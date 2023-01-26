@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/24 13:14:36 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 12:07:03 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	clean_rest(t_tree *start, int i, int end)
 		start->cmd[i++] = ' ';
 }
 
-char	*get_filename(char *line, int i) //attention a gerer les quotes
+char	*get_filename(char *line, int i)
 {
 	char	*text;
 	int		a;
@@ -67,8 +67,29 @@ t_infile	*add_file_in(t_infile *lst, char *file)
 	if (!new_elem)
 		return (free_files_in(lst), NULL);
 	new_elem->file_in = file;
-	new_elem->next = NULL;
-	return (p->next = new_elem, p_bis);
+	return (new_elem->next = NULL, p->next = new_elem, p_bis);
+}
+
+static t_outfile	*null_case(char *file, int opt)
+{
+	t_outfile	*p;
+
+	p = malloc(sizeof(t_outfile));
+	if (!p && (file == NULL || !file))
+		return (NULL);
+	else if (!p)
+		return (free(file), NULL);
+	p->file_out = file;
+	p->next = NULL;
+	if (opt == 1)
+		p->append = 1;
+	else
+		p->append = 0;
+	if (file != NULL && access(file, F_OK) != 0)
+		p->created = 1;
+	else
+		p->created = 0;
+	return (p);
 }
 
 t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
@@ -78,24 +99,7 @@ t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
 	t_outfile	*p_bis;
 
 	if (lst == NULL)
-	{
-		p = malloc(sizeof(t_outfile));
-		if (!p && (file == NULL || !file))
-			return (NULL);
-		else if (!p)
-			return (free(file), NULL);
-		p->file_out = file;
-		p->next = NULL;
-		if (opt == 1)
-			p->append = 1;
-		else
-			p->append = 0;
-		if (file != NULL && access(file, F_OK) != 0)
-			p->created = 1;
-		else
-			p->created = 0;
-		return (p);
-	}
+		return (null_case(file, opt));
 	p = lst;
 	p_bis = p;
 	while (p->next != NULL)
@@ -116,29 +120,20 @@ t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
 	return (p->next = new_elem, p_bis);
 }
 
-int	check_redirection(char *cmd, t_minishell *maillon) //fonction bancale (risque de invalid read)
+static int	append_treat(char *cmd, t_minishell *maillon)
 {
 	int	i;
 
 	i = 0;
-	while (i + 2 < ft_strlen(cmd)) //ft_strlen(cmd) > 3 && cmd[i + 2] != '\0') //il y a sans doute une plus opti a faire
+	while (i + 3 < ft_strlen(cmd))
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
-			i = avoid_quotes(cmd, i) - 1; //MEGA BANCAL
-		else if ((i == 0 && cmd[i] == '<' && cmd[i + 1] != '<') || (i > 0 && cmd[i - 1] != '<' && cmd[i] == '<' && cmd[i + 2] != '<')) //NB: il peut y avoir plusieurs fois la meme redirection
-			maillon->file_in = add_file_in(maillon->file_in, ft_trimhard(get_filename(cmd, i + 1)));
-		else if ((i == 0 && cmd[i] == '>' && cmd[i + 1] != '<') || (cmd[i] != '>' && cmd[i + 1] == '>' && cmd[i + 2] != '>')) //NB: il peut y avoir plusieurs fois la meme redirection
-			maillon->file_out = add_file_out(maillon->file_out, ft_trimhard(get_filename(cmd, i + 2)), 0);
-		i++;
-	}
-	i = 0;
-	while (i + 3 < ft_strlen(cmd)) //ft_strlen(cmd) > 4 && cmd[i + 3] != '\0')
-	{
-		if (cmd[i] == '\"' || cmd[i] == '\'')
-			i = avoid_quotes(cmd, i) - 1; //MEGA BANCAL
-		else if (cmd[i] != '>' && cmd[i + 1] == '>' && cmd[i + 2] == '>' && cmd[i + 3] != '>') //NB: il peut y avoir plusieurs fois la meme redirection
+			i = avoid_quotes(cmd, i) - 1;
+		else if (cmd[i] != '>' && cmd[i + 1] == '>'
+			&& cmd[i + 2] == '>' && cmd[i + 3] != '>')
 		{
-			maillon->file_out = add_file_out(maillon->file_out, ft_trimhard(get_filename(cmd, i + 3)), 1);
+			maillon->file_out = add_file_out(maillon->file_out,
+					ft_trimhard(get_filename(cmd, i + 3)), 1);
 			if (maillon->file_out == NULL)
 				return (-1);
 		}
@@ -147,13 +142,50 @@ int	check_redirection(char *cmd, t_minishell *maillon) //fonction bancale (risqu
 	return (1);
 }
 
+int	check_redirection(char *cmd, t_minishell *maillon)
+{
+	int	i;
+
+	i = 0;
+	while (i + 2 < ft_strlen(cmd))
+	{
+		if (cmd[i] == '\"' || cmd[i] == '\'')
+			i = avoid_quotes(cmd, i) - 1;
+		else if ((i == 0 && cmd[i] == '<' && cmd[i + 1] != '<')
+			|| (i > 0 && cmd[i - 1] != '<'
+				&& cmd[i] == '<' && cmd[i + 2] != '<'))
+			maillon->file_in = add_file_in(maillon->file_in,
+					ft_trimhard(get_filename(cmd, i + 1)));
+		else if ((i == 0 && cmd[i] == '>' && cmd[i + 1] != '<')
+			|| (cmd[i] != '>' && cmd[i + 1] == '>' && cmd[i + 2] != '>'))
+			maillon->file_out = add_file_out(maillon->file_out,
+					ft_trimhard(get_filename(cmd, i + 2)), 0);
+		i++;
+	}
+	return (append_treat(cmd, maillon));
+}
+
+char	*erasing(char *cmd, int *i)
+{
+	int	end;
+
+	if (cmd[*i] == '\"' || cmd[*i] == '\'')
+	{
+		end = avoid_quotes(cmd, *i);
+		while (*i < end)
+			cmd[(*i)++] = ' ';
+	}
+	else
+		cmd[(*i)++] = ' ';
+	return (cmd);
+}
+
 char	*erase_redir(char *cmd)
 {
 	int	i;
-	int	end;
 
 	i = 0;
-	while (cmd[i] != '\0' && cmd[i + 1] != '\0') //il y a sans doute une plus opti a faire
+	while (cmd[i] != '\0' && cmd[i + 1] != '\0')
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
 			i = avoid_quotes(cmd, i);
@@ -165,16 +197,7 @@ char	*erase_redir(char *cmd)
 			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 1)
 				i++;
 			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 0)
-			{
-				if (cmd[i] == '\"' || cmd[i] == '\'')
-				{
-					end = avoid_quotes(cmd, i);
-					while (i < end)
-						cmd[i++] = ' ';
-				}
-				else
-					cmd[i++] = ' ';
-			}
+				cmd = erasing(cmd, &i);
 		}
 		if (cmd[i] == '\0')
 			break ;
@@ -186,12 +209,11 @@ char	*erase_redir(char *cmd)
 char	*erase_redirbis(char *cmd)
 {
 	int	i;
-	int	end;
 
 	i = 0;
 	if (cmd == NULL)
 		return (NULL);
-	while (cmd[i] != '\0' && cmd[i + 1] != '\0') //il y a sans doute une plus opti a faire
+	while (cmd[i] != '\0' && cmd[i + 1] != '\0')
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
 			i = avoid_quotes(cmd, i);
@@ -203,16 +225,7 @@ char	*erase_redirbis(char *cmd)
 			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 1)
 				i++;
 			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 0)
-			{
-				if (cmd[i] == '\"' || cmd[i] == '\'')
-				{
-					end = avoid_quotes(cmd, i);
-					while (i < end)
-						cmd[i++] = ' ';
-				}
-				else
-					cmd[i++] = ' ';
-			}
+				cmd = erasing(cmd, &i);
 		}
 		if (cmd[i] == '\0')
 			break ;

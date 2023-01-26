@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 01:03:16 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/25 11:29:47 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 12:09:42 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_interligne(char *line)
 		if (line[i] == '(')
 		{
 			while (line[i] != '\0' && line[i + 1] != '\0' && ((line[i] == '&'
-				&& line[i + 1] == '&') || (line[i] == '|')))  //&& line[i + 1] == '|'
+						&& line[i + 1] == '&') || (line[i] == '|')))
 			{
 				if (line[i++] == ')')
 					return (0);
@@ -37,24 +37,25 @@ int	check_interligne(char *line)
 	return (1);
 }
 
-int	check_extraligne(char *line)
+int	check_extraligne(char *li)
 {
 	int	i;
 	int	count;
 
 	i = 0;
-	while (line[i] != '\0')
+	while (li[i] != '\0')
 	{
 		count = 0;
-		if (line[i] == ')')
+		if (li[i] == ')')
 		{
-			while (line[i] != '\0' && line[i + 1] != '\0' && line[i + 1] != '(')
+			while (li[i] != '\0' && li[i + 1] != '\0' && li[i + 1] != '(')
 			{
-				if (line[i] != '\0' && line[i + 1] != '\0' && ((line[i] == '&' && line[i + 1] == '&') || (line[i] == '|')))  //&& line[i + 1] == '|'
+				if (li[i] != '\0' && li[i + 1] != '\0'
+					&& ((li[i] == '&' && li[i + 1] == '&') || (li[i] == '|')))
 					count++;
 				i++;
 			}
-			if ((line[i] != '\0' && line[i + 1] != '\0') && count == 0)
+			if ((li[i] != '\0' && li[i + 1] != '\0') && count == 0)
 				return (0);
 		}
 		i++;
@@ -62,7 +63,7 @@ int	check_extraligne(char *line)
 	return (1);
 }
 
-char *clean_first(char *line)
+char	*clean_first(char *line)
 {
 	int	i;
 

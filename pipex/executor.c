@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/25 17:45:18 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 12:03:37 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ int	stop_signals(void)
 
 int	cond_redir(t_minishell *elem, t_all *p)
 {
+	if (elem->cmd == NULL &&
+		((elem->file_in != NULL && elem->file_in->file_in == NULL)
+			|| (elem->file_out != NULL && elem->file_out->file_out == NULL)))
+	{
+		printf(" : No such file or directory\n");
+		end_process(p, 0);
+	}
 	if (g_sig.sig_int > 0 || g_sig.sig_quit > 0
 		|| (elem->file_in != NULL
 			&& opening_in(elem->file_in, STDIN_FILENO, elem->cmd, p) == -1)
@@ -161,7 +168,7 @@ int	executor(t_tree *start, t_all *p, char *line)
 			return (intermed = start->or, free(start),
 				p->start = intermed, executor(p->start, p, line));
 		}
-		return (free_start(start, 1), g_sig.cmd_stat);
+		return (free_start(start, 0), g_sig.cmd_stat);
 	}
 	if (start->and && start->and != NULL)
 	{

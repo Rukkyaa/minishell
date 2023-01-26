@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 18:28:50 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 13:42:12 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_env		*env_to_struct(char **env);
 int			check_minishell(char **tabl);
 int			count_words2(char *str, char c);
 char		*erase_redirbis(char *cmd);
-int			all_spaces(char **tabl, char *str);
+int	all_spaces(char **tabl);
 int			stop_signals(void);
 char		**trim_tab(char **tabl);
 int			create_signal_spe(void);
@@ -116,6 +116,12 @@ char		*ft_strcpy(char *dst, const char *src);
 void		clean_rest(t_tree *start, int i, int end);
 char **maj_path(t_env *env);
 void print_env(t_env *env);
+int	check_spaces(char *s, char c);
+int	check_spaces_spe(char *str, char c);
+int	que_space(char *str);
+void	abort_pipe2(t_minishell *elem, t_all *p);
+void	abort_pipe3(t_minishell *elem, t_all *p);
+void	abort_pipe(t_minishell *elem, t_all *p);
 
 //wildcard.c
 char		*wildcard(char *extension);
@@ -152,6 +158,7 @@ void		free_all(t_all *p);
 //parsing/3-segmentation.c
 int			first_segmentation(t_tree *start, t_tree *init);
 int			scnd_segmentation(t_tree *start, t_tree *init);
+int			op_scd_treat_and(t_tree *start, int i, char *reserve);
 
 //parsing/3-segmentationbis.c
 int			op_segmentation(t_tree *start, int i, int end, char *reserve);
