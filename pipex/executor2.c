@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 17:52:42 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 22:03:09 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,19 +109,4 @@ int	opening_in(t_infile *file_org, int port, char **cmd, t_all *p)
 	if (dup2(fdt, port) < 0)
 		return (perror(""), close(fdt), -1);
 	return (close(fdt), 0);
-}
-
-int	find_cat(t_minishell *elem)
-{
-	t_minishell	*p;
-
-	p = elem;
-	while (p != NULL)
-	{
-		if (ft_strcmp(p->cmd[0], "cat") == 0 && p->cmd[1] == NULL
-			&& p->file_in == NULL && p->file_out == NULL)
-			return (1);
-		p = p->next;
-	}
-	return (0);
 }

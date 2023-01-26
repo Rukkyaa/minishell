@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 15:47:04 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 22:10:24 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,17 @@ int			avoid_quotes_spe(char *line, int i);
 //parsing/5-heredocs.c
 char		**get_here_docs(char **line, t_all *p);
 int			heredoc_count(char *line, int index);
+int			prev_valo(char *lect);
+void		warning(char *str, int nb);
+char		*generate_name(char *limiter);
+char		*find_lim(char *line, int *alert);
+char		*gen_new_limiter(char *limiter);
+char		*clean_heredoc_line(char *line, char *filename,
+				char *LIM, int *alert);
+int			signals_hdoc(int opt);
+int			pipex(t_minishell *first_elem, t_all *p, t_tree *start);
+bool		check_line(char *line, int *i, int flag);
+void		alert_case(char *str);
 
 //parsing/6-count.c
 int			countof_spe(char **line, char c, int compt, int i);

@@ -3,33 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   split_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 12:13:55 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 18:17:32 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 22:00:46 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-
-int	count_words(char const *str, char c)
-{
-	int	i;
-	int	compteur;
-
-	i = 0;
-	compteur = 0;
-	while (str[i] != '\0')
-	{
-		while (str[i] == c && str[i] != '\0')
-			i++;
-		if (str[i] != c && str[i] != '\0')
-			compteur++;
-		while (str[i] != c && str[i] != '\0')
-			i++;
-	}
-	return (compteur);
-}
 
 int	words_length(char const *str, int i, char c)
 {

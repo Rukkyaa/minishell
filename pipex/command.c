@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 00:16:01 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/26 18:12:07 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 22:03:36 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,23 +99,4 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 		free(path);
 	}
 	return (clean_p(paths, 0, p), final_opt(cmd, reforged_env));
-}
-
-void	end_process(t_all *p, int nb)
-{
-	free_start(p->start, 0);
-	free_env(p->env);
-	free_here_docs(p->here_docs);
-	free(p);
-	free(g_sig.line);
-	rl_clear_history();
-	if (g_sig.sig_quit == 1)
-		exit(134);
-	else if (g_sig.sig_int == 1)
-		exit(0);
-	else if (g_sig.cmd_stat == 127)
-		exit (127);
-	else if (g_sig.cmd_stat == 126)
-		exit (126);
-	exit(nb);
 }

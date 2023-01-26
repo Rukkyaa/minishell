@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spe_split.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 12:28:52 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 17:41:11 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 21:59:38 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,6 @@ static int	words_length2(char *str, int i, char c)
 // 	return (0);
 // }
 
-int	check_spaces(char *s, char c)
-{
-	int	i;
-	int	compt;
-
-	i = 0;
-	compt = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == '\'' || s[i] == '\"')
-			compt++;
-		if (s[i] != '\'' && s[i] != '\"' && s[i] != c)
-			return (0);
-		i++;
-	}
-	if (compt > 0)
-		return (1);
-	return (0);
-}
-
 int	check_spaces_spe(char *str, char c)
 {
 	int		i;
@@ -145,11 +125,9 @@ char	**ft_split_spe(char *s, char c)
 	char	**tabl;
 	int		a;
 	int		i;
-	int		end;
 
 	i = 0;
 	a = 0;
-	end = 0;
 	if (!s)
 		return (NULL);
 	tabl = malloc((count_words2(s, c) + 1) * sizeof(char *));

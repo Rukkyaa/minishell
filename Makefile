@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+         #
+#    By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 10:54:33 by gabrielduha       #+#    #+#              #
-#    Updated: 2023/01/26 15:47:40 by axlamber         ###   ########.fr        #
+#    Updated: 2023/01/26 22:04:14 by rukkyaa          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS	= minishell.c libft_utils.c get_path.c split_path.c pipex/command.c\
 			pipex/executor2.c parsing/1-initbis.c parsing/2-freebis.c parsing/3-segmentationbis.c \
 			parsing/11-wildparsing.c parsing/12-taboperations.c parsing/var_dealer2.c \
 			my_builtins/export_utils.c parsing/9-redirebis.c parsing/8-initbis2.c \
-			pipex/pipe2.c signal/signal2.c
+			pipex/pipe2.c signal/signal2.c parsing/5-heredocs2.c parsing/5-heredocs3.c \
+			parsing/utils.c pipex/pipex_utils.c
 			
 OBJS	= $(SRCS:.c=.o)
 NAME	= minishell

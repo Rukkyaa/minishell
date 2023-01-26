@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 17:27:49 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 21:59:55 by rukkyaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,6 @@ static char	*quote_modifier(char *line, int *i, char *var, int *leng)
 	if (line == NULL)
 		return (NULL);
 	return (line);
-}
-
-bool	check_line(char *line, int *i, int flag)
-{
-	if (flag == 1)
-	{
-		return (line[*i] != '\0' && line[*i] == '$'
-			&& line[*i + 1] != '\0' && line[*i + 1] == '$');
-	}
-	else
-	{
-		return (line[*i] != '\0' && line[*i] == '$'
-			&& line[*i + 1] != '\0' && line[*i + 1] == '?');
-	}
 }
 
 static char	*quote_treat(char *line, int *i, int *leng, t_all *p)
