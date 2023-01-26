@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 10:00:52 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/25 10:04:25 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:55:04 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	change_value(t_env *env, char *key, char *value)
 	{
 		new = ft_envnew(key, value);
 		if (!new)
-			return ;
+			return (free(key), free(value));
 		new->code = 1;
 		ft_env_add_back(&env, new);
 	}
@@ -90,7 +90,7 @@ void	change_value_equal(t_env *env, char *key)
 	{
 		new = ft_envnew(key, NULL);
 		if (!new)
-			return ;
+			return (free(key));
 		new->code = 2;
 		ft_env_add_back(&env, new);
 	}

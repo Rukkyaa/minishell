@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 09:53:54 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 13:53:12 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_tree	*parsingator(char *line, t_all *p)
 	if (*line_bis == NULL)
 		return (free(line_bis), NULL);
 	start = init_tree(line_bis);
-	printf("on a peu :%s.\n", start->cmd);
+	// printf("on a peu :%s.\n", start->cmd);
 	if (init_shell(start, p) == -1)
 		return (free_start(start, 1), NULL);
 	return (start);
@@ -96,7 +96,7 @@ int	main(int argc, char **argv, char **env)
 			//print_all(p);
 			if (p->start != NULL && g_sig.sig_int == 0)
 				executor(p->start, p, g_sig.line);
-			printf("clean\n");
+			// printf("clean\n");
 			free_here_docs(p->here_docs);
 		}
 		free(g_sig.line);
