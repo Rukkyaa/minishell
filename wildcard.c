@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 10:20:56 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/20 15:46:43 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:49:51 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static char	*w_treat(char *str, char *filename)
 char	*wildcard(char *extension)
 {
 	DIR				*dir;
-	char *str;
+	char			*str;
 	struct dirent	*f;
 
 	dir = opendir(".");

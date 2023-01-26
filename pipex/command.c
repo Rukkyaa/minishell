@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 00:16:01 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/26 11:57:23 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:33:15 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ static int	check_directory(char *path)
 	return (126);
 }
 
-static int exec_now(char *path, char **cmd, char **reforged_env, int opt)
+static int	exec_now(char *path, char **cmd, char **reforged_env, int opt)
 {
 	if (access(path, X_OK) != 0)
-    {
-        if (opt == 1)
-            free(path);
+	{
+		if (opt == 1)
+			free(path);
 		return (perror(""), free_tab(reforged_env), g_sig.cmd_stat = 126, 126);
-    }
+	}
 	if (execve(path, cmd, reforged_env) == -1)
-    {
-        if (opt == 1)
-            free(path);
+	{
+		if (opt == 1)
+			free(path);
 		return (free_tab(reforged_env), -1);
 	}
 	if (opt == 1)
@@ -45,19 +45,20 @@ static int exec_now(char *path, char **cmd, char **reforged_env, int opt)
 	return (free_tab(reforged_env), 0);
 }
 
-static int final_opt(char **cmd, char **reforged_env)
+static int	final_opt(char **cmd, char **reforged_env)
 {
 	if (check_directory(cmd[0]) != 0)
 		return (free_tab(reforged_env), -1);
 	if (access(cmd[0], F_OK) == 0
-        && (ft_strncmp(cmd[0], "./", 2) == 0
-            || ft_strncmp(cmd[0], "../", 3) == 0 || ft_strncmp(cmd[0], "/", 1) == 0))
+		&& (ft_strncmp(cmd[0], "./", 2) == 0
+			|| ft_strncmp(cmd[0], "../", 3) == 0
+			|| ft_strncmp(cmd[0], "/", 1) == 0))
 		return (exec_now(cmd[0], cmd, reforged_env, 0));
-    ft_putstr_fd(cmd[0], 2);
-    ft_putstr_fd(": command not found\n", 2);
-    free_tab(reforged_env);
-    g_sig.cmd_stat = 127;
-    return (127);
+	ft_putstr_fd(cmd[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
+	free_tab(reforged_env);
+	g_sig.cmd_stat = 127;
+	return (127);
 }
 
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
@@ -92,18 +93,18 @@ int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)
 	while (paths != NULL && paths[++i] != NULL)
 	{
 		path = ft_strjoin(paths[i], cmd[0]);
-        if (path == NULL)
-		    return (free_tab(reforged_env), free_tab(paths), -1);
-	    if (access(path, F_OK) == 0)
-            return (free_tab(paths), exec_now(path, cmd, reforged_env, 1));
-        free(path);
-    }
+		if (path == NULL)
+			return (free_tab(reforged_env), free_tab(paths), -1);
+		if (access(path, F_OK) == 0)
+			return (free_tab(paths), exec_now(path, cmd, reforged_env, 1));
+		free(path);
+	}
 	if (paths != NULL)
 		free_tab(paths);
 	return (final_opt(cmd, reforged_env));
 }
 
-void end_process(t_all *p, int nb)
+void	end_process(t_all *p, int nb)
 {
 	free_start(p->start, 0);
 	free_env(p->env);

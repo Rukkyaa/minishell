@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 13:42:12 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:30:48 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_env		*env_to_struct(char **env);
 int			check_minishell(char **tabl);
 int			count_words2(char *str, char c);
 char		*erase_redirbis(char *cmd);
-int	all_spaces(char **tabl);
+int			all_spaces(char **tabl);
 int			stop_signals(void);
 char		**trim_tab(char **tabl);
 int			create_signal_spe(void);
@@ -114,14 +114,14 @@ int			create_signal_here(void);
 int			check_redirection(char *cmd, t_minishell *maillon);
 char		*ft_strcpy(char *dst, const char *src);
 void		clean_rest(t_tree *start, int i, int end);
-char **maj_path(t_env *env);
-void print_env(t_env *env);
-int	check_spaces(char *s, char c);
-int	check_spaces_spe(char *str, char c);
-int	que_space(char *str);
-void	abort_pipe2(t_minishell *elem, t_all *p);
-void	abort_pipe3(t_minishell *elem, t_all *p);
-void	abort_pipe(t_minishell *elem, t_all *p);
+char		**maj_path(t_env *env);
+void		print_env(t_env *env);
+int			check_spaces(char *s, char c);
+int			check_spaces_spe(char *str, char c);
+int			que_space(char *str);
+void		abort_pipe2(t_minishell *elem, t_all *p);
+void		abort_pipe3(t_minishell *elem, t_all *p);
+void		abort_pipe(t_minishell *elem, t_all *p);
 
 //wildcard.c
 char		*wildcard(char *extension);
@@ -241,11 +241,11 @@ void		end_process(t_all *p, int nb);
 int			executor(t_tree *start, t_all *p, char *line);
 int			opening(char *file, int port, int append, int mode);
 char		**env_to_char(t_env *env);
-int	cond_redir(t_minishell *elem, t_all *p);
+int			cond_redir(t_minishell *elem, t_all *p);
 
 //pipex/executor2.c
-int	opening_in(t_infile *file_org, int port, char **cmd, t_all *p);
-int	opening_out(t_outfile *file_org, int port, char **cmd, t_all *p);
+int			opening_in(t_infile *file_org, int port, char **cmd, t_all *p);
+int			opening_out(t_outfile *file_org, int port, char **cmd, t_all *p);
 int			find_cat(t_minishell *elem);
 
 //pipex/exec_builtins.c

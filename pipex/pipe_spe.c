@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_spe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:29:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 13:42:55 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:39:34 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	wait_all(t_tree *start)
 {
-	t_minishell *p;
-	int	status;
+	t_minishell	*p;
+	int			status;
 
 	p = start->first_elem;
 	while (p->next != NULL)
@@ -68,7 +68,6 @@ int	end_pipe2_cat(t_minishell *elem, t_all *p, t_tree *start)
 	return (create_signal(), init_signal(0), mid_pipe_cat(elem, p, start));
 }
 
-
 int	mid_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 {
 	if (pipe(elem->next->fd) == -1)
@@ -120,6 +119,6 @@ int	last_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 		exit(0);
 	}
 	if (wait_all(start) == -1)
-		return(create_signal(), init_signal(0), -1);
+		return (create_signal(), init_signal(0), -1);
 	return (create_signal(), init_signal(0), 0);
 }

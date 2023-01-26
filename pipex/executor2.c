@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 18:28:08 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:38:47 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	check_file_in(char *file)
 	return (0);
 }
 
-static int check_file_out(t_outfile *file)
+static int	check_file_out(t_outfile *file)
 {
 	int	fdt;
 
@@ -45,8 +45,8 @@ static int check_file_out(t_outfile *file)
 
 int	opening_out(t_outfile *file_org, int port, char **cmd, t_all *p)
 {
-	int fdt;
-	t_outfile *file;
+	int			fdt;
+	t_outfile	*file;
 
 	file = file_org;
 	if (file == NULL || !file)
@@ -79,13 +79,13 @@ int	opening_out(t_outfile *file_org, int port, char **cmd, t_all *p)
 
 int	opening_in(t_infile *file_org, int port, char **cmd, t_all *p)
 {
-	int fdt;
-	t_infile *file;
+	int			fdt;
+	t_infile	*file;
 
 	file = file_org;
 	if (file == NULL || !file)
 		return (-1);
-	while(file->next != NULL)
+	while (file->next != NULL)
 	{
 		if (check_file_in(file->file_in) == -1)
 			return (-1);

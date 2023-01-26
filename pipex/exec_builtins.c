@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:42:24 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/25 16:47:02 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:35:56 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int path_comp_builtins(char **cmd)
+int	path_comp_builtins(char **cmd)
 {
-	if (cmd ==  NULL || cmd[0] == NULL)
+	if (cmd == NULL || cmd[0] == NULL)
 		return (0);
 	else if (ft_strcmp(cmd[0], "echo") == 0)
 		return (1);
@@ -33,7 +33,7 @@ int path_comp_builtins(char **cmd)
 	return (0);
 }
 
-int exec_builtin(int nb, char **cmd, t_all *p, t_tree *start)
+int	exec_builtin(int nb, char **cmd, t_all *p, t_tree *start)
 {
 	if (nb == 1)
 		end_process(p, ft_echo(cmd));

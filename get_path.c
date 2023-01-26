@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 13:27:26 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/25 13:11:43 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:46:19 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*get_env_var(t_env *envp, char	*var)
 {
-	t_env *temp;
+	t_env	*temp;
 
 	if (!envp || envp == NULL)
 		return (NULL);
@@ -28,9 +28,9 @@ char	*get_env_var(t_env *envp, char	*var)
 	return (NULL);
 }
 
-int is_whitespace(char c)
+int	is_whitespace(char c)
 {
-	if (c == 32 || (c>= 10 && c<=14))
+	if (c == 32 || (c >= 10 && c <= 14))
 		return (1);
 	return (0);
 }

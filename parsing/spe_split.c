@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spe_split.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 12:28:52 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 10:31:36 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:02:32 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ static char	**free_tab2(char **tabl, int a)
 	return (0);
 }
 
-
-
 int	check_spaces(char *s, char c)
 {
 	int	i;
@@ -96,9 +94,9 @@ int	check_spaces(char *s, char c)
 
 int	check_spaces_spe(char *str, char c)
 {
-	int	i;
-	char *s;
-	int	compt;
+	int		i;
+	char	*s;
+	int		compt;
 
 	i = 0;
 	compt = 0;
@@ -122,14 +120,11 @@ char	**ft_split_spe(char *s, char c)
 	int		a;
 	int		i;
 	int		d;
-	//int		end;
 
 	i = 0;
 	a = 0;
 	if (!s)
 		return (NULL);
-	// if (check_spaces(s, c) == 1)
-	// 	return (tabone(s));
 	tabl = malloc((count_words2(s, c) + 1) * sizeof(char *));
 	if (!(tabl))
 		return (NULL);
@@ -144,11 +139,7 @@ char	**ft_split_spe(char *s, char c)
 		while (i < ft_strlen(s) && s[i] != c && s[i] != '\0')
 		{
 			if (s[i] == '\"' || s[i] == '\'')
-			{
 				i = avoid_quotes(s, i);
-				// while (i < ft_strlen(s) && s[i] != '\0' && i <= end)
-				// 	tabl[a][d++] = s[i++];
-			}
 			else
 				tabl[a][d++] = s[i++];
 		}

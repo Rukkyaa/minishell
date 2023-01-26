@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 23:35:36 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 15:11:32 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:01:29 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void print_env(t_env *env)
+void	print_env(t_env *env)
 {
 	while (env)
 	{
