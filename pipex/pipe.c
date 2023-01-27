@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 16:07:10 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 15:46:06 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/27 09:48:32 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ void	abort_pipe3(t_minishell *elem, t_all *p)
 	end_process(p, 1);
 }
 
-int	end_pipe2(t_minishell *elem, t_all *p, t_tree *start)
-{
-	if (close_all(elem->fd[0], elem->fd[1], NULL, elem->pid) == -1)
-		return (create_signal(), init_signal(0), -1);
-	elem = elem->next;
-	if (elem->next->next == NULL)
-		return (create_signal(), init_signal(0), last_pipe(elem, p, start));
-	return (create_signal(), init_signal(0), mid_pipe(elem, p, start));
-}
+// int	end_pipe2(t_minishell *elem, t_all *p, t_tree *start)
+// {
+// 	if (close_all(elem->fd[0], elem->fd[1], NULL, elem->pid) == -1)
+// 		return (create_signal(), init_signal(0), -1);
+// 	elem = elem->next;
+// 	if (elem->next->next == NULL)
+// 		return (create_signal(), init_signal(0), last_pipe(elem, p, start));
+// 	return (create_signal(), init_signal(0), mid_pipe(elem, p, start));
+// }
 
 int	end_pipe3(t_minishell *elem)
 {

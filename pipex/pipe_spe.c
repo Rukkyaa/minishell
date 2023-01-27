@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_spe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:29:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 14:39:34 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/27 10:02:40 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,15 @@ static int	wait_all(t_tree *start)
 		p = p->next;
 	}
 	p = start->first_elem;
-	while (p != NULL)
+	while (p->next != NULL)
 	{
-		if (waitpid(p->pid, &status, 0) == -1
-			|| ((WIFEXITED(status)) && WEXITSTATUS(status) != 0))
+		if (waitpid(p->pid, NULL, 0) == -1)
 			return (-1);
 		p = p->next;
 	}
+	if (waitpid(p->pid, &status, WUNTRACED) == -1
+		|| ((WIFEXITED(status)) && WEXITSTATUS(status) != 0))
+		return (WEXITSTATUS(status));
 	return (0);
 }
 
