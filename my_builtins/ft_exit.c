@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:23:26 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 15:42:40 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/27 10:33:31 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ bool	full_digit(char *str)
 
 void	free_exit(t_all *p, t_tree *start)
 {
-	printf("exit\n");
 	free(g_sig.line);
 	free_start(start, 0);
 	free_env(p->env);
@@ -44,6 +43,7 @@ void	ft_exit(t_all *p, t_tree *start, char **cmd)
 
 	if (length_tab(cmd) > 1 && full_digit(cmd[1]) && cmd[2])
 		return (ft_putendl_fd("exit: too many arguments", 2));
+	printf("exit\n");
 	if (cmd[1])
 	{
 		if (!full_digit(cmd[1]))

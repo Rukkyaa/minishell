@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 13:56:36 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/27 10:49:50 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	ft_export(t_env *env, char **cmd)
 		else if (!cmd[i][ft_strlen(key)])
 			change_value_empty(env, key);
 		else
-			return (do_export(env, key, cmd[i]));
+			do_export(env, key, cmd[i]);
 	}
 	return (0);
 }

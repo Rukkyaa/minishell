@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:47:57 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/26 15:48:44 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/27 11:00:44 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	create_signal(void)
 	a.sa_handler = sighandler;
 	a.sa_flags = 0;
 	sigemptyset(&a.sa_mask);
-	signal(SIGQUIT, SIG_IGN);
-	if (sigaction(SIGINT, &a, NULL) != 0 || sigaction(SIGTSTP, &a, NULL) != 0)
+	if (sigaction(SIGINT, &a, NULL) != 0 || sigaction(SIGTSTP, &a, NULL) != 0
+		|| sigaction(SIGQUIT, &a, NULL) != 0)
 		return (-1);
 	return (0);
 }

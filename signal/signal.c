@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 15:48:32 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/27 10:38:23 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,13 @@ void	sighandler(int code)
 	}
 	else if (code == (int)SIGTSTP)
 		sig_eof(code);
-	else if (code == (int)SIGQUIT && g_sig.p_status == -1)
-		return ;
+	else if (code == (int)SIGQUIT && g_sig.p_status == 0 && rl_end != 0)
+	{
+		g_sig.sig_quit = 1;
+		rl_on_new_line();
+		rl_replace_line("end", 0);
+		printf("\nexit\n");
+		rl_done = 1;
+	}
 	return ;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:02:21 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/27 09:47:18 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/27 10:09:09 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,6 @@ int	pipex(t_minishell *first_elem, t_all *p, t_tree *start)
 		return (0);
 	else if (first_elem->next == NULL)
 		return (exec_command_one(first_elem, p, start));
-	// else if (first_elem->next != NULL && first_elem->next->next != NULL
-	// 	&& find_cat(first_elem) == 1)
-	// 	return (first_pipe_cat(first_elem, p, start));
 	return (first_pipe_cat(first_elem, p, start));
 }
 

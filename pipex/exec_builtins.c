@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:42:24 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/26 14:35:56 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/27 10:29:09 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	exec_builtin(int nb, char **cmd, t_all *p, t_tree *start)
 	else if (nb == 6)
 		end_process(p, ft_env(p->env));
 	else if (nb == -7)
-		ft_exit(p, start, cmd);
+		return (ft_exit(p, start, cmd), 1);
 	end_process(p, 1);
 	return (1);
 }
