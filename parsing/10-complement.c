@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   10-complement.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:20:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 18:00:27 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/29 23:44:17 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	first_check(char *line)
 	if (check_spaces(line_bis, ' ') == 1 || que_space(line_bis) == 1)
 		return (free(line_bis), 0);
 	tab_cmd = ft_split_spe(line_bis, '|');
-	if (all_spaces(tab_cmd) == 1)
+	if (pipe_in(line_bis) == 1 && all_spaces(tab_cmd) == 1)
 		return (printf("syntax error near unexpected token `|'\n"),
 			free_tab(tab_cmd), free(line_bis), g_sig.cmd_stat = 2, 1);
 	return (free_tab(tab_cmd), free(line_bis), 0);

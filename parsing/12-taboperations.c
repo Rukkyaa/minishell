@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   12-taboperations.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:52:25 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/26 17:21:53 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/29 23:16:51 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ char	*tab_to_str(char **tabl, int opt)
 char	*ft_trim(char *s1)
 {
 	int		i;
-	char	*s1_bis;
-	char	**tabinter;
+	// char	*s1_bis;
+	// char	**tabinter;
 
 	i = -1;
 	if (!s1 || s1 == NULL)
@@ -55,18 +55,18 @@ char	*ft_trim(char *s1)
 		else if (s1[i] == '\'')
 			s1 = treat_str(s1, &i, '\'');
 	}
-	tabinter = ft_split_spe(s1, '\v');
-	if (tabinter == NULL)
-		return (free(s1), NULL);
-	s1_bis = tab_to_str(tabinter, 0);
-	return (free(s1), s1_bis);
+	// tabinter = ft_split_spe(s1, '\v');
+	// if (tabinter == NULL)
+	// 	return (free(s1), NULL);
+	// s1_bis = tab_to_str(tabinter, 0);
+	return (trimator(s1));
 }
 
 char	*ft_trimhard(char *s1)
 {
 	int		i;
-	char	*s1_bis;
-	char	**tabinter;
+	//char	*s1_bis;
+	//char	**tabinter;
 
 	i = -1;
 	if (!s1 || s1 == NULL)
@@ -81,11 +81,11 @@ char	*ft_trimhard(char *s1)
 		else if (s1[i] == '\'')
 			s1 = treat_str(s1, &i, '\'');
 	}
-	tabinter = ft_split_spe(s1, '\v');
-	if (tabinter == NULL)
-		return (free(s1), NULL);
-	s1_bis = tab_to_str(tabinter, 0);
-	return (free(s1), s1_bis);
+	// tabinter = ft_split_spe(s1, '\v');
+	// if (tabinter == NULL)
+	// 	return (free(s1), NULL);
+	// s1_bis = tab_to_str(tabinter, 0);
+	return (trimator(s1));
 }
 
 char	**trim_tab(char **tabl)

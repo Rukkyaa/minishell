@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/27 10:50:49 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:58:47 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_tree	*parsingator(char *line, t_all *p)
 	return (start);
 }
 
-//valgrind --leak-check=full --show-leak-kinds=all
+//valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes
 //--suppressions=./.readline.supp ./minishell
 
 char	*do_minishell(t_all *p)
@@ -67,6 +67,8 @@ char	*do_minishell(t_all *p)
 	}
 	free(g_sig.line);
 	g_sig.line = NULL;
+	// if (rl_line_buffer != NULL)
+	// 	rl_replace_line("", 0);
 	return (g_sig.line);
 }
 

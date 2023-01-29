@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   8-initbis2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:38:13 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/26 15:40:52 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/29 23:47:42 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	que_space(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] != '\0')
+	while (i < ft_strlen(str))
 	{
 		if (str[i] != ' ')
 			return (0);

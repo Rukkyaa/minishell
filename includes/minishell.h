@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 22:10:24 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/29 23:44:37 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,12 @@ extern t_sig	g_sig;
 # define BUFFER_SIZE 42
 //# define PATH_MAX 100
 
+int			var_empt(char *var);
 t_env		*env_to_struct(char **env);
+int			sig_exit(int nb);
+int			potential_name(char c);
+char		*trimator(char *str);
+int			pipe_in(char *str);
 
 int			check_minishell(char **tabl);
 int			count_words2(char *str, char c);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 22:10:09 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/29 22:57:54 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static char	*hdoc_process(t_all *p, int fd, char *newlimiter)
 	int		nb;
 
 	lect = replace_var(get_next_line(0), p);
+	if (lect == NULL && g_sig.sig_int != 1)
+		return (warning(newlimiter, 0), NULL);
 	prev = prev_valo(lect);
 	nb = 1;
 	while (ft_strcmp(lect, newlimiter) != 0 && g_sig.sig_int == 0)
@@ -48,6 +50,8 @@ static char	*hdoc_process(t_all *p, int fd, char *newlimiter)
 		}
 		prev = prev_valo(lect);
 	}
+	if (g_sig.sig_int == 1)
+		g_sig.cmd_stat = 130;
 	return (cleanlect(lect));
 }
 

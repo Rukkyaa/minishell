@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redirebis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:33:05 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/26 15:35:32 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/29 23:07:07 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@ void	clean_rest(t_tree *start, int i, int end)
 {
 	while (i <= end)
 		start->cmd[i++] = ' ';
+}
+
+int	potential_name(char c)
+{
+	if (ft_isprint(c) == 1 && c != '<' && c != '>'
+		&& c != '|' && c != '&')
+		return (1);
+	return (0);
 }
 
 char	*get_filename(char *line, int i)
@@ -28,7 +36,7 @@ char	*get_filename(char *line, int i)
 	while (is_whitespace(line[i]) == 1)
 		i++;
 	a = i;
-	while (ft_isprint(line[a]) == 1)
+	while (potential_name(line[a]) == 1)
 	{
 		if (line[a] == '\"' || line[a] == '\'')
 			a = avoid_quotes(line, a);
@@ -40,8 +48,7 @@ char	*get_filename(char *line, int i)
 		return (NULL);
 	while (i < a)
 		text[len++] = line[i++];
-	text[len] = '\0';
-	return (text);
+	return (text[len] = '\0', text);
 }
 
 t_infile	*add_file_in(t_infile *lst, char *file)

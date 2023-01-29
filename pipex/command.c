@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 00:16:01 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/26 22:03:36 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/01/30 00:05:05 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@ static int	check_directory(char *path)
 	ft_putstr_fd(": Is a directory\n", 2);
 	g_sig.cmd_stat = 126;
 	return (126);
+}
+
+int	first_slash(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (i < ft_strlen(str) && is_whitespace(str[i]) == 1)
+		i++;
+	if (str[i] == '/')
+		return (1);
+	return (0);
 }
 
 static int	exec_now(char *path, char **cmd, char **reforged_env, int opt)
@@ -55,7 +67,10 @@ static int	final_opt(char **cmd, char **reforged_env)
 			|| ft_strncmp(cmd[0], "/", 1) == 0))
 		return (exec_now(cmd[0], cmd, reforged_env, 0));
 	ft_putstr_fd(cmd[0], 2);
-	ft_putstr_fd(": command not found\n", 2);
+	if (first_slash(cmd[0]) == 1)
+		ft_putstr_fd(": No such file or directory\n", 2);
+	else
+		ft_putstr_fd(": command not found\n", 2);
 	free_tab(reforged_env);
 	g_sig.cmd_stat = 127;
 	return (127);

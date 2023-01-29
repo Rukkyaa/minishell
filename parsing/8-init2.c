@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 17:17:27 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 00:01:43 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,21 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	return (recursive_lst(new_elem, cmd, ++nb, p));
 }
 
+int	pipe_in(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (++i < ft_strlen(str))
+	{
+		if (str[i] == '\"' || str[i] == '\'')
+			i = avoid_quotes(str, i) - 1;
+		else if (str[i] == '|')
+			return (1);
+	}
+	return (0);
+}
+
 int	all_spaces(char **tabl)
 {
 	int		i;
@@ -74,15 +89,24 @@ int	init_cmd(t_tree *start, t_all *p)
 
 	if (!start || !p)
 		return (-1);
-	if (check_spaces_spe(start->cmd, ' ') == 1)
-		tab_cmd = tabone(ft_strdup(start->cmd));
-	else
+	if (pipe_in(start->cmd) == 1)
 	{
 		tab_cmd = ft_split_spe(start->cmd, '|');
 		if (all_spaces(tab_cmd) == 1)
 			return (printf("syntax error near unexpected token `|'\n"),
 				free_tab(tab_cmd), 2);
 	}
+	else
+		tab_cmd = tabone(ft_strdup(start->cmd));
+	// if (check_spaces_spe(start->cmd, ' ') == 1)
+	// 	tab_cmd = tabone(ft_strdup(start->cmd));
+	// else
+	// {
+	// 	tab_cmd = ft_split_spe(start->cmd, '|');
+	// 	if (pipe_in(start->cmd) == 1 && all_spaces(tab_cmd) == 1)
+	// 		return (printf("syntax error near unexpected token `|'\n"),
+	// 			free_tab(tab_cmd), 2);
+	// }
 	init_mini = malloc(sizeof(t_minishell));
 	if (!init_mini)
 		return (-1);

@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:02:21 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/27 10:09:09 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/29 22:35:55 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	sig_exit(int nb)
+{
+	if (nb == 2)
+		return (130);
+	else if (nb == 3)
+		return (printf("Quit (core dumped)\n"), 131);
+	return (0);
+}
 
 int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 {
@@ -33,9 +42,14 @@ int	exec_command_one(t_minishell *elem, t_all *p, t_tree *start)
 			end_process(p, 1);
 		exit(0);
 	}
-	if (waitpid(elem->pid, &status1, 0) == -1
-		|| ((WIFEXITED(status1)) && WEXITSTATUS(status1) != 0))
+	if (waitpid(elem->pid, &status1, 0) == -1)
+		return (1);
+	if (WIFEXITED(status1) && WEXITSTATUS(status1) != 0)
 		return (create_signal(), init_signal(0), WEXITSTATUS(status1));
+	if (WIFSIGNALED(status1))
+		return (create_signal(), init_signal(0), sig_exit(WTERMSIG(status1)));
+	// if (WIFSTOPPED(status1))
+	// 	return (create_signal(), init_signal(0), WSTOPSIG(status1));
 	return (create_signal(), init_signal(0), 0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_spe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:29:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/27 11:39:23 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/29 22:45:58 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,12 @@ static int	wait_l(t_tree *start)
 			return (-1);
 		p = p->next;
 	}
-	if (waitpid(p->pid, &status, 0) == -1
-		|| ((WIFEXITED(status)) && WEXITSTATUS(status) != 0))
+	if (p->next != NULL || waitpid(p->pid, &status, 0) == -1)
+		return (-1);
+	if ((WIFEXITED(status)) && WEXITSTATUS(status) != 0)
 		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (create_signal(), init_signal(0), sig_exit(WTERMSIG(status)));
 	return (0);
 }
 
@@ -93,6 +96,8 @@ int	mid_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 
 int	last_pipe_cat(t_minishell *e, t_all *p, t_tree *start)
 {
+	int	ret;
+
 	if (stop_signals() == 1)
 		return (134);
 	e->next->pid = fork();
@@ -115,7 +120,8 @@ int	last_pipe_cat(t_minishell *e, t_all *p, t_tree *start)
 			end_process(p, 1);
 		exit(0);
 	}
-	if (close(e->fd[0]) == -1 || close(e->fd[1]) == -1 || wait_l(start) == -1)
+	if (close(e->fd[0]) == -1 || close(e->fd[1]) == -1)
 		return (create_signal(), init_signal(0), -1);
-	return (create_signal(), init_signal(0), 0);
+	ret = wait_l(start);
+	return (create_signal(), init_signal(0), ret);
 }

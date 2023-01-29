@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 15:36:46 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/29 23:46:48 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*erase_redir(char *cmd)
 	int	i;
 
 	i = 0;
-	while (cmd[i] != '\0' && cmd[i + 1] != '\0')
+	while (i + 1 < ft_strlen(cmd))
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
 			i = avoid_quotes(cmd, i);
@@ -85,9 +85,9 @@ char	*erase_redir(char *cmd)
 			cmd[i] = ' ';
 			if (cmd[i + 1] == '>')
 				cmd[++i] = ' ';
-			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 1)
+			while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
 				i++;
-			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 0)
+			while (i < ft_strlen(cmd) && potential_name(cmd[i] == 1))
 				cmd = erasing(cmd, &i);
 		}
 		if (cmd[i] == '\0')
@@ -104,7 +104,7 @@ char	*erase_redirbis(char *cmd)
 	i = 0;
 	if (cmd == NULL)
 		return (NULL);
-	while (cmd[i] != '\0' && cmd[i + 1] != '\0')
+	while (i + 1 < ft_strlen(cmd))
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
 			i = avoid_quotes(cmd, i);
@@ -113,9 +113,9 @@ char	*erase_redirbis(char *cmd)
 			cmd[i] = ' ';
 			if (cmd[i + 1] == '>' || cmd[i + 1] == '<')
 				cmd[++i] = ' ';
-			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 1)
+			while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
 				i++;
-			while (cmd[i] != '\0' && is_whitespace(cmd[i]) == 0)
+			while (i < ft_strlen(cmd) && potential_name(cmd[i] == 1))
 				cmd = erasing(cmd, &i);
 		}
 		if (cmd[i] == '\0')
