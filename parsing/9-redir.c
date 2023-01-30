@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 12:18:54 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 15:22:13 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*erase_redir(char *cmd)
 			if (cmd[i + 1] == '>')
 				cmd[++i] = '\v';
 			while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
-				i++;
+				cmd[i++] = '\v';
 			while (i < ft_strlen(cmd) && potential_name(cmd[i]) == 1)
 				cmd = erasing(cmd, &i);
 		}

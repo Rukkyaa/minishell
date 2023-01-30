@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_spe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:29:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 12:46:48 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 15:15:11 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	mid_pipe_cat(t_minishell *elem, t_all *p, t_tree *start)
 				|| dup2(elem->next->fd[1], STDOUT_FILENO) < 0))
 			abort_pipe3(elem, p);
 		if (close(elem->next->fd[0]) == -1 || close(elem->fd[0]) == -1
-			|| close(elem->next->fd[1]) == -1 || cond_redir(elem, p) == -1
+			|| close(elem->next->fd[1]) == -1 || cond_redir(elem->next, p) == -1
 			|| exec_command(maj_path(p->env), elem->next->cmd, p, start) != 0)
 			end_process(p, 1);
 		exit(0);
@@ -112,7 +112,7 @@ int	last_pipe_cat(t_minishell *e, t_all *p, t_tree *start)
 			|| dup2(e->fd[0], STDIN_FILENO) < 0)
 			emergency(e, p);
 		close(e->fd[0]);
-		if (cond_redir(e, p) == -1
+		if (cond_redir(e->next, p) == -1
 			|| exec_command(maj_path(p->env), e->next->cmd, p, start) != 0)
 			end_process(p, 1);
 		exit(0);

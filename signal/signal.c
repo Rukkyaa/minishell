@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/30 12:05:15 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 15:06:04 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,6 @@ void	sighandler(int code)
 	}
 	else if (code == (int)SIGTSTP)
 		sig_eof(code);
-	else if (code == (int)SIGQUIT && g_sig.p_status == 0 && rl_end != 0)
-	{
-		g_sig.sig_quit = 1;
-		rl_on_new_line();
-		rl_replace_line("end", 0);
-		printf("\nexit\n");
-		rl_done = 1;
-	}
 	else if (code == (int)SIGQUIT && g_sig.p_status == 0)
 		lanormedufutur();
 	return ;

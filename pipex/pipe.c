@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 16:07:10 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/27 09:48:32 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 15:12:11 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,16 @@ void	abort_pipe3(t_minishell *elem, t_all *p)
 // 	return (create_signal(), init_signal(0), mid_pipe(elem, p, start));
 // }
 
-int	end_pipe3(t_minishell *elem)
-{
-	int	status2;
+// int	end_pipe3(t_minishell *elem)
+// {
+// 	int	status2;
 
-	close(elem->fd[0]);
-	close(elem->fd[1]);
-	if (waitpid(elem->pid, NULL, 0) == -1)
-		return (create_signal(), init_signal(0), -1);
-	if (waitpid(elem->next->pid, &status2, 0) == -1
-		|| ((WIFEXITED(status2)) && WEXITSTATUS(status2) != 0))
-		return (create_signal(), init_signal(0), WEXITSTATUS(status2));
-	return (create_signal(), init_signal(0), 0);
-}
+// 	close(elem->fd[0]);
+// 	close(elem->fd[1]);
+// 	if (waitpid(elem->pid, NULL, 0) == -1)
+// 		return (create_signal(), init_signal(0), -1);
+// 	if (waitpid(elem->next->pid, &status2, 0) == -1
+// 		|| ((WIFEXITED(status2)) && WEXITSTATUS(status2) != 0))
+// 		return (create_signal(), init_signal(0), WEXITSTATUS(status2));
+// 	return (create_signal(), init_signal(0), 0);
+// }
