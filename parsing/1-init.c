@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1-init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 15:13:57 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 17:12:26 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:31:45 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,7 @@ t_tree	*fill_branch(char *reserve, int i)
 		return (free(new_elem), NULL);
 	while (i >= 0)
 		new_elem->cmd[i--] = ' ';
+	if (invalid_quote(new_elem->cmd) == 1 || invalid_start(new_elem->cmd) == 1)
+		return (free(new_elem->cmd), free(new_elem), NULL);
 	return (new_elem);
 }

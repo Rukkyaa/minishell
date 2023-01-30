@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:53:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 20:49:45 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 23:59:38 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@ bool	check_echo(char *str)
 		if (str[i] != 'n')
 			return (false);
 	return (true);
+}
+
+static int	conditions_echo(char *cmd)
+{
+	if (!(ft_strlen(cmd) == 2
+			&& ((cmd[0] == '\"' && cmd[1] == '\"')
+				|| (cmd[0] == '\'' && cmd[1] == '\''))))
+		return (1);
+	return (0);
 }
 
 /*
@@ -62,7 +71,7 @@ int	ft_echo(char **cmd)
 			option = true;
 		while (cmd[i])
 		{
-			if (!(ft_strlen(cmd[i]) == 2 && ((cmd[i][0] == '\"' && cmd[i][1] == '\"') || (cmd[i][0] == '\'' && cmd[i][1] == '\''))))
+			if (conditions_echo(cmd[i]) == 1)
 				ft_putstr_fd(cmd[i], 1);
 			if (cmd[i][0] && cmd[i + 1])
 				ft_putchar_fd(' ', 1);

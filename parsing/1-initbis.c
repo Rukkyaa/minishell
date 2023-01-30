@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 01:03:16 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/26 12:09:42 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 23:27:28 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	check_interligne(char *line)
 	int	i;
 
 	i = 0;
-	while (line[i] != '\0')
+	while (i < ft_strlen(line) && line[i] != '\0')
 	{
 		if (line[i] == '(')
 		{
@@ -27,7 +27,7 @@ int	check_interligne(char *line)
 				if (line[i++] == ')')
 					return (0);
 			}
-			while (line[i] != '\0' && line[i] != ')')
+			while (i < ft_strlen(line) && line[i] != ')')
 				i++;
 			if (line[i] == '\0')
 				return (0);
@@ -43,7 +43,7 @@ int	check_extraligne(char *li)
 	int	count;
 
 	i = 0;
-	while (li[i] != '\0')
+	while (i < ft_strlen(li) && li[i] != '\0')
 	{
 		count = 0;
 		if (li[i] == ')')
@@ -68,12 +68,12 @@ char	*clean_first(char *line)
 	int	i;
 
 	i = 0;
-	while (line[i] != '\0' && is_whitespace(line[i]) == 1)
+	while (i < ft_strlen(line) && is_whitespace(line[i]) == 1)
 		i++;
 	if (line[i] != '\0' && line[i] == '(')
 	{
 		line[i] = ' ';
-		while (line[i] != '\0' && line[i] != ')')
+		while (i < ft_strlen(line) && line[i] != ')')
 			i++;
 		if (line[i] != '\0' && line[i] == ')')
 			line[i] = ' ';

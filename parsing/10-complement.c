@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   10-complement.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:20:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 12:38:00 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:22:48 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,35 @@ int	check_whitespace(char *line)
 	return (1);
 }
 
-int	invalid_quote(char *line)
+int	invalid_quote(char *line) //retravailler
 {
 	if (countofquotes(line, '\"', 0) % 2 != 0
 		|| countofquotes(line, '\'', 0) % 2 != 0)
-		return (printf("Syntax error\n"), 1);
+		return (printf("syntax error, unexpected quotes number\n"), g_sig.cmd_stat = 2, 1);
 	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '|'
 		&& line[ft_strlen(line) - 1] == '|')
-		return (printf("Syntax error\n"), 1);
+		return (ft_putstr_fd("syntax error near unexpected token `||'\n", 2), g_sig.cmd_stat = 2, 1);
 	else if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '|')
-		return (printf("Syntax error\n"), 1);
+		return (ft_putstr_fd("syntax error near unexpected token `|'\n", 2), g_sig.cmd_stat = 2, 1);
 	else if (ft_strlen(line) > 1 && line[ft_strlen(line) - 2] == '&'
 		&& line[ft_strlen(line) - 1] == '&')
-		return (printf("Syntax error\n"), 1);
+		return (ft_putstr_fd("syntax error near unexpected token `&&'\n", 2), g_sig.cmd_stat = 2, 1);
+	return (0);
+}
+
+int	invalid_start(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (i < ft_strlen(line) && is_whitespace(line[i]) == 1)
+		i++;
+	if (i + 1 < ft_strlen(line) && line[i] == '|' && line[i + 1] == '|')
+		return (ft_putstr_fd("syntax error near unexpected token `||'\n", 2), g_sig.cmd_stat = 2, 1);
+	else if (i + 1 < ft_strlen(line) && line[i] == '&' && line[i + 1] == '&')
+		return (ft_putstr_fd("syntax error near unexpected token `&&'\n", 2), g_sig.cmd_stat = 2, 1);
+	else if (line[i] == '|')
+		return (ft_putstr_fd("syntax error near unexpected token `|'\n", 2), g_sig.cmd_stat = 2, 1);
 	return (0);
 }
 

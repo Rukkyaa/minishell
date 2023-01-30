@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 20:44:26 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 23:13:27 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,21 @@ char **lsfact(char **tabl)
 	return (tabl);
 }
 
+char	*prev_redir(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (i < ft_strlen(cmd))
+	{
+		if (i + 1 < ft_strlen(cmd) && cmd[i] == '<'
+			&& cmd[i + 1] == '>')
+			cmd[i] = '\v';
+		i++;
+	}
+	return (trimator(cmd));
+}
+
 int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 {
 	t_minishell	*new_elem;
@@ -47,6 +62,7 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	if (!init)
 		return (-1);
 	init->env = p->env;
+	cmd[nb] = prev_redir(cmd[nb]);
 	if (check_redirection(cmd[nb], init) == -1)
 		return (-1);
 	cmd[nb] = erase_redir(cmd[nb]);
@@ -93,7 +109,7 @@ int	all_spaces(char **tabl)
 	{
 		inter = ft_split_spe(tabl[i], ' ');
 		if (*inter == NULL)
-			return (free_tab(inter), 1);
+			return (free_tab(inter), g_sig.cmd_stat = 2, 1);
 		free_tab(inter);
 		i++;
 	}
@@ -111,7 +127,7 @@ int	init_cmd(t_tree *start, t_all *p)
 	{
 		tab_cmd = ft_split_spe(start->cmd, '|');
 		if (all_spaces(tab_cmd) == 1)
-			return (printf("syntax error near unexpected token `|'\n"),
+			return (ft_putstr_fd("syntax error near unexpected token `|'\n", 2),
 				free_tab(tab_cmd), 2);
 	}
 	else

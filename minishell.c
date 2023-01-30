@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 21:07:30 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 23:35:43 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ t_tree	*parsingator(char *line, t_all *p)
 	*line_bis = ft_strdup(line);
 	if (!(*line_bis) || *line_bis == NULL)
 		return (free(line_bis), NULL);
-	if (invalid_quote(*line_bis) == 1 || first_check(*line_bis, p->env) == 1)
+	if (invalid_quote(*line_bis) == 1 || invalid_start(*line_bis) == 1
+		|| first_check(*line_bis, p->env) == 1)
 		return (free(*line_bis), free(line_bis), NULL);
 	p->here_docs = get_here_docs(line_bis, p);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)
@@ -46,10 +47,6 @@ t_tree	*parsingator(char *line, t_all *p)
 
 
 //Trucs a corriger
-//>lol echo > test>lol>test>>lol>test mdr >lol test >test; cat test
-// | test  --> sortie egale a 2 !!!
-//echo > <
-//echo | |
 // < stat 2
 // erreur de exit --> stat 2
 

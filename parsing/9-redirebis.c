@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:33:05 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/30 20:23:05 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 22:58:25 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,19 @@ int	potential_name(char c)
 	return (0);
 }
 
-char	*get_filename(char *line, int i)
+char	*get_filename(char *line, int i, int *alert)
 {
 	char	*text;
 	int		a;
 	int		len;
 
 	len = 0;
+	
 	while (is_whitespace(line[i]) == 1)
 		i++;
 	a = i;
+	if (line[a] == '>' || line[a] == '<')
+		*alert = a;
 	while (potential_name(line[a]) == 1)
 	{
 		if (line[a] == '\"' || line[a] == '\'')
@@ -100,25 +103,44 @@ t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
 	return (p->next = new_elem, p_bis);
 }
 
+int	end_redir(int alert, char *cmd)
+{
+	if (alert > -1)
+	{
+		g_sig.cmd_stat = 2;
+		ft_putstr_fd("syntax error near unexpected token `", 2);
+		ft_putchar_fd(cmd[alert], 2);
+		ft_putstr_fd("\'\n", 2);
+		return (-1);
+	}
+	return (1);
+}
+
+
 int	check_redirection(char *cmd, t_minishell *maillon)
 {
 	int	i;
+	int	alert;
 
-	i = 0;
-	while (i + 2 < ft_strlen(cmd))
+	i = -1;
+	alert = -1;
+	while (++i < ft_strlen(cmd) && alert == -1)
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
 			i = avoid_quotes(cmd, i) - 1;
-		else if ((i == 0 && cmd[i] == '<' && cmd[i + 1] != '<')
-			|| (i > 0 && cmd[i - 1] != '<'
+		else if ((i == 0 && i + 1 < ft_strlen(cmd) && cmd[i] == '<' && cmd[i + 1] != '<')
+			|| (i > 0 && i + 2 < ft_strlen(cmd) && cmd[i - 1] != '<'
 				&& cmd[i] == '<' && cmd[i + 2] != '<'))
 			maillon->file_in = add_file_in(maillon->file_in,
-					ft_trimhard(get_filename(cmd, i + 1)));
-		else if ((i == 0 && cmd[i] == '>' && cmd[i + 1] != '<')
-			|| (cmd[i] != '>' && cmd[i + 1] == '>' && cmd[i + 2] != '>'))
+					ft_trimhard(get_filename(cmd, i + 1, &alert)));
+		else if ((i == 0 && i + 1 < ft_strlen(cmd) && cmd[i] == '>' && cmd[i + 1] != '<')
+			|| (i > 0 && i + 2 < ft_strlen(cmd) && cmd[i] != '>' && cmd[i + 1] == '>' && cmd[i + 2] != '>'))
 			maillon->file_out = add_file_out(maillon->file_out,
-					ft_trimhard(get_filename(cmd, i + 2)), 0);
-		i++;
+					ft_trimhard(get_filename(cmd, i + 2, &alert)), 0);
+		else if (i + 3 < ft_strlen(cmd) && cmd[i] != '>' && cmd[i + 1] == '>'
+			&& cmd[i + 2] == '>' && cmd[i + 3] != '>')
+			maillon->file_out = add_file_out(maillon->file_out,
+					ft_trimhard(get_filename(cmd, i + 3, &alert)), 1);
 	}
-	return (append_treat(cmd, maillon));
+	return (end_redir(alert, cmd));
 }

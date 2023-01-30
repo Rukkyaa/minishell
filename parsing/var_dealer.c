@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/30 21:03:34 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/31 00:04:48 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ static char	*quote_modifier(char *line, int *i, char *var, int *leng)
 	return (line);
 }
 
+char	*special_back(char *line, int *i)
+{
+	line[*i] = '\v';
+	*i += 2;
+	return (line);
+}
+
 static char	*quote_treat(char *line, int *i, int *leng, t_all *p)
 {
 	int	init;
@@ -57,10 +64,7 @@ static char	*quote_treat(char *line, int *i, int *leng, t_all *p)
 		if (check_line(line, i, 1))
 			*i += 2;
 		else if (*i + 1 < ft_strlen(line) && line[*i] == '\\' && line[*i + 1] == '$')
-		{
-			line[*i] = '\v';
-			*i += 2;
-		}
+			line = special_back(line, i);
 		else if (check_line(line, i, 932587))
 		{
 			line = quote_modifier(line, i, ft_itoa(g_sig.cmd_stat), leng);

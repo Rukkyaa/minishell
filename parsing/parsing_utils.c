@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 12:36:57 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/30 12:38:07 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:54:34 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,22 @@ int	ambiguous(char *line, t_env *env)
 			if (var_empt(var) == 1)
 			{
 				while (i < ft_strlen(line) && is_whitespace(line[i]) == 0)
-					printf("%c", line[i++]);
+					ft_putchar_fd(line[i++], 2);
 				return (free(line), free(var), 1);
 			}
 			free(var);
 		}
 	}
 	return (free(line), 0);
+}
+
+int	all_rest(char *line, int i)
+{
+	while (i < ft_strlen(line) && is_whitespace(line[i]) == 1)
+		i++;
+	if (i == ft_strlen(line))
+		return (1);
+	return (0);
 }
 
 int	empty_redir(char *line)
@@ -80,35 +89,20 @@ int	empty_redir(char *line)
 	i = 0;
 	while (i < ft_strlen(line) && is_whitespace(line[i]) == 1)
 		i++;
-	while (i < ft_strlen(line) && (line[i] == '>' || line[i] == '<'))
-		i++;
-	if (i < ft_strlen(line) && line[i] != ' '
-		&& line[i] != '<' && line[i] != '>')
-		return (0);
-	while (i < ft_strlen(line) && is_whitespace(line[i]) == 1)
-		i++;
-	if (i == ft_strlen(line))
-		return (1);
+	if ((line[i] == '>' || line[i] == '<') && all_rest(line, i + 1) == 1)
+		return (ft_putstr_fd("syntax error near unexpected token `newline'\n", 2), 1);
+	else if (line[i] == '>' && line[i + 1] == '>' && all_rest(line, i + 2) == 1)
+		return (ft_putstr_fd("syntax error near unexpected token `newline'\n", 2), 1);
 	return (0);
 }
 
 int	first_check(char *line, t_env *env)
 {
-	char	*line_bis;
-	char	**tab_cmd;
-
 	if (ambiguous(ft_strdup(line), env) == 1)
-		return (printf(": ambiguous redirect\n"), 1);
+		return (ft_putstr_fd(": ambiguous redirect\n", 2), g_sig.cmd_stat = 1, 1);
 	if (ft_strlen(line) == 1 && line[0] == '.')
-		return (printf(".: filename argument required\n"), 1);
+		return (ft_putstr_fd(".: filename argument required\n", 2), g_sig.cmd_stat = 2, 1);
 	if (empty_redir(line) == 1)
-		return (printf("syntax error near unexpected token `newline'\n"), 1);
-	line_bis = erase_redir(ft_strdup(line));
-	if (check_spaces(line_bis, ' ') == 1 || que_space(line_bis) == 1)
-		return (free(line_bis), 0);
-	tab_cmd = ft_split_spe(line_bis, '|');
-	if (pipe_in(line_bis) == 1 && all_spaces(tab_cmd) == 1)
-		return (printf("syntax error near unexpected token `|'\n"),
-			free_tab(tab_cmd), free(line_bis), g_sig.cmd_stat = 2, 1);
-	return (free_tab(tab_cmd), free(line_bis), 0);
+		return (g_sig.cmd_stat = 2, 1);
+	return (0);
 }

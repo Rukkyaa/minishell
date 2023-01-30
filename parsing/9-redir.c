@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 15:22:13 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 22:02:15 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,27 @@ t_outfile	*null_case(char *file, int opt)
 	return (p);
 }
 
-int	append_treat(char *cmd, t_minishell *maillon)
-{
-	int	i;
+// int	append_treat(char *cmd, t_minishell *maillon)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i + 3 < ft_strlen(cmd))
-	{
-		if (cmd[i] == '\"' || cmd[i] == '\'')
-			i = avoid_quotes(cmd, i) - 1;
-		else if (cmd[i] != '>' && cmd[i + 1] == '>'
-			&& cmd[i + 2] == '>' && cmd[i + 3] != '>')
-		{
-			maillon->file_out = add_file_out(maillon->file_out,
-					ft_trimhard(get_filename(cmd, i + 3)), 1);
-			if (maillon->file_out == NULL)
-				return (-1);
-		}
-		i++;
-	}
-	return (1);
-}
+// 	i = 0;
+// 	while (i + 3 < ft_strlen(cmd))
+// 	{
+// 		if (cmd[i] == '\"' || cmd[i] == '\'')
+// 			i = avoid_quotes(cmd, i) - 1;
+// 		else if (cmd[i] != '>' && cmd[i + 1] == '>'
+// 			&& cmd[i + 2] == '>' && cmd[i + 3] != '>')
+// 		{
+// 			maillon->file_out = add_file_out(maillon->file_out,
+// 					ft_trimhard(get_filename(cmd, i + 3)), 1);
+// 			if (maillon->file_out == NULL)
+// 				return (-1);
+// 		}
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
 char	*erasing(char *cmd, int *i)
 {

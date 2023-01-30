@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 12:48:29 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:23:39 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ char		**tabone(char *s);
 //parsing/9-redir.c
 char		*erase_redir(char *cmd);
 int			check_redirection(char *cmd, t_minishell *maillon);
-char		*get_filename(char *line, int i);
+char		*get_filename(char *line, int i, int *alert);
 void		clean_rest(t_tree *start, int i, int end);
 t_outfile	*add_file_out(t_outfile *lst, char *file, int opt);
 t_infile	*add_file_in(t_infile *lst, char *file);
@@ -241,6 +241,7 @@ int			countbis(int i, char d, char *line);
 int			countofquotes(char *line, char c, int compt);
 int			check_whitespace(char *line);
 int			invalid_quote(char *line);
+int			invalid_start(char *line);
 int			first_check(char *line, t_env *env);
 int			empty_redir(char *line);
 
@@ -332,7 +333,6 @@ char		*ft_strdup(const char *s1);
 int			ft_strlen(const char *s);
 
 //gen_command.c
-char		*get_filename(char *line, int i);
 char		*extrac_cmd(char *line, char **redir);
 char		*clean_up(char *line, int dep, int length);
 t_minishell	*gen_maillon(char *line);
