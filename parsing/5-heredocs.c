@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 11:05:23 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 11:42:30 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,20 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 	alert = 0;
 	if (nb == max)
 		return (p->here_docs[nb] = NULL, 1);
-	p->here_docs[nb] = generate_name(find_lim(*line, &alert));
+	p->here_docs[nb] = generate_name(ft_trimhard(find_lim(*line, &alert)));
 	if (alert == -1 || p->here_docs[nb] == NULL)
 		return (alert_case(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
 	fd = open(p->here_docs[nb], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
 		return (free(p->here_docs[nb]), p->here_docs[nb] = NULL, -1);
-	newlimiter = gen_new_limiter(find_lim(*line, &alert));
+	newlimiter = gen_new_limiter(ft_trimhard(find_lim(*line, &alert)));
 	if (newlimiter == NULL || alert == -1 || signals_hdoc(0) == -1)
 		return (ret_norm(0, p, newlimiter, nb));
 	lect = hdoc_process(p, fd, newlimiter);
 	if (nb + 1 == max && (lect || !lect))
 		lect = get_next_line(-42);
 	*line = clean_heredoc_line(*line, p->here_docs[nb],
-			ft_trimhard(find_lim(*line, &alert)), &alert);
+			find_lim(*line, &alert), &alert);
 	if (signals_hdoc(1) == -1 || *line == NULL || g_sig.sig_int == 1)
 		return (close (fd), ret_norm(1, p, newlimiter, nb));
 	return (free(newlimiter), close (fd), fill_file(p, line, max, ++nb));

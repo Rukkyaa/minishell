@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redirebis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:33:05 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/29 23:07:07 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 11:14:54 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	clean_rest(t_tree *start, int i, int end)
 int	potential_name(char c)
 {
 	if (ft_isprint(c) == 1 && c != '<' && c != '>'
-		&& c != '|' && c != '&')
+		&& c != '|' && c != '&' && is_whitespace(c) == 0)
 		return (1);
 	return (0);
 }

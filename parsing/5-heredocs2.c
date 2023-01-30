@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 21:56:54 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/29 23:30:23 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 11:53:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,25 @@ char	*clone(char *limiter)
 	int	count;
 	int	i;
 	char *new_str;
+	int	start;
 
 	count = 0;
 	i = 0;
-	while (count < ft_strlen(limiter) && is_whitespace(limiter[i++]) == 0)
+	while (i < ft_strlen(limiter) && is_whitespace(limiter[i]) == 1)
+		i++;
+	start = i;
+	while (count < ft_strlen(limiter) && i < ft_strlen(limiter) && is_whitespace(limiter[i]) == 0)
+	{
 		count++;
+		i++;
+	}
 	new_str = malloc((count + 1) * sizeof(char));
 	if (!new_str)
 		return (NULL);
-	i = -1;
-	while (++i < count)
-		new_str[i] = limiter[i];
-	return (new_str[i] = '\0', new_str);
+	count = 0;
+	while (start < i)
+		new_str[count++] = limiter[start++];
+	return (new_str[count] = '\0', new_str);
 }
 
 char	*generate_name(char *limiter)
@@ -88,7 +95,7 @@ char	*find_lim2(char *line, int i, int compt, int d)
 	compt = 0;
 	while (line[i] != '\0' && i < d)
 		limiter[compt++] = line[i++];
-	return (limiter[compt] = '\0', ft_trimhard(limiter));
+	return (limiter[compt] = '\0', limiter);
 }
 
 int	increment_i(char *line, int i)
@@ -103,6 +110,7 @@ char	*find_lim(char *line, int *alert)
 	int		i;
 	int		compt;
 	int		d;
+	//int		end;
 
 	i = 0;
 	compt = 0;
@@ -114,15 +122,21 @@ char	*find_lim(char *line, int *alert)
 		i++;
 	d = i;
 	*alert = i;
-	while (line[d] != '\0' && potential_name(line[i]) == 1)
+	while (d < ft_strlen(line) && potential_name(line[d]) == 1 && is_whitespace(line[d]) == 0)
 	{
 		if (line[d] == '\"' || line[d] == '\'')
 		{
-			compt += avoid_quotes(line, d) - 1 - d;
-			d = avoid_quotes(line, d) - 1;
+			// end = avoid_quotes(line, d);
+			// while (d++ < end)
+			// 	compt++;
+			compt += avoid_quotes(line, d) - d;
+			d = avoid_quotes(line, d);
 		}
-		compt++;
-		d++;
+		else
+		{
+			compt++;
+			d++;
+		}
 	}
 	return (find_lim2(line, i, compt, d));
 }
