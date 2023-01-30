@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 18:04:39 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/30 00:11:39 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 10:17:50 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static char	*modifier(char *line, int *i, char *var, int *leng)
 	if (line == NULL)
 		return (NULL);
 	if (line[*i] == '$' && var_empt(var) == 1)
-		line[*i] = '\t';
+		line[*i] = '\v';
 	else if (line[*i] == '$')
 		line[*i] = ' ';
 	else if (line[*i + 1] == '~')

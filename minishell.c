@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/29 19:58:47 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 10:36:41 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_tree	*parsingator(char *line, t_all *p)
 	*line_bis = ft_strdup(line);
 	if (!(*line_bis) || *line_bis == NULL)
 		return (free(line_bis), NULL);
-	if (invalid_quote(*line_bis) == 1 || first_check(*line_bis) == 1)
+	if (invalid_quote(*line_bis) == 1 || first_check(*line_bis, p->env) == 1)
 		return (free(*line_bis), free(line_bis), NULL);
 	p->here_docs = get_here_docs(line_bis, p);
 	if (p->here_docs == NULL && heredoc_count(line, 0) != 0)

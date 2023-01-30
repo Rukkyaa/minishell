@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 09:14:38 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:24:57 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ int			sig_exit(int nb);
 int			potential_name(char c);
 char		*trimator(char *str);
 int			pipe_in(char *str);
+int			var_empt(char *var);
+char		*get_var(char *line, t_env *envp, int i, int *leng);
 
 int			check_minishell(char **tabl);
 int			count_words2(char *str, char c);
@@ -228,7 +230,7 @@ int			countbis(int i, char d, char *line);
 int			countofquotes(char *line, char c, int compt);
 int			check_whitespace(char *line);
 int			invalid_quote(char *line);
-int			first_check(char *line);
+int			first_check(char *line, t_env *env);
 
 //parsing/11-wildparsing.c
 char		**w_finder(char **tabl);

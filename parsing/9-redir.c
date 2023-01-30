@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:32:08 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/29 23:46:48 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 10:35:04 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ char	*erasing(char *cmd, int *i)
 	{
 		end = avoid_quotes(cmd, *i);
 		while (*i < end)
-			cmd[(*i)++] = ' ';
+			cmd[(*i)++] = '\v';
 	}
 	else
-		cmd[(*i)++] = ' ';
+		cmd[(*i)++] = '\v';
 	return (cmd);
 }
 
@@ -82,19 +82,19 @@ char	*erase_redir(char *cmd)
 			i = avoid_quotes(cmd, i);
 		if (cmd[i] == '>' || cmd[i] == '<')
 		{
-			cmd[i] = ' ';
+			cmd[i] = '\v';
 			if (cmd[i + 1] == '>')
-				cmd[++i] = ' ';
+				cmd[++i] = '\v';
 			while (i < ft_strlen(cmd) && is_whitespace(cmd[i]) == 1)
 				i++;
-			while (i < ft_strlen(cmd) && potential_name(cmd[i] == 1))
+			while (i < ft_strlen(cmd) && potential_name(cmd[i]) == 1)
 				cmd = erasing(cmd, &i);
 		}
 		if (cmd[i] == '\0')
 			break ;
 		i++;
 	}
-	return (cmd);
+	return (trimator(cmd));
 }
 
 char	*erase_redirbis(char *cmd)
