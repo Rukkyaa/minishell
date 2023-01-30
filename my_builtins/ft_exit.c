@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:23:26 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/27 10:33:31 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:42:11 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	ft_exit(t_all *p, t_tree *start, char **cmd)
 	int	nb;
 
 	if (length_tab(cmd) > 1 && full_digit(cmd[1]) && cmd[2])
-		return (ft_putendl_fd("exit: too many arguments", 2));
+		return (ft_putstr_fd("exit\n", 2),
+			ft_putendl_fd("exit: too many arguments", 2));
 	printf("exit\n");
 	if (cmd[1])
 	{
