@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:53:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/26 17:19:23 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:15:54 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ int	ft_echo(char **cmd)
 
 	option = false;
 	i = 0;
+	if (write(1, "\0", 1) == -1)
+		if (errno == ENOSPC)
+			return (ft_putendl_fd(
+					"echo: write error: No space left on device", 2), 1);
 	if (cmd[1])
 	{
 		while (cmd[++i] && check_echo(cmd[i]))
