@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 15:36:12 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 21:07:30 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,15 @@ t_tree	*parsingator(char *line, t_all *p)
 
 //valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes
 //--suppressions=./.readline.supp ./minishell
+
+
+//Trucs a corriger
+//>lol echo > test>lol>test>>lol>test mdr >lol test >test; cat test
+// | test  --> sortie egale a 2 !!!
+//echo > <
+//echo | |
+// < stat 2
+// erreur de exit --> stat 2
 
 char	*do_minishell(t_all *p)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redirebis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:33:05 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/30 12:06:44 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 20:23:05 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	potential_name(char c)
 {
 	if (ft_isprint(c) == 1 && c != '<' && c != '>'
-		&& c != '|' && c != '&' && is_whitespace(c) == 0)
+		&& c != '|' && c != '&' && is_whitespace(c) == 0
+		&& (c < 35 || c > 47))
 		return (1);
 	return (0);
 }

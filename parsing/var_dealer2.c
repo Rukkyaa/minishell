@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 14:40:48 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/30 12:10:57 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 20:12:03 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,16 @@ char	*get_var(char *line, t_env *envp, int i, int *leng)
 	env = envp;
 	if (line == NULL || env == NULL)
 		return (NULL);
-	while (line[e] != '\0' && potential_name(line[e]) == 1 && line[e] != '/'
-		&& line[e] != '\"' && line[e] != '\'' && line[e] != '$')
+	if (line[e] >= '1' && line[e] <= '9')
 		e++;
+	else if (line[e] == '0')
+		return (line[e] = '\v', ft_strdup("minishell")); //ON GARDE?? //symbole etrange quand on pipe avec cat : echo $0 (ou autre echo) | cat -e
+	else
+	{
+		while (line[e] != '\0' && potential_name(line[e]) == 1 && line[e] != '/'
+			&& line[e] != '\"' && line[e] != '\'' && line[e] != '$')
+			e++;
+	}
 	var = ft_substr(line, i + 1, e - i - 1);
 	if (!var)
 		return (NULL);

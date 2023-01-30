@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 08:53:56 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 10:15:54 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 20:49:45 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ int	ft_echo(char **cmd)
 			option = true;
 		while (cmd[i])
 		{
-			ft_putstr_fd(cmd[i], 1);
+			if (!(ft_strlen(cmd[i]) == 2 && ((cmd[i][0] == '\"' && cmd[i][1] == '\"') || (cmd[i][0] == '\'' && cmd[i][1] == '\''))))
+				ft_putstr_fd(cmd[i], 1);
 			if (cmd[i][0] && cmd[i + 1])
 				ft_putchar_fd(' ', 1);
 			i ++;

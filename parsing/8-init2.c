@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   8-init2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 12:10:19 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 20:44:26 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,24 @@ static t_minishell	*parameting(t_minishell *new_elem)
 	return (new_elem);
 }
 
+char **lsfact(char **tabl)
+{
+	int	i;
+	int	d;
+
+	i = -1;
+	while (tabl[++i] != NULL)
+	{
+		d = -1;
+		while (tabl[i][++d] != '\0')
+		{
+			if (tabl[i][d] == '\\')
+				tabl[i][d] = ' ';
+		}
+	}
+	return (tabl);
+}
+
 int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 {
 	t_minishell	*new_elem;
@@ -35,9 +53,9 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	if (que_space(cmd[nb]) == 1)
 		init->cmd = tabone(NULL);
 	else if (check_spaces(cmd[nb], ' ') == 1)
-		init->cmd = trim_tab(tabone(ft_strtrim(cmd[nb], " ")));
+		init->cmd = lsfact(trim_tab(tabone(ft_strtrim(cmd[nb], " "))));
 	else
-		init->cmd = trim_tab(w_finder(ft_split_spe(cmd[nb], ' ')));
+		init->cmd = lsfact(trim_tab(w_finder(ft_split_spe(cmd[nb], ' '))));
 	if (cmd[nb + 1] == NULL)
 		return (free_tab(cmd), 1);
 	new_elem = malloc(sizeof(t_minishell));
