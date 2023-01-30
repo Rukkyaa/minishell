@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:29:25 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 10:49:11 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 10:54:57 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ int	countof_spe(char **line, char c, int compt, int i)
 		return (0);
 	while (i < ft_strlen(*line) && (*line)[++i] != '\0')
 	{
-		if ((*line)[i] != '\0' && (*line)[i] == '\"')
+		if (i < ft_strlen(*line) && (*line)[i] != '\0' && (*line)[i] == '\"')
 		{
 			i++;
 			while ((*line)[i] != '\0' && (*line)[i] != '\"')
 				i++;
 			i++;
 		}
-		if ((*line)[i] != '\0' && (*line)[i] == '\'')
+		if (i < ft_strlen(*line) && (*line)[i] != '\0' && (*line)[i] == '\'')
 		{
 			i++;
-			while ((*line)[i] != '\0' && (*line)[i] != '\'')
+			while (i < ft_strlen(*line) && (*line)[i] != '\'')
 				i++;
 			i++;
 		}

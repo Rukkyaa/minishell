@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   12-taboperations.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:52:25 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/29 23:16:51 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 10:58:34 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ char	*tab_to_str(char **tabl, int opt)
 char	*ft_trim(char *s1)
 {
 	int		i;
-	// char	*s1_bis;
-	// char	**tabinter;
 
 	i = -1;
 	if (!s1 || s1 == NULL)
@@ -55,18 +53,12 @@ char	*ft_trim(char *s1)
 		else if (s1[i] == '\'')
 			s1 = treat_str(s1, &i, '\'');
 	}
-	// tabinter = ft_split_spe(s1, '\v');
-	// if (tabinter == NULL)
-	// 	return (free(s1), NULL);
-	// s1_bis = tab_to_str(tabinter, 0);
 	return (trimator(s1));
 }
 
 char	*ft_trimhard(char *s1)
 {
 	int		i;
-	//char	*s1_bis;
-	//char	**tabinter;
 
 	i = -1;
 	if (!s1 || s1 == NULL)
@@ -74,17 +66,13 @@ char	*ft_trimhard(char *s1)
 	if (ft_strlen(s1) == 2 && ((s1[0] == '\"' && s1[1] == '\"')
 			|| (s1[0] == '\'' && s1[1] == '\'')))
 		return (free(s1), NULL);
-	while (s1[++i] != '\0')
+	while (i < ft_strlen(s1) && s1[++i] != '\0')
 	{
 		if (s1[i] == '\"')
 			s1 = treat_str(s1, &i, '\"');
 		else if (s1[i] == '\'')
 			s1 = treat_str(s1, &i, '\'');
 	}
-	// tabinter = ft_split_spe(s1, '\v');
-	// if (tabinter == NULL)
-	// 	return (free(s1), NULL);
-	// s1_bis = tab_to_str(tabinter, 0);
 	return (trimator(s1));
 }
 

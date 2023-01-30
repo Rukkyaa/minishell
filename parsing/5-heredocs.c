@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/29 22:57:54 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 11:05:23 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// void	alert_case(char *str);
 
 static char	*cleanlect(char *lect)
 {
@@ -96,7 +94,7 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 	if (nb + 1 == max && (lect || !lect))
 		lect = get_next_line(-42);
 	*line = clean_heredoc_line(*line, p->here_docs[nb],
-			find_lim(*line, &alert), &alert);
+			ft_trimhard(find_lim(*line, &alert)), &alert);
 	if (signals_hdoc(1) == -1 || *line == NULL || g_sig.sig_int == 1)
 		return (close (fd), ret_norm(1, p, newlimiter, nb));
 	return (free(newlimiter), close (fd), fill_file(p, line, max, ++nb));
