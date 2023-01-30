@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 00:00:45 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/27 10:49:50 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:04:20 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ int	before(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (-1);
+	if (!ft_isalpha(str[0]))
+		return (ft_putstr_fd(str, 2),
+			ft_putendl_fd(": not a valid identifier", 2), -1);
 	while (str[i])
 	{
 		if (str[i] == '+' && str[i + 1] == '=')
