@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 00:16:01 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/30 00:05:05 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 12:47:13 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,6 @@ static int	final_opt(char **cmd, char **reforged_env)
 	free_tab(reforged_env);
 	g_sig.cmd_stat = 127;
 	return (127);
-}
-
-void	clean_p(char **paths, int flag, t_all *p)
-{
-	if (paths != NULL)
-		free_tab(paths);
-	if (flag == 1)
-	{
-		ft_putstr_fd("'' : command not found\n", 2);
-		end_process(p, 0);
-	}
 }
 
 int	exec_command(char **paths, char **cmd, t_all *p, t_tree *start)

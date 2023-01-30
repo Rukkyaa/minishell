@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_spe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:29:17 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/29 22:45:58 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 12:46:48 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,7 @@ int	last_pipe_cat(t_minishell *e, t_all *p, t_tree *start)
 		close(e->fd[1]);
 		if (g_sig.sig_int > 0 || g_sig.sig_quit > 0
 			|| dup2(e->fd[0], STDIN_FILENO) < 0)
-		{
-			close(e->fd[0]);
-			end_process(p, 1);
-		}
+			emergency(e, p);
 		close(e->fd[0]);
 		if (cond_redir(e, p) == -1
 			|| exec_command(maj_path(p->env), e->next->cmd, p, start) != 0)

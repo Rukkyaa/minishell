@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5-heredocs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 13:15:43 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 11:42:30 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 12:37:13 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ static char	*cleanlect(char *lect)
 		lect = NULL;
 	}
 	return (lect);
+}
+
+void	fin(void)
+{
+	if (g_sig.sig_int == 1)
+		g_sig.cmd_stat = 130;
 }
 
 static char	*hdoc_process(t_all *p, int fd, char *newlimiter)
@@ -48,9 +54,7 @@ static char	*hdoc_process(t_all *p, int fd, char *newlimiter)
 		}
 		prev = prev_valo(lect);
 	}
-	if (g_sig.sig_int == 1)
-		g_sig.cmd_stat = 130;
-	return (cleanlect(lect));
+	return (fin(), cleanlect(lect));
 }
 
 int	ret_norm(int opt, t_all *p, char *newlimiter, int nb)
@@ -98,16 +102,4 @@ int	fill_file(t_all *p, char **line, int max, int nb)
 	if (signals_hdoc(1) == -1 || *line == NULL || g_sig.sig_int == 1)
 		return (close (fd), ret_norm(1, p, newlimiter, nb));
 	return (free(newlimiter), close (fd), fill_file(p, line, max, ++nb));
-}
-
-char	**get_here_docs(char **line, t_all *p)
-{
-	if (heredoc_count(*line, 0) == 0)
-		return (NULL);
-	p->here_docs = malloc((heredoc_count(*line, 0) + 1) * sizeof(char *));
-	if (!p->here_docs)
-		return (NULL);
-	if (fill_file(p, line, heredoc_count(*line, 0), 0) == -1)
-		return (free_here_docs(p->here_docs), NULL);
-	return (p->here_docs);
 }

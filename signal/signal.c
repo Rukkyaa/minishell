@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 15:22:03 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/29 20:00:02 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 12:05:15 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	create_signal_here(void)
 		return (-1);
 	a.sa_handler = sighandler;
 	a.sa_flags = 0;
-	//a.sa_flags = SA_RESTART;
 	sigemptyset(&a.sa_mask);
 	if (sigaction(SIGINT, &a, NULL) != 0)
 		return (-1);
@@ -43,7 +42,7 @@ void	init_signal(int nb)
 
 void	sig_eof(int code)
 {
-	char *save;
+	char	*save;
 
 	(void) code;
 	if (g_sig.p_status == 0 && rl_end == 0)
@@ -68,10 +67,21 @@ void	sig_eof(int code)
 		g_sig.sig_quit = 1;
 }
 
-void	sighandler(int code)
+void	lanormedufutur(void)
 {
 	char	*save;
 
+	save = ft_strdup(rl_line_buffer);
+	if (save == NULL)
+		rl_on_new_line();
+	rl_on_new_line();
+	rl_replace_line(save, 0);
+	rl_redisplay();
+	free(save);
+}
+
+void	sighandler(int code)
+{
 	if (code == (int)SIGINT)
 	{
 		g_sig.sig_int = 1;
@@ -92,14 +102,6 @@ void	sighandler(int code)
 		rl_done = 1;
 	}
 	else if (code == (int)SIGQUIT && g_sig.p_status == 0)
-	{
-		save = ft_strdup(rl_line_buffer);
-		if (save == NULL)
-			rl_on_new_line();
-		rl_on_new_line();
-		rl_replace_line(save, 0);
-		rl_redisplay();
-		free(save);
-	}
+		lanormedufutur();
 	return ;
 }

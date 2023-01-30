@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:08:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 10:36:41 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 12:20:28 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ char	*do_minishell(t_all *p)
 	}
 	free(g_sig.line);
 	g_sig.line = NULL;
-	// if (rl_line_buffer != NULL)
-	// 	rl_replace_line("", 0);
 	return (g_sig.line);
 }
 

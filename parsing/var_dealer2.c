@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_dealer2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 14:40:48 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/30 00:12:22 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 12:10:57 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,49 +25,6 @@ int	var_empt(char *var)
 			return (0);
 	}
 	return (1);
-}
-
-char	*trimator(char *str)
-{
-	int		i;
-	int		count;
-	char	*new_str;
-
-	i = 0;
-	count = 0;
-	while (i < ft_strlen(str) && str[i] != '\0')
-	{
-		if (str[i++] != '\v')
-			count++;
-	}
-	new_str = malloc((count + 1) * sizeof(char));
-	if (!new_str)
-		return (free(str), NULL);
-	i = -1;
-	count = 0;
-	while(++i < ft_strlen(str))
-	{
-		if (str[i] != '\v')
-			new_str[count++] = str[i];
-	}
-	new_str[count] = '\0';
-	return (free(str), new_str);
-}
-
-int	find_other(char *line, int init, int *i, int opt)
-{
-	int	a;
-
-	a = init + 1;
-	if (opt == 1)
-		*i = init + 1;
-	while (line[a] != '\0')
-	{
-		if (line[a] == '\"')
-			return (a);
-		a++;
-	}
-	return (0);
 }
 
 char	*tilde(t_env *env)

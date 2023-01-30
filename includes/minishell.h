@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 10:24:57 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 12:48:29 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ t_tree		*fill_branch(char *reserve, int i);
 int			check_interligne(char *line);
 int			check_extraligne(char *line);
 char		*clean_first(char *line);
+int			ambiguous(char *line, t_env *env);
+int			fill_file(t_all *p, char **line, int max, int nb);
 
 //parsing/2-free.c
 void		free_start(t_tree *start, int mode);
@@ -192,6 +194,11 @@ int			signals_hdoc(int opt);
 int			pipex(t_minishell *first_elem, t_all *p, t_tree *start);
 bool		check_line(char *line, int *i, int flag);
 void		alert_case(char *str);
+char		*find_lim2(char *line, int i, int compt, int d);
+int			increment_amb(char *line, int i);
+void		emergency(t_minishell *e, t_all *p);
+void		clean_p(char **paths, int flag, t_all *p);
+void		emergency(t_minishell *e, t_all *p);
 
 //parsing/6-count.c
 int			countof_spe(char **line, char c, int compt, int i);
@@ -199,6 +206,7 @@ int			avoid_quotes(char *line, int i);
 int			last_char_spe(char *line, char c);
 int			first_char_spe(char *line, char c, int index);
 int			count_pipe(char *cmd);
+int			increment_d(int d, int *compt, char *line);
 
 //parsing/7-print.c
 void		print_tree(t_tree *start, int i);
@@ -224,6 +232,9 @@ t_outfile	*add_file_out(t_outfile *lst, char *file, int opt);
 t_infile	*add_file_in(t_infile *lst, char *file);
 t_outfile	*null_case(char *file, int opt);
 int			append_treat(char *cmd, t_minishell *maillon);
+void		clean_rest(t_tree *start, int i, int end);
+int			increment_i(char *line, int i);
+int			init_shell(t_tree *start, t_all *p);
 
 //parsing/10-complement.c
 int			countbis(int i, char d, char *line);
@@ -231,6 +242,7 @@ int			countofquotes(char *line, char c, int compt);
 int			check_whitespace(char *line);
 int			invalid_quote(char *line);
 int			first_check(char *line, t_env *env);
+int			empty_redir(char *line);
 
 //parsing/11-wildparsing.c
 char		**w_finder(char **tabl);

@@ -3,20 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   9-redirebis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:33:05 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/30 11:14:54 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/01/30 12:06:44 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	clean_rest(t_tree *start, int i, int end)
-{
-	while (i <= end)
-		start->cmd[i++] = ' ';
-}
 
 int	potential_name(char c)
 {
