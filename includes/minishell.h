@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/29 23:44:37 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/30 09:14:38 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,6 +334,7 @@ int			ft_unset(t_env *env, char **to_unset);
 int			ft_export(t_env *env, char **split);
 int			ft_cd(t_env *env, char **split);
 void		ft_exit(t_all *p, t_tree *start, char **cmd);
+void		error_cd(char *str);
 
 // ENV STRUCT
 t_env		*ft_envlast(t_env *lst);

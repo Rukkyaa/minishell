@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 23:15:08 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/25 09:45:30 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 09:15:35 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ int	ft_cd(t_env *env, char **split)
 	if (!chdir(pwd))
 		update_pwd(env, oldpwd);
 	else
-		return (free(oldpwd), free(pwd),
-			ft_putendl_fd("cd : No such file or directory", 2), 1);
+		return (free(oldpwd), error_cd(pwd), 1);
 	return (free(pwd), 0);
 }

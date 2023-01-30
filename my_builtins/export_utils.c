@@ -6,7 +6,7 @@
 /*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 10:00:52 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/26 13:55:04 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/01/30 09:28:40 by axlamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,12 @@ void	change_value_equal(t_env *env, char *key)
 		new->code = 2;
 		ft_env_add_back(&env, new);
 	}
+}
+
+void	error_cd(char *str)
+{
+	ft_putstr_fd("cd: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putendl_fd(": No such file or directory", 2);
+	free(str);
 }
