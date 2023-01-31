@@ -6,26 +6,11 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 14:40:48 by gatsby            #+#    #+#             */
-/*   Updated: 2023/01/31 00:07:12 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/31 10:15:43 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	var_empt(char *var)
-{
-	int	i;
-
-	i = 0;
-	if (!var || ft_strlen(var) == 0)
-		return (0);
-	while (i < ft_strlen(var) && var[i] != '\0')
-	{
-		if (var[i++] != '\v')
-			return (0);
-	}
-	return (1);
-}
 
 char	*tilde(t_env *env)
 {
@@ -83,7 +68,7 @@ static char	*empty_var(char *var)
 
 int	incrementor(char *line, int e)
 {
-	if (line[e] >= '1' && line[e] <= '9')
+	if (line[e] >= '0' && line[e] <= '9')
 		return (++e);
 	while (line[e] != '\0' && potential_name(line[e]) == 1 && line[e] != '/'
 		&& line[e] != '\"' && line[e] != '\'' && line[e] != '$')
@@ -102,7 +87,7 @@ char	*get_var(char *line, t_env *envp, int i, int *leng)
 	if (line == NULL || env == NULL)
 		return (NULL);
 	if (line[e] == '0')
-		return (line[e] = '\v', ft_strdup("minishell")); //ON GARDE?? //symbole etrange quand on pipe avec cat : echo $0 (ou autre echo) | cat -e
+		return (line[e] = '\v', ft_strdup("minishell"));
 	else
 		e = incrementor(line, e);
 	var = ft_substr(line, i + 1, e - i - 1);

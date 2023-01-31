@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 23:23:39 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/31 10:31:06 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,11 @@ char		*trimator(char *str);
 int			pipe_in(char *str);
 int			var_empt(char *var);
 char		*get_var(char *line, t_env *envp, int i, int *leng);
+char		*special_back(char *line, int *i);
+char		**lsfact(char **tabl);
+int			all_rest(char *line, int i);
+int			pipe_in(char *str);
+int			quote_cond(char *line, int *i, int flag);
 
 int			check_minishell(char **tabl);
 int			count_words2(char *str, char c);
@@ -163,6 +168,7 @@ void		free_env(t_env *envp);
 //parsing/2-freebis.c
 void		free_here_docs(char **here_docs);
 void		free_all(t_all *p);
+int			check_whitespace(char *line);
 
 //parsing/3-segmentation.c
 int			first_segmentation(t_tree *start, t_tree *init);
@@ -231,7 +237,7 @@ void		clean_rest(t_tree *start, int i, int end);
 t_outfile	*add_file_out(t_outfile *lst, char *file, int opt);
 t_infile	*add_file_in(t_infile *lst, char *file);
 t_outfile	*null_case(char *file, int opt);
-int			append_treat(char *cmd, t_minishell *maillon);
+int			end_redir(int alert, char *cmd);
 void		clean_rest(t_tree *start, int i, int end);
 int			increment_i(char *line, int i);
 int			init_shell(t_tree *start, t_all *p);
@@ -239,7 +245,6 @@ int			init_shell(t_tree *start, t_all *p);
 //parsing/10-complement.c
 int			countbis(int i, char d, char *line);
 int			countofquotes(char *line, char c, int compt);
-int			check_whitespace(char *line);
 int			invalid_quote(char *line);
 int			invalid_start(char *line);
 int			first_check(char *line, t_env *env);

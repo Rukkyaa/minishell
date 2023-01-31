@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 12:36:57 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/30 23:54:34 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/31 10:22:08 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,6 @@ int	ambiguous(char *line, t_env *env)
 	return (free(line), 0);
 }
 
-int	all_rest(char *line, int i)
-{
-	while (i < ft_strlen(line) && is_whitespace(line[i]) == 1)
-		i++;
-	if (i == ft_strlen(line))
-		return (1);
-	return (0);
-}
-
 int	empty_redir(char *line)
 {
 	int	i;
@@ -90,18 +81,24 @@ int	empty_redir(char *line)
 	while (i < ft_strlen(line) && is_whitespace(line[i]) == 1)
 		i++;
 	if ((line[i] == '>' || line[i] == '<') && all_rest(line, i + 1) == 1)
-		return (ft_putstr_fd("syntax error near unexpected token `newline'\n", 2), 1);
+		return (
+			ft_putstr_fd("syntax error near unexpected token `newline'\n", 2),
+			1);
 	else if (line[i] == '>' && line[i + 1] == '>' && all_rest(line, i + 2) == 1)
-		return (ft_putstr_fd("syntax error near unexpected token `newline'\n", 2), 1);
+		return (
+			ft_putstr_fd("syntax error near unexpected token `newline'\n", 2),
+			1);
 	return (0);
 }
 
 int	first_check(char *line, t_env *env)
 {
 	if (ambiguous(ft_strdup(line), env) == 1)
-		return (ft_putstr_fd(": ambiguous redirect\n", 2), g_sig.cmd_stat = 1, 1);
+		return (ft_putstr_fd(": ambiguous redirect\n", 2),
+			g_sig.cmd_stat = 1, 1);
 	if (ft_strlen(line) == 1 && line[0] == '.')
-		return (ft_putstr_fd(".: filename argument required\n", 2), g_sig.cmd_stat = 2, 1);
+		return (ft_putstr_fd(".: filename argument required\n", 2),
+			g_sig.cmd_stat = 2, 1);
 	if (empty_redir(line) == 1)
 		return (g_sig.cmd_stat = 2, 1);
 	return (0);

@@ -6,20 +6,11 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:33:05 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/30 22:58:25 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/31 10:08:44 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	potential_name(char c)
-{
-	if (ft_isprint(c) == 1 && c != '<' && c != '>'
-		&& c != '|' && c != '&' && is_whitespace(c) == 0
-		&& (c < 35 || c > 47))
-		return (1);
-	return (0);
-}
 
 char	*get_filename(char *line, int i, int *alert)
 {
@@ -28,7 +19,6 @@ char	*get_filename(char *line, int i, int *alert)
 	int		len;
 
 	len = 0;
-	
 	while (is_whitespace(line[i]) == 1)
 		i++;
 	a = i;
@@ -103,19 +93,15 @@ t_outfile	*add_file_out(t_outfile *lst, char *file, int opt)
 	return (p->next = new_elem, p_bis);
 }
 
-int	end_redir(int alert, char *cmd)
+static int	infile_cond(char *cmd, int i)
 {
-	if (alert > -1)
-	{
-		g_sig.cmd_stat = 2;
-		ft_putstr_fd("syntax error near unexpected token `", 2);
-		ft_putchar_fd(cmd[alert], 2);
-		ft_putstr_fd("\'\n", 2);
-		return (-1);
-	}
-	return (1);
+	if ((i == 0 && i + 1 < ft_strlen(cmd) && cmd[i] == '<'
+			&& cmd[i + 1] != '<')
+		|| (i > 0 && i + 2 < ft_strlen(cmd) && cmd[i - 1] != '<'
+			&& cmd[i] == '<' && cmd[i + 2] != '<'))
+		return (1);
+	return (0);
 }
-
 
 int	check_redirection(char *cmd, t_minishell *maillon)
 {
@@ -128,13 +114,13 @@ int	check_redirection(char *cmd, t_minishell *maillon)
 	{
 		if (cmd[i] == '\"' || cmd[i] == '\'')
 			i = avoid_quotes(cmd, i) - 1;
-		else if ((i == 0 && i + 1 < ft_strlen(cmd) && cmd[i] == '<' && cmd[i + 1] != '<')
-			|| (i > 0 && i + 2 < ft_strlen(cmd) && cmd[i - 1] != '<'
-				&& cmd[i] == '<' && cmd[i + 2] != '<'))
+		else if (infile_cond(cmd, i) == 1)
 			maillon->file_in = add_file_in(maillon->file_in,
 					ft_trimhard(get_filename(cmd, i + 1, &alert)));
-		else if ((i == 0 && i + 1 < ft_strlen(cmd) && cmd[i] == '>' && cmd[i + 1] != '<')
-			|| (i > 0 && i + 2 < ft_strlen(cmd) && cmd[i] != '>' && cmd[i + 1] == '>' && cmd[i + 2] != '>'))
+		else if ((i == 0 && i + 1 < ft_strlen(cmd) && cmd[i] == '>'
+				&& cmd[i + 1] != '<')
+			|| (i > 0 && i + 2 < ft_strlen(cmd) && cmd[i] != '>'
+				&& cmd[i + 1] == '>' && cmd[i + 2] != '>'))
 			maillon->file_out = add_file_out(maillon->file_out,
 					ft_trimhard(get_filename(cmd, i + 2, &alert)), 0);
 		else if (i + 3 < ft_strlen(cmd) && cmd[i] != '>' && cmd[i + 1] == '>'

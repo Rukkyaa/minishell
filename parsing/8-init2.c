@@ -6,7 +6,7 @@
 /*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 12:29:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/30 23:13:27 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/01/31 10:22:46 by gatsby           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,6 @@ static t_minishell	*parameting(t_minishell *new_elem)
 	new_elem->cmd = NULL;
 	new_elem->append = 0;
 	return (new_elem);
-}
-
-char **lsfact(char **tabl)
-{
-	int	i;
-	int	d;
-
-	i = -1;
-	while (tabl[++i] != NULL)
-	{
-		d = -1;
-		while (tabl[i][++d] != '\0')
-		{
-			if (tabl[i][d] == '\\')
-				tabl[i][d] = ' ';
-		}
-	}
-	return (tabl);
 }
 
 char	*prev_redir(char *cmd)
@@ -80,21 +62,6 @@ int	recursive_lst(t_minishell *init, char **cmd, int nb, t_all *p)
 	new_elem = parameting(new_elem);
 	init->next = new_elem;
 	return (recursive_lst(new_elem, cmd, ++nb, p));
-}
-
-int	pipe_in(char *str)
-{
-	int	i;
-
-	i = -1;
-	while (++i < ft_strlen(str))
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-			i = avoid_quotes(str, i) - 1;
-		else if (str[i] == '|')
-			return (1);
-	}
-	return (0);
 }
 
 int	all_spaces(char **tabl)
