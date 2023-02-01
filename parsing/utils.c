@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 21:59:09 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 12:43:02 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/02/01 14:04:33 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,15 @@ int	count_words(char const *str, char c)
 			i++;
 	}
 	return (compteur);
+}
+
+int	incrementspe(int i, char *line)
+{
+	if ((i + 1 < ft_strlen(line) && line[i] == '>' && line[i + 1] != '>')
+		|| (i + 1 < ft_strlen(line) && line[i] == '<' && line[i + 1] != '<'))
+		return (++i);
+	else if (i + 2 < ft_strlen(line) && line[i] == '>' && line[i + 1] == '>'
+		&& line[i + 2] != '>')
+		return (i + 2);
+	return (i);
 }

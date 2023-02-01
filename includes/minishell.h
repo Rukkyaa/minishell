@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 11:15:05 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/31 10:31:06 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/02/01 14:04:44 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ char		**lsfact(char **tabl);
 int			all_rest(char *line, int i);
 int			pipe_in(char *str);
 int			quote_cond(char *line, int *i, int flag);
+int			incrementspe(int i, char *line);
 
 int			check_minishell(char **tabl);
 int			count_words2(char *str, char c);

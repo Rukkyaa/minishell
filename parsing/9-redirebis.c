@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9-redirebis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gatsby <gatsby@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:33:05 by axlamber          #+#    #+#             */
-/*   Updated: 2023/01/31 10:08:44 by gatsby           ###   ########.fr       */
+/*   Updated: 2023/02/01 14:04:11 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*get_filename(char *line, int i, int *alert)
 	int		len;
 
 	len = 0;
+	i = incrementspe(i, line);
 	while (is_whitespace(line[i]) == 1)
 		i++;
 	a = i;
@@ -116,17 +117,17 @@ int	check_redirection(char *cmd, t_minishell *maillon)
 			i = avoid_quotes(cmd, i) - 1;
 		else if (infile_cond(cmd, i) == 1)
 			maillon->file_in = add_file_in(maillon->file_in,
-					ft_trimhard(get_filename(cmd, i + 1, &alert)));
+					ft_trimhard(get_filename(cmd, i, &alert)));
 		else if ((i == 0 && i + 1 < ft_strlen(cmd) && cmd[i] == '>'
 				&& cmd[i + 1] != '<')
 			|| (i > 0 && i + 2 < ft_strlen(cmd) && cmd[i] != '>'
 				&& cmd[i + 1] == '>' && cmd[i + 2] != '>'))
 			maillon->file_out = add_file_out(maillon->file_out,
-					ft_trimhard(get_filename(cmd, i + 2, &alert)), 0);
+					ft_trimhard(get_filename(cmd, i, &alert)), 0);
 		else if (i + 3 < ft_strlen(cmd) && cmd[i] != '>' && cmd[i + 1] == '>'
 			&& cmd[i + 2] == '>' && cmd[i + 3] != '>')
 			maillon->file_out = add_file_out(maillon->file_out,
-					ft_trimhard(get_filename(cmd, i + 3, &alert)), 1);
+					ft_trimhard(get_filename(cmd, i, &alert)), 1);
 	}
 	return (end_redir(alert, cmd));
 }
