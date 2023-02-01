@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 09:55:17 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/30 10:32:29 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/02/01 10:10:46 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	cond_redir(t_minishell *elem, t_all *p)
 		&& ((elem->file_in != NULL && elem->file_in->file_in == NULL)
 			|| (elem->file_out != NULL && elem->file_out->file_out == NULL)))
 	{
-		printf(" : No such file or directory\n");
+		ft_putstr_fd(" : No such file or directory\n", 2);
 		end_process(p, 0);
 	}
 	if (g_sig.sig_int > 0 || g_sig.sig_quit > 0

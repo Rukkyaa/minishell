@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:02:21 by rukkyaa           #+#    #+#             */
-/*   Updated: 2023/01/30 12:48:21 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/02/01 10:12:00 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	sig_exit(int nb)
 	if (nb == 2)
 		return (130);
 	else if (nb == 3)
-		return (printf("Quit (core dumped)\n"), 131);
+		return (ft_putstr_fd("Quit (core dumped)\n", 2), 131);
 	return (0);
 }
 

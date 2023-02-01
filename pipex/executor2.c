@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rukkyaa <rukkyaa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:05 by gabrielduha       #+#    #+#             */
-/*   Updated: 2023/01/26 22:03:09 by rukkyaa          ###   ########.fr       */
+/*   Updated: 2023/02/01 10:13:42 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	check_file_in(char *file)
 {
 	if (file == NULL)
-		return (printf(" : No such file or directory\n"), -1);
+		return (ft_putstr_fd(" : No such file or directory\n", 2), -1);
 	if (access(file, F_OK) != 0 || access(file, R_OK) != 0)
 		return (perror(file), -1);
 	return (0);
@@ -26,7 +26,7 @@ static int	check_file_out(t_outfile *file)
 	int	fdt;
 
 	if (file->file_out == NULL)
-		return (printf(" : No such file or directory\n"), -1);
+		return (ft_putstr_fd(" : No such file or directory\n", 2), -1);
 	if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
 		return (perror(file->file_out), -1);
 	else
@@ -72,7 +72,7 @@ int	opening_out(t_outfile *file_org, int port, char **cmd, t_all *p)
 		file = file->next;
 	}
 	if (file->file_out == NULL)
-		return (printf(" : No such file or directory\n"), -1);
+		return (ft_putstr_fd(" : No such file or directory\n", 2), -1);
 	if (access(file->file_out, F_OK) == 0 && access(file->file_out, W_OK) != 0)
 		return (perror(file->file_out), -1);
 	else if (file->append == 1)

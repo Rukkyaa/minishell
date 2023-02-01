@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axlamber <axlamber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:23:26 by gduhau            #+#    #+#             */
-/*   Updated: 2023/01/30 10:42:11 by axlamber         ###   ########.fr       */
+/*   Updated: 2023/02/01 10:09:29 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_exit(t_all *p, t_tree *start, char **cmd)
 	if (length_tab(cmd) > 1 && full_digit(cmd[1]) && cmd[2])
 		return (ft_putstr_fd("exit\n", 2),
 			ft_putendl_fd("exit: too many arguments", 2));
-	printf("exit\n");
+	ft_putstr_fd("exit\n", 2);
 	if (cmd[1])
 	{
 		if (!full_digit(cmd[1]))
