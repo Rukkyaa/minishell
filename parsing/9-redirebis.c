@@ -6,7 +6,7 @@
 /*   By: gduhau <gduhau@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 15:33:05 by axlamber          #+#    #+#             */
-/*   Updated: 2023/02/01 14:04:11 by gduhau           ###   ########.fr       */
+/*   Updated: 2023/02/01 14:16:38 by gduhau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,11 @@ int	check_redirection(char *cmd, t_minishell *maillon)
 			|| (i > 0 && i + 2 < ft_strlen(cmd) && cmd[i] != '>'
 				&& cmd[i + 1] == '>' && cmd[i + 2] != '>'))
 			maillon->file_out = add_file_out(maillon->file_out,
-					ft_trimhard(get_filename(cmd, i, &alert)), 0);
+					ft_trimhard(get_filename(cmd, ++i, &alert)), 0);
 		else if (i + 3 < ft_strlen(cmd) && cmd[i] != '>' && cmd[i + 1] == '>'
 			&& cmd[i + 2] == '>' && cmd[i + 3] != '>')
 			maillon->file_out = add_file_out(maillon->file_out,
-					ft_trimhard(get_filename(cmd, i, &alert)), 1);
+					ft_trimhard(get_filename(cmd, ++i, &alert)), 1);
 	}
 	return (end_redir(alert, cmd));
 }
